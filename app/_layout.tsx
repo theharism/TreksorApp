@@ -29,15 +29,12 @@ export default function RootLayout() {
               animation: "none"
             }}
           >
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen 
-              name="login" 
-              options={{ 
-                headerShown: true,
-                headerTitle: '',
-                headerBackTitle: 'Back',
-              }} 
-            />
+            <Stack.Screen name="index" />
+            <Stack.Screen name="login" />
+            <Stack.Screen name="register" />
+            <Stack.Screen name="request-reset-password" />
+            <Stack.Screen name="reset-password" />
+            <Stack.Screen name="verify-otp" />
             {/* Other screens */}
           </Stack>
           <Toast />
