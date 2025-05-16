@@ -2,7 +2,7 @@
 import { ImageBackground } from "expo-image";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Dimensions, SafeAreaView, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import Toast from "react-native-toast-message";
 
 export default function RootLayout() {
@@ -15,7 +15,6 @@ export default function RootLayout() {
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}
       >
-        <SafeAreaView style={styles.safeArea}>
           <Stack
             screenOptions={{
               headerShown: false,
@@ -42,7 +41,6 @@ export default function RootLayout() {
             {/* Other screens */}
           </Stack>
           <Toast />
-        </SafeAreaView>
       </ImageBackground>
     </View>
   );
@@ -60,10 +58,5 @@ const styles = StyleSheet.create({
   },
   imageStyle: {
     opacity: 0.9,
-  },
-  safeArea: {
-    flex: 1, // This is crucial
-    backgroundColor: 'transparent',
-    padding: 20,
   },
 });
