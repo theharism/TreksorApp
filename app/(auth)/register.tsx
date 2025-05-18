@@ -199,7 +199,7 @@ export default function Register() {
         role: "user",
       }).then(() => {
         requestOtp({email}).then(() => {
-          router.replace("/(auth)/verify-otp")
+          router.push({ pathname: "/(auth)/verify-otp", params: { email } });
         })
       })
     }
