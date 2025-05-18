@@ -21,9 +21,9 @@ import OtpInput from "@/components/ui/OtpInput"
 import { useAuthStore } from "@/store/auth-store"
 
 export default function VerifyOtp() {
-  const { verifyOtp, loading, getCurrentUser, requestOtp} = useAuthStore();
+  const { verifyOtp, loading, getCurrentUser, requestOtp, requestResetPassword} = useAuthStore();
   const params = useLocalSearchParams()
-  const { email, purpose = "verification" } = params
+  const { email, purpose = "registration" } = params
 
   const [otp, setOtp] = useState("")
   const [error, setError] = useState("")
@@ -90,15 +90,27 @@ export default function VerifyOtp() {
 
     setError("")
 
-    verifyOtp({ email: email as string, otp }).then(()=>{
-      getCurrentUser();
+    verifyOtp({ email: email as string, otp }).then((token)=>{
+      if(purpose === 'reset-password')
+      {
+        router.push({ pathname: "/(auth)/reset-password", params: { token } });
+      }
+      else {
+        getCurrentUser();
+      }
     })
   }
 
   const handleResendCode = () => {
     if (!canResend) return
 
-    requestOtp({ email: email as string });
+    if(purpose === 'reset-password')
+    {
+      requestResetPassword({ email: email as string })
+    }
+    else{
+      requestOtp({ email: email as string });
+    }
   }
 
   const formatTime = (seconds: number) => {
@@ -132,7 +144,7 @@ export default function VerifyOtp() {
           <Text style={styles.heading}>Verification Code</Text>
           <Text style={styles.subHeading}>
             We've sent a 4-digit code to {email}. Enter the code below to verify your{" "}
-            {purpose === "reset" ? "identity" : "account"}.
+            {purpose === "reset-password" ? "identity" : "account"}.
           </Text>
 
           <OtpInput codeLength={4} onCodeFilled={setOtp} error={!!error} />

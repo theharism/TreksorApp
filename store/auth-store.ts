@@ -44,6 +44,7 @@ export interface AuthResponse {
       isVerified: boolean;
     };
     token?: string;
+    resetToken?: string;
   }
 }
 
@@ -64,7 +65,7 @@ interface AuthState {
   register: (data: RegisterRequest) => Promise<void>;
   resetPassword: (data: ResetPasswordRequest) => Promise<void>;
   requestResetPassword: (data: RequestResetPasswordRequest) => Promise<void>;
-  verifyOtp: (data: VerifyOtpRequest) => Promise<void>;
+  verifyOtp: (data: VerifyOtpRequest) => Promise<string | undefined>;
   requestOtp: (data: RequestOtpRequest) => Promise<void>;
   getCurrentUser: () => Promise<boolean | undefined>;
   clearError: () => void
@@ -176,6 +177,11 @@ export const useAuthStore = create<AuthState>()(
         try {
           set({ loading: true, error: null });
           const {data:response} = await api.post<AuthResponse>("auth/verify-otp", data);
+          if(response.data.resetToken)
+          {
+            set({ loading: false });
+            return response.data.resetToken;
+          }
           set({ loading: false, token: response.data.token });
         } catch (error: any) {
           console.error("verifyOtp error:", {error:error.response.data });

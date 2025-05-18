@@ -23,7 +23,6 @@ import { useAuthStore } from "@/store/auth-store"
 export default function ForgotPassword() {
   const {requestResetPassword, loading} = useAuthStore();
   const [email, setEmail] = useState("")
-  const [sent, setSent] = useState(false)
   const [error, setError] = useState("")
 
   // Animation values
@@ -63,7 +62,7 @@ export default function ForgotPassword() {
 
     if (validateEmail()) {
       requestResetPassword({ email }).then(() => {
-        setSent(true)
+        router.push({ pathname: "/(auth)/verify-otp", params: { email,purpose:'reset-password' } });
       })
     }
   }
@@ -85,51 +84,28 @@ export default function ForgotPassword() {
           <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
+          
+          <Text style={styles.heading}>Reset Password</Text>
+          <Text style={styles.subHeading}>
+            Enter your email address and we'll send you a otp to reset your password
+          </Text>
 
-          {!sent ? (
-            <>
-              <Text style={styles.heading}>Reset Password</Text>
-              <Text style={styles.subHeading}>
-                Enter your email address and we'll send you a link to reset your password
-              </Text>
+          <View style={styles.form}>
+            <TextInput
+              placeholder="Email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              icon="mail-outline"
+              error={error}
+            />
 
-              <View style={styles.form}>
-                <TextInput
-                  placeholder="Email"
-                  value={email}
-                  onChangeText={setEmail}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                  icon="mail-outline"
-                  error={error}
-                />
-
-                <Button onPress={handleSendResetLink} loading={loading}>
-                  SEND RESET LINK
-                </Button>
-              </View>
-            </>
-          ) : (
-            <View style={styles.successContainer}>
-              <View style={styles.successIconContainer}>
-                <Ionicons name="checkmark-circle" size={80} color="#3498db" />
-              </View>
-
-              <Text style={styles.heading}>Check Your Email</Text>
-              <Text style={styles.subHeading}>We've sent a password reset link to {email}</Text>
-
-            <View style={{marginTop: 20}}>
-                <Button onPress={() => router.push("/login")}>
-                BACK TO LOGIN
-                </Button>
-            </View>
-
-              <TouchableOpacity style={styles.resendLink} onPress={handleSendResetLink}>
-                <Text style={styles.resendText}>Didn't receive the email? Resend</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-
+            <Button onPress={handleSendResetLink} loading={loading}>
+              SEND RESET OTP
+            </Button>
+          </View>
+        
           <View style={styles.footer}>
             <Text style={styles.footerText}>Remember your password? </Text>
             <TouchableOpacity onPress={() => router.push("/login")}>
