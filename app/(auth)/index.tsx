@@ -1,12 +1,8 @@
 import Button from "@/components/ui/Button";
-import { useAuthStore } from "@/store/auth-store";
-import { Redirect, router } from "expo-router";
+import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function Index() {
-  const { isAuthenticated, isVerified } = useAuthStore();
-  if(isAuthenticated && isVerified) return <Redirect href="/(home)" />;
-
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>TREKSOR</Text>
