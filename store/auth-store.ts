@@ -1,5 +1,6 @@
 import { api } from "@/api/axios";
 import { errorHandler } from "@/lib/utils";
+import { ImagePickerAsset } from "expo-image-picker";
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -28,10 +29,16 @@ export interface ResetPasswordRequest {
 
 export interface RequestResetPasswordRequest {
   email: string;
+  isChangePassword?: boolean;
 }
 
 export interface RequestOtpRequest {
   email: string;
+}
+
+export interface updateProfileRequest {
+  name: string | null;
+  avatar: ImagePickerAsset | null;
 }
 
 export interface AuthResponse {
@@ -42,6 +49,7 @@ export interface AuthResponse {
       email: string;
       role: string;
       isVerified: boolean;
+      avatar?: string;
     };
     token?: string;
     resetToken?: string;
@@ -51,11 +59,13 @@ export interface AuthResponse {
 interface AuthState {
   isAuthenticated: boolean;
   isVerified: boolean;
+  isChangePassword: boolean;
   user: {
     id: string;
     name: string;
     email: string;
     role: string;
+    avatar?: string;
   };
   token: string | null;
   loading: boolean;
@@ -68,6 +78,7 @@ interface AuthState {
   verifyOtp: (data: VerifyOtpRequest) => Promise<string | undefined>;
   requestOtp: (data: RequestOtpRequest) => Promise<void>;
   getCurrentUser: () => Promise<boolean | undefined>;
+  updateProfile: (data: updateProfileRequest) => Promise<void>;
   clearError: () => void
 }
 
@@ -88,6 +99,7 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       isAuthenticated: false,
       isVerified: false,
+      isChangePassword: false,
       user: {
         id: "",
         name: "",
@@ -141,7 +153,7 @@ export const useAuthStore = create<AuthState>()(
         try {
           set({ loading: true, error: null });
           await api.post<void>("auth/request-reset-password", data);
-          set({ loading: false });
+          set({ loading: false, isChangePassword: data.isChangePassword });
         } catch (error: any) {
           console.error("requestResetPassword error:", {error:error.response.data });
           set({ error: error.response.data.message, loading: false });
@@ -179,7 +191,7 @@ export const useAuthStore = create<AuthState>()(
           const {data:response} = await api.post<AuthResponse>("auth/verify-otp", data);
           if(response.data.resetToken)
           {
-            set({ loading: false });
+            set({ loading: false, isChangePassword: false, isVerified: false, isAuthenticated:false });
             return response.data.resetToken;
           }
           set({ loading: false, token: response.data.token });
@@ -198,6 +210,34 @@ export const useAuthStore = create<AuthState>()(
           return response.data.user?.isVerified;
         } catch (error: any) {
           console.error("getCurrentUser error:", {error:error.response.data });
+          set({ error: error.response.data.message, loading: false });
+          errorHandler(error);
+        }
+      },
+
+      updateProfile: async (data: updateProfileRequest) => {
+        try {
+          set({ loading: true, error: null });
+          const formData = new FormData();
+          if (data.avatar) {
+            if (data.avatar.uri) {
+              const response = await fetch(data.avatar.uri);
+              const blob = await response.blob();
+              formData.append("avatar", blob);
+            }
+          }
+          if (data.name) {
+            formData.append("name", data.name);
+          }
+          const config = {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          };
+          await api.patch<AuthResponse>("user/profile", formData, config);
+          set({ loading: false });
+        } catch (error: any) {
+          console.error("updateProfile error:", {error:error.response.data });
           set({ error: error.response.data.message, loading: false });
           errorHandler(error);
         }
