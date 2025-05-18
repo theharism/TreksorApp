@@ -1,7 +1,7 @@
 // _layout.jsx
 import { useAuthStore } from "@/store/auth-store";
 import { ImageBackground } from "expo-image";
-import { Redirect, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Dimensions, StyleSheet, View } from "react-native";
 import Toast from "react-native-toast-message";
@@ -9,7 +9,7 @@ import Toast from "react-native-toast-message";
 export default function AuthLayout() {
 
   const { isAuthenticated, isVerified } = useAuthStore();
-  if(isAuthenticated && isVerified) return <Redirect href="/(home)" />;
+  // if(isAuthenticated && isVerified) return <Redirect href="/(home)" />;
 
   return (
     <View style={styles.container}>

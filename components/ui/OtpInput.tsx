@@ -3,14 +3,14 @@
 import { LinearGradient } from "expo-linear-gradient"
 import { useEffect, useRef, useState } from "react"
 import {
-    Animated,
-    Clipboard,
-    Dimensions,
-    Keyboard,
-    StyleSheet,
-    TextInput,
-    TouchableWithoutFeedback,
-    View,
+  Animated,
+  Clipboard,
+  Dimensions,
+  Keyboard,
+  StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native"
 
 const { width } = Dimensions.get("window")
@@ -52,7 +52,7 @@ const OtpInput = ({ codeLength = 4, onCodeFilled, error = false }: OtpInputProps
           }
         }
       } catch (error) {
-        console.log("Failed to read clipboard", error)
+        console.error("Failed to read clipboard", error)
       }
     }
 

@@ -27,7 +27,6 @@ export default function ResetPassword() {
     return <Redirect href={"/"} />
   }
   const {resetPassword, loading} = useAuthStore();
-  console.log(token)
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [errors, setErrors] = useState({
