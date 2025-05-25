@@ -1,4 +1,3 @@
-import Header from "@/components/ui/Header";
 import { useAuthStore } from "@/store/auth-store";
 import { AntDesign } from "@expo/vector-icons";
 import { Redirect, Tabs } from "expo-router";
@@ -18,7 +17,7 @@ export default function TabLayout() {
         screenOptions={{
           animation: "shift",
           sceneStyle:{
-          backgroundColor:'transparent'
+          backgroundColor:'#02050C'
           },
           tabBarStyle: Platform.select({
             ios: {
@@ -29,17 +28,21 @@ export default function TabLayout() {
               backgroundColor: "#02050C",
             },
           }),
-          header: () => <Header/>,
+          headerShown: false,
         }}
       >
         <Tabs.Screen
-          name="index"
+          name="home"
           options={{
             title: "Home",
             tabBarIcon: ({ color }) => (
               <AntDesign name="home" size={24} color={color} />
             ),
           }}
+        />
+        <Tabs.Screen
+          name="index"
+          redirect
         />
       </Tabs>
     </View>

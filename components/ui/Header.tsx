@@ -90,7 +90,6 @@ const Header: React.FC<HeaderProps> = ({
 const styles = StyleSheet.create({
   container: {
     width: "100%",
-    paddingBottom: 10,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
     overflow: "hidden",
@@ -104,8 +103,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingHorizontal: 10,
+    paddingTop: 15,
+    paddingBottom: 5,
   },
   backButton: {
     padding: 5,

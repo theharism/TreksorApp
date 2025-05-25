@@ -1,14 +1,23 @@
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { ActivityIndicator, Dimensions, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  ActivityIndicator,
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 type ButtonProps = {
   children: React.ReactNode | string;
   onPress?: () => void;
   loading?: boolean;
+  icon?: string;
 };
 
-const Button = ({ children, onPress, loading }: ButtonProps) => {
+const Button = ({ children, onPress, loading, icon }: ButtonProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -29,13 +38,20 @@ const Button = ({ children, onPress, loading }: ButtonProps) => {
           end={{ x: 1, y: 1 }}
           style={styles.innerGradient}
         >
-            {loading ? (
+          {loading ? (
             <ActivityIndicator size="small" color="#FFFFFF" />
-            ) : typeof children === "string" ? (
-            <Text style={styles.buttonText}>{children}</Text>
+          ) : typeof children === "string" ? (
+            icon ? (
+              <View style={{ flexDirection: "row", alignItems:'center' }}>
+                <Image source={icon} style={{ marginRight: 10, width:20, height:20 }} />
+                <Text style={styles.buttonText}>{children}</Text>
+              </View>
             ) : (
+              <Text style={styles.buttonText}>{children}</Text>
+            )
+          ) : (
             children
-            )}
+          )}
         </LinearGradient>
       </LinearGradient>
     </TouchableOpacity>
