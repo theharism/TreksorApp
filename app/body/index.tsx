@@ -28,7 +28,7 @@ const BodyHome = () => {
         <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
           <Button onPress={()=>router.push("/body/workout/selection")} icon={require("@/assets/images/dumbbell.png")}>WORKOUT</Button>
           <Button onPress={()=>router.push("/body/nutrition")} icon={require("@/assets/images/food-items.png")}>NUTRITION</Button>
-          <Button icon={require("@/assets/images/articles.png")}>ARTICLES</Button>
+          <Button onPress={()=>router.push("/body/articles")} icon={require("@/assets/images/articles.png")}>ARTICLES</Button>
         </View>
       </ImageBackground>
     </View>
