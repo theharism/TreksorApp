@@ -245,12 +245,12 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container} edges={["bottom"]}>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Welcome Section */}
-        <View style={styles.welcomeSection}>
-          <View style={styles.streakContainer}>
+        <View style={styles.welcomeSection}/>
+          {/* <View style={styles.streakContainer}>
             <Text style={styles.streakEmoji}>🔥</Text>
             <Text style={styles.streakText}>4-Day Streak</Text>
           </View>
-        </View>
+        </View> */}
 
         {/* Ritual Cards Grid */}
         <View style={styles.ritualsGrid}>
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   },
   welcomeSection: {
     paddingHorizontal: 10,
-    paddingBottom: 30,
+    paddingBottom: 10,
     paddingTop: 10,
   },
   welcomeText: {

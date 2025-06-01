@@ -31,7 +31,7 @@ export default function AuthLayout() {
               contentStyle: {
                 backgroundColor: 'transparent',
               },
-              // animation: "none"
+              animation: "none"
             }}
           >
             <Stack.Screen name="index" />
