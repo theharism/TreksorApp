@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 export const api = axios.create({
-  baseURL: 'https://treksor-backend.vercel.app/api/v1/',
+  baseURL: 'https://app.treksor.com/api/v1/',
   headers: {
     "Content-Type": "application/json",
   },

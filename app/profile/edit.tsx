@@ -89,28 +89,6 @@ export default function EditProfile() {
     }
   }
 
-//   const handleRemoveAvatar = () => {
-//     Alert.alert(
-//       "Remove Avatar",
-//       "Are you sure you want to remove your profile picture?",
-//       [
-//         {
-//           text: "Cancel",
-//           style: "cancel",
-//         },
-//         {
-//           text: "Remove",
-//           style: "destructive",
-//           onPress: () => {
-//             setTempAvatar(null)
-//             setAvatar(null)
-//           },
-//         },
-//       ],
-//       { cancelable: true },
-//     )
-//   }
-
   const handleAvatarOptions = () => {
     Alert.alert(
       "Change Profile Picture",

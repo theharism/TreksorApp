@@ -241,37 +241,6 @@ export default function HomeScreen() {
     );
   };
 
-  // const renderPowerThought = ({
-  //   item,
-  //   index,
-  // }: {
-  //   item: PowerThought
-  //   index: number
-  // }) => {
-  //   const isRead = readThoughts.has(item.id)
-
-  //   return (
-  //     <View style={styles.powerThoughtCard}>
-
-  //       <Text style={styles.powerThoughtCategory}>{item.category}</Text>
-  //       <Text style={styles.powerThoughtContent}>{item.content}</Text>
-
-  //       <TouchableOpacity
-  //         style={[styles.markAsReadButton, isRead && styles.markAsReadButtonRead]}
-  //         onPress={handleMarkAsRead}
-  //         disabled={isRead}
-  //       >
-  //         <View style={styles.checkmarkContainer}>
-  //           <Ionicons name="checkmark" size={12} color="#000000" />
-  //         </View>
-  //         <Text style={[styles.markAsReadText, isRead && styles.markAsReadTextRead]}>
-  //           {isRead ? "Read" : "Mark as read"}
-  //         </Text>
-  //       </TouchableOpacity>
-  //     </View>
-  //   )
-  // }
-
   return (
     <SafeAreaView style={styles.container} edges={["bottom"]}>
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
