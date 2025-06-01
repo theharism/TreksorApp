@@ -56,7 +56,6 @@ export default function EditProfile() {
 
       if (!result.canceled && result.assets && result.assets.length > 0) {
         setTempAvatar(result.assets[0].uri)
-        console.log(result.assets[0])
         setTempAvatarFile(result.assets[0])
       }
     } catch (error) {

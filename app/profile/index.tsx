@@ -50,13 +50,15 @@ export default function ProfileScreen() {
       })
   }
 
+  const imageUrl = `https://app.treksor.com/${user?.avatar}`;
+
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <ScrollView style={styles.content}>
         <View style={styles.profileHeader}>
           <View style={styles.avatarSection}>
             {user.avatar ? (
-              <Image source={{ uri: user.avatar }} style={styles.avatar} />
+              <Image source={{ uri: imageUrl }} style={styles.avatar} />
             ) : (
               <View style={styles.avatarPlaceholder}>
                 <Text style={styles.avatarText}>{user.name.charAt(0)}</Text>

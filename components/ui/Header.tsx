@@ -40,6 +40,7 @@ const Header: React.FC<HeaderProps> = ({
   }
 
   const displayName = user?.name ? user.name.split(" ")[0] : "there"
+  const imageUrl = `https://app.treksor.com/${user?.avatar}`;
 
   return (
     <LinearGradient
@@ -74,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({
         {showAvatar && (
           <TouchableOpacity style={styles.avatarContainer} onPress={() => router.push("/profile")} activeOpacity={0.8}>
             {user?.avatar ? (
-              <Image source={{ uri: user.avatar }} style={styles.avatar} />
+              <Image source={{ uri: imageUrl }} style={styles.avatar} />
             ) : (
               <View style={styles.avatarPlaceholder}>
                 <Text style={styles.avatarText}>{displayName.charAt(0)}</Text>

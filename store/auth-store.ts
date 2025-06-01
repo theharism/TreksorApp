@@ -222,9 +222,11 @@ export const useAuthStore = create<AuthState>()(
           const formData = new FormData();
           if (data.avatar) {
             if (data.avatar.uri) {
-              const response = await fetch(data.avatar.uri);
-              const blob = await response.blob();
-              formData.append("avatar", blob);
+              formData.append("avatar",  {
+                uri: data.avatar.uri,
+                name: data.avatar.fileName || 'photo.jpg',
+                type: data.avatar.type,
+              } as any);
             }
           }
           if (data.name) {
