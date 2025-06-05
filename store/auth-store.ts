@@ -19,6 +19,7 @@ export interface RegisterRequest {
 export interface VerifyOtpRequest {
   email: string;
   otp: string;
+  type: string;
 }
 
 export interface ResetPasswordRequest {

@@ -90,7 +90,7 @@ export default function VerifyOtp() {
 
     setError("")
 
-    verifyOtp({ email: email as string, otp }).then((token)=>{
+    verifyOtp({ email: email as string, otp, type: purpose as string }).then((token)=>{
       if(purpose === 'reset-password')
       {
         router.push({ pathname: "/(auth)/reset-password", params: { token } });
