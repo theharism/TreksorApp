@@ -2,16 +2,30 @@
 
 import { Ionicons } from "@expo/vector-icons"
 import { router } from "expo-router"
-import { useEffect } from "react"
-import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { useEffect, useState } from "react"
+import { Alert, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import Button from "@/components/ui/Button"
+import PDFViewer from "@/components/ui/PDFViewer"
 import { useAuthStore } from "@/store/auth-store"
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const {isAuthenticated, logout, user, loading, requestResetPassword} = useAuthStore();
+  const [showPDF, setShowPDF] = useState<{
+      visible: boolean
+      title: string
+      url: string
+    }>({
+      visible: false,
+      title: "",
+      url: "",
+    });
+  
+  const TERMS_URL = "http://localhost:3000/public/terms-of-service.pdf"
+  const PRIVACY_URL = "http://localhost:3000/public/privacy-policy.pdf"
+  const DISCLAIMER_URL = "http://localhost:3000/public/disclaimer.pdf"
 
   // Check if user is authenticated
   useEffect(() => {
@@ -50,6 +64,14 @@ export default function ProfileScreen() {
       })
   }
 
+  const openPDF = (title: string, url: string) => {
+    setShowPDF({ visible: true, title, url })
+  }
+
+  const closePDF = () => {
+    setShowPDF({ visible: false, title: "", url: "" })
+  }
+
   const imageUrl = `https://app.treksor.com/${user?.avatar}`;
 
   return (
@@ -71,7 +93,7 @@ export default function ProfileScreen() {
             <Text style={styles.email}>{user.email}</Text>
           </View>
 
-          <Button onPress={handleEditProfile} size="small" style={styles.editButton}>
+          <Button onPress={handleEditProfile} style={styles.editButton}>
             EDIT PROFILE
           </Button>
         </View>
@@ -120,14 +142,39 @@ export default function ProfileScreen() {
           </TouchableOpacity>
         </View> */}
 
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Legal</Text>
+
+          <TouchableOpacity style={styles.menuItem} onPress={() => openPDF("Terms of Service", TERMS_URL)}>
+            <Ionicons name="document-text-outline" size={22} color="#FFFFFF" style={styles.menuIcon} />
+            <Text style={styles.menuText}>Terms of Service</Text>
+            <Ionicons name="chevron-forward" size={20} color="#AAAAAA" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.menuItem} onPress={() => openPDF("Privacy Policy", PRIVACY_URL)}>
+            <Ionicons name="shield-checkmark-outline" size={22} color="#FFFFFF" style={styles.menuIcon} />
+            <Text style={styles.menuText}>Privacy Policy</Text>
+            <Ionicons name="chevron-forward" size={20} color="#AAAAAA" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.menuItem} onPress={() => openPDF("Disclaimer", DISCLAIMER_URL)}>
+            <Ionicons name="warning-outline" size={22} color="#FFFFFF" style={styles.menuIcon} />
+            <Text style={styles.menuText}>Disclaimer</Text>
+            <Ionicons name="chevron-forward" size={20} color="#AAAAAA" />
+          </TouchableOpacity>
+        </View>
+
         <View style={styles.logoutSection}>
-          <Button onPress={handleLogout} variant="outline" loading={loading} style={styles.logoutButton}>
+          <Button onPress={handleLogout} loading={loading}>
             LOGOUT
           </Button>
 
           <Text style={styles.versionText}>Treksor v1.0.0</Text>
         </View>
       </ScrollView>
+      <Modal visible={showPDF.visible} animationType="slide" presentationStyle="fullScreen">
+        <PDFViewer title={showPDF.title} pdfUrl={showPDF.url} onClose={closePDF} />
+      </Modal>
     </View>
   )
 }

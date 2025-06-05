@@ -14,6 +14,7 @@ import {
   View
 } from "react-native"
 
+import LegalAgreement from "@/components/LegalAgreement"
 import Button from "@/components/ui/Button"
 import TextInput from "@/components/ui/TextInput"
 import { useAuthStore } from "@/store/auth-store"
@@ -23,6 +24,7 @@ export default function Register() {
   const [step, setStep] = useState(1)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
+  const [legalAgreed, setLegalAgreed] = useState(false);
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   // const [loading, setLoading] = useState(false)
@@ -31,6 +33,7 @@ export default function Register() {
     email: "",
     password: "",
     confirmPassword: "",
+    legal: "",
   })
 
   // Animation values
@@ -110,49 +113,68 @@ export default function Register() {
     return valid
   }
 
+  const validateStep3 = () => {
+    let valid = true
+    const newErrors = { ...errors }
+
+    if (!legalAgreed) {
+      newErrors.legal = "You must agree to the Terms of Service and Privacy Policy"
+      valid = false
+    } else {
+      newErrors.legal = ""
+    }
+
+    setErrors(newErrors)
+    return valid
+  }
+
   const handleNextStep = () => {
     Keyboard.dismiss()
 
-    if (validateStep1()) {
-      // Animate transition to next step
-      Animated.sequence([
-        Animated.parallel([
-          Animated.timing(fadeAnim, {
-            toValue: 0,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-          Animated.timing(slideAnim, {
-            toValue: -50,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-        ]),
-        Animated.timing(slideAnim, {
-          toValue: 50,
-          duration: 0,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        setStep(2)
-        Animated.parallel([
-          Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-          Animated.timing(slideAnim, {
-            toValue: 0,
-            duration: 300,
-            useNativeDriver: true,
-          }),
-        ]).start()
-      })
+    if (step === 1 && validateStep1()) {
+      animateToNextStep()
+    } else if (step === 2 && validateStep2()) {
+      animateToNextStep()
     }
   }
 
+  const animateToNextStep = () => {
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(slideAnim, {
+          toValue: -50,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.timing(slideAnim, {
+        toValue: 50,
+        duration: 0,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      setStep(step + 1)
+      Animated.parallel([
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(slideAnim, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]).start()
+    })
+  }
+
   const handlePrevStep = () => {
-    // Animate transition to previous step
     Animated.sequence([
       Animated.parallel([
         Animated.timing(fadeAnim, {
@@ -172,7 +194,7 @@ export default function Register() {
         useNativeDriver: true,
       }),
     ]).start(() => {
-      setStep(1)
+      setStep(step - 1)
       Animated.parallel([
         Animated.timing(fadeAnim, {
           toValue: 1,
@@ -191,7 +213,7 @@ export default function Register() {
   const handleRegister = () => {
     Keyboard.dismiss()
 
-    if (validateStep2()) {
+    if (validateStep3()) {
       register({
         name,
         email,
@@ -202,6 +224,32 @@ export default function Register() {
           router.push({ pathname: "/(auth)/verify-otp", params: { email } });
         })
       })
+    }
+  }
+
+  const getStepTitle = () => {
+    switch (step) {
+      case 1:
+        return "Create Account"
+      case 2:
+        return "Set Password"
+      case 3:
+        return "Legal Agreements"
+      default:
+        return "Create Account"
+    }
+  }
+
+  const getStepSubtitle = () => {
+    switch (step) {
+      case 1:
+        return "Let's get started with your journey"
+      case 2:
+        return "Choose a strong password to secure your account"
+      case 3:
+        return "Please review and accept our policies"
+      default:
+        return "Let's get started with your journey"
     }
   }
 
@@ -224,15 +272,16 @@ export default function Register() {
             </TouchableOpacity>
 
             <View style={styles.stepIndicator}>
-              <View style={[styles.stepDot, step >= 1 && styles.activeStepDot]} />
-              <View style={styles.stepLine} />
-              <View style={[styles.stepDot, step >= 2 && styles.activeStepDot]} />
+              {[1, 2, 3].map((stepNumber) => (
+                <React.Fragment key={stepNumber}>
+                  <View style={[styles.stepDot, step >= stepNumber && styles.activeStepDot]} />
+                  {stepNumber < 3 && <View style={styles.stepLine} />}
+                </React.Fragment>
+              ))}
             </View>
 
-            <Text style={styles.heading}>{step === 1 ? "Create Account" : "Set Password"}</Text>
-            <Text style={styles.subHeading}>
-              {step === 1 ? "Let's get started with your journey" : "Choose a strong password to secure your account"}
-            </Text>
+            <Text style={styles.heading}>{getStepTitle()}</Text>
+            <Text style={styles.subHeading}>{getStepSubtitle()}</Text>
 
             <View style={styles.form}>
               {step === 1 ? (
@@ -257,7 +306,7 @@ export default function Register() {
 
                   <Button onPress={handleNextStep}>CONTINUE</Button>
                 </>
-              ) : (
+              ) : step === 2 ? (
                 <>
                   <TextInput
                     placeholder="Password"
@@ -276,6 +325,13 @@ export default function Register() {
                     icon="shield-checkmark-outline"
                     error={errors.confirmPassword}
                   />
+
+                  <Button onPress={handleNextStep}>CONTINUE</Button>
+                </>
+              )
+              : step === 3 && (
+                <>
+                  <LegalAgreement onAgreementChange={setLegalAgreed} required={true} />
 
                   <Button onPress={handleRegister} loading={loading}>
                     CREATE ACCOUNT
