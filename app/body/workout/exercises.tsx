@@ -1,12 +1,13 @@
 "use client";
 
+import Header from "@/components/ui/Header";
 import { useWorkoutStore } from "@/store/workout-store";
-import { Exercise, Exercises } from "@/types/workout";
+import { Exercise } from "@/types/workout";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -19,9 +20,10 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function WorkoutDetailScreen() {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation();
   const { workoutId } = useLocalSearchParams();
   const { workouts, getWorkoutExercies, updateExerciseStatus } = useWorkoutStore();
-  const [workout, setWorkout] = useState<Exercises>();
+  const [workout, setWorkout] = useState<Exercise[]>();
 
   useEffect(() => {
     if (workoutId) {
@@ -29,10 +31,23 @@ export default function WorkoutDetailScreen() {
     }
   }, [workoutId, workouts]);
 
-  const handleExercisePress = (workoutId: string, exerciseId: string) => {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      header: () => (
+        <Header
+          title={(workoutId as string).toUpperCase()}
+          showBackButton={true}
+          onBackPress={() => router.back()}
+          showAvatar={false}
+        />
+      ),
+    })
+  }, [navigation, workoutId])
+
+  const handleExercisePress = (exerciseId: string) => {
     if (!workout) return;
     // updateExerciseStatus(workoutId as string,exerciseId);
-    router.push({pathname:"/body/workout/details",params:{id:"backAndBiceps"}})
+    router.push({pathname:"/body/workout/details",params:{id:exerciseId}})
   };
 
   const renderExerciseCard = (
@@ -43,7 +58,7 @@ export default function WorkoutDetailScreen() {
     return (
         <TouchableOpacity
           style={styles.exerciseCard}
-          onPress={() => handleExercisePress(workoutId, exercise.id)}
+          onPress={() => handleExercisePress(exercise.id)}
           key={index}
         >
           <LinearGradient
@@ -103,14 +118,14 @@ export default function WorkoutDetailScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {Object.entries(workout).map(([sectionTitle, exercises]) => (
-          <View key={sectionTitle} style={styles.section}>
-            <Text style={styles.sectionTitle}>{sectionTitle}</Text>
+        {workout.map((exercise,index) => (
+          <View key={index} style={styles.section}>
+            {/* <Text style={styles.sectionTitle}>{sectionTitle}</Text> */}
             <View style={styles.exercisesList}>
-              {exercises.map((exercise) => {
-                const cardIndex = exerciseIndex++;
-                return renderExerciseCard(exercise, workoutId as string, cardIndex);
-              })}
+              {/* {exercises.map((exercise) => {
+                const cardIndex = exerciseIndex++; */}
+                {renderExerciseCard(exercise, workoutId as string, index)}
+              {/* })} */}
             </View>
           </View>
         ))}

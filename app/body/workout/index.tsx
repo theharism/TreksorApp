@@ -27,19 +27,19 @@ const Selection = () => {
         </View>
         <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
           <TouchableOpacity
-            onPress={() => router.push("/body/workout/workouts")}
+            onPress={() => router.push({ pathname: "/body/workout/exercises", params: { workoutId: 'push' }})}
             style={styles.gymButtonContainer}
           >
             <Text style={styles.gymButtonText}>PUSH</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => router.push("/body/workout/workouts")}
+                      onPress={() => router.push({ pathname: "/body/workout/exercises", params: { workoutId: 'pull' }})}
             style={styles.gymButtonContainer}
           >
             <Text style={styles.gymButtonText}>PULL</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => router.push("/body/workout/workouts")}
+            onPress={() => router.push({ pathname: "/body/workout/exercises", params: { workoutId: 'legs' }})}
             style={styles.gymButtonContainer}
           >
             <Text style={styles.gymButtonText}>LEGS</Text>

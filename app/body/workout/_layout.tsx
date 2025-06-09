@@ -31,14 +31,6 @@ const WorkoutLayout = () => {
         name="exercises"
         options={{
           headerShown: true,
-          header: () => (
-            <Header
-              title="BACK & BICEP"
-              showBackButton={true}
-              onBackPress={() => router.back()}
-              showAvatar={false}
-            />
-          ),
         }}
       />
     </Stack>

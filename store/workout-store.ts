@@ -1,12 +1,12 @@
-import { secureStorage } from "@/lib/utils";
 import { WorkoutsData } from "@/mock/workouts";
-import { Exercises, Workout } from "@/types/workout";
+import { Exercise, Workout } from "@/types/workout";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface WorkoutState {
     workouts: Workout[];
-    getWorkoutExercies:(id:string)=>Exercises | undefined;
+    getWorkoutExercies:(id:string)=>Exercise[] | undefined;
     updateExerciseStatus:(workoutId: string, exerciseId: string) => void;
 }
 
@@ -24,24 +24,10 @@ export const useWorkoutStore = create<WorkoutState>()(
           set((state) => {
             const updatedWorkouts = state.workouts.map((workout) => {
               if (workout.id !== workoutId) return workout;
-        
-              const updatedExercises: typeof workout.exercises = {};
-        
-              for (const [section, exercises] of Object.entries(workout.exercises)) {
-                updatedExercises[section] = exercises.map((exercise) => {
-                  if (exercise.id === exerciseId) {
-                    return {
-                      ...exercise,
-                      completed: !exercise.completed,
-                    };
-                  }
-                  return exercise;
-                });
-              }
-        
+      
               return {
                 ...workout,
-                exercises: updatedExercises,
+                exercises: [],
               };
             });
         
@@ -51,10 +37,7 @@ export const useWorkoutStore = create<WorkoutState>()(
     }),
     {
       name: "workout-storage",
-      storage: createJSONStorage(() => secureStorage),
-      partialize: (state) => ({
-        workouts: state.workouts,
-      }),
+      storage: createJSONStorage(() => AsyncStorage),
     }
   )
 );
