@@ -58,18 +58,17 @@ const Header: React.FC<HeaderProps> = ({
           </TouchableOpacity>
         ) : null}
 
-        <View style={styles.titleContainer}>
-          {!title && (
-            <View style={{flexDirection:'row'}}>
-              <Text style={styles.title}>{`${getGreeting()},`}{" "}</Text>
-              <Text style={styles.title}>{displayName}</Text>
-            </View>
-          )}
-          {title && (
-            <>
+        <View style={title ? styles.absoluteTitleWrapper: {}}>
+          <View style={styles.titleContainer}>
+            {!title ? (
+              <View style={{ flexDirection: "row" }}>
+                <Text style={styles.title}>{`${getGreeting()}, `}</Text>
+                <Text style={styles.title}>{displayName}</Text>
+              </View>
+            ) : (
               <Text style={styles.title}>{title}</Text>
-            </>
-          )}
+            )}
+          </View>
         </View>
 
         {showAvatar && (
@@ -100,20 +99,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
-  headerContent: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
-    paddingTop: 15,
-    paddingBottom: 5,
-  },
   backButton: {
     padding: 5,
-    marginRight: 10,
-  },
-  titleContainer: {
-    flex: 1,
   },
   greeting: {
     color: "#FFFFFF",
@@ -153,12 +140,33 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  title:{
-    textAlign:'center',
-    fontWeight:'bold',
+  headerContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+    paddingTop: 15,
+    paddingBottom: 5,
+    position: "relative",
+  },
+  absoluteTitleWrapper: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: -1, // keep it under avatar/back if needed
+  },
+  titleContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    fontWeight: "bold",
     fontSize: 22,
     color: "#FFFFFF",
-  }
+    textAlign: "center",
+  },  
 })
 
 export default Header
