@@ -6,7 +6,6 @@ export default function HomeLayout() {
     <Stack
       screenOptions={{
         headerShown: false,
-        animation:"ios_from_right",
         contentStyle: {
           backgroundColor: "#02050C",
         },

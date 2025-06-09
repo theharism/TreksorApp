@@ -61,8 +61,8 @@ const AnimatedDonutChart: React.FC<AnimatedDonutChartProps> = ({
         />
       </Svg>
       <View style={styles.textContainer}>
-        <Text style={styles.percentageText}>{percentage}%</Text>
-        <Text style={styles.completeText}>Complete</Text>
+        <Text style={[styles.percentageText,{fontSize: size / 6}]}>{percentage}%</Text>
+        <Text style={[styles.completeText,{fontSize: size / 12}]}>Complete</Text>
       </View>
     </View>
   )

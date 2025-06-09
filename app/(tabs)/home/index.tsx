@@ -1,10 +1,14 @@
 "use client";
 
+import { ritualCards } from "@/mock/rituals";
+import { usePowerThoughtStore } from "@/store/thought-store";
+import { PowerThought } from "@/types/powerThought";
+import { RitualCard } from "@/types/ritualCard";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -16,107 +20,25 @@ import {
   View,
 } from "react-native";
 import {
-  SafeAreaView,
-  useSafeAreaInsets,
+  SafeAreaView
 } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("window");
 const cardWidth = (width - 60) / 2; // Account for padding and gap
 
-interface RitualCard {
-  id: string;
-  title: string;
-  ritualsCompleted: number;
-  totalRituals: number;
-  image: any;
-  isLocked?: boolean;
-  availableDate?: string;
-  backgroundColor: string;
-  route: string;
-}
-
-interface PowerThought {
-  id: string;
-  category: string;
-  title: string;
-  content: string;
-  isRead: boolean;
-}
-
-const ritualCards: RitualCard[] = [
-  {
-    id: "body",
-    title: "Body",
-    ritualsCompleted: 3,
-    totalRituals: 5,
-    image: require("@/assets/images/body-ritual.png"),
-    backgroundColor: "#2D4A3E",
-    route: "/body",
-  },
-  {
-    id: "mental",
-    title: "Mental",
-    ritualsCompleted: 5,
-    totalRituals: 7,
-    image: require("@/assets/images/mental-ritual.png"),
-    backgroundColor: "#3D3D3D",
-    route: "/body",
-  },
-  {
-    id: "spiritual",
-    title: "Spiritual",
-    ritualsCompleted: 3,
-    totalRituals: 4,
-    image: require("@/assets/images/spiritual-ritual.png"),
-    backgroundColor: "#4A3D2D",
-    route: "/body",
-  },
-  {
-    id: "purpose",
-    title: "Purpose",
-    ritualsCompleted: 0,
-    totalRituals: 0,
-    image: require("@/assets/images/locked-ritual.png"),
-    isLocked: true,
-    availableDate: "Available August 2025",
-    backgroundColor: "#2D2D2D",
-    route: "/body",
-  },
-];
-
-const powerThoughts: PowerThought[] = [
-  {
-    id: "1",
-    category: "Power Thought",
-    title: "Discipline",
-    content: "Discipline is remembering what you want.",
-    isRead: false,
-  },
-  {
-    id: "2",
-    category: "Daily Wisdom",
-    title: "Growth",
-    content: "The only way to grow is to step outside your comfort zone.",
-    isRead: false,
-  },
-  {
-    id: "3",
-    category: "Motivation",
-    title: "Success",
-    content: "Success is the sum of small efforts repeated day in and day out.",
-    isRead: false,
-  },
-];
-
 export default function HomeScreen() {
-  const insets = useSafeAreaInsets();
+  const {powerThoughts, fetchPowerThoughts} = usePowerThoughtStore();
   const [currentThoughtIndex, setCurrentThoughtIndex] = useState(0);
   const [readThoughts, setReadThoughts] = useState<Set<string>>(new Set());
   const thoughtsRef = useRef<FlatList>(null);
 
+  useEffect(()=>{
+    fetchPowerThoughts();
+  },[]);
+
   const handleMarkAsRead = () => {
     const currentThought = powerThoughts[currentThoughtIndex];
-    setReadThoughts((prev) => new Set([...prev, currentThought.id]));
+    setReadThoughts((prev) => new Set([...prev, currentThought._id]));
   };
 
   const handleRitualPress = (ritual: RitualCard) => {
@@ -188,7 +110,7 @@ export default function HomeScreen() {
     item: PowerThought;
     index: number;
   }) => {
-    const isRead = readThoughts.has(item.id);
+    const isRead = readThoughts.has(item._id);
 
     return (
       <View style={styles.powerThoughtCard}>
@@ -206,8 +128,8 @@ export default function HomeScreen() {
             end={{ x: 1, y: 1 }}
             style={styles.innerGradient}
           >
-            <Text style={styles.powerThoughtCategory}>{item.category}</Text>
-            <Text style={styles.powerThoughtContent}>{item.content}</Text>
+            <Text style={styles.powerThoughtCategory}>Power Thought</Text>
+            <Text style={styles.powerThoughtContent}>{item.thought}</Text>
             <TouchableOpacity
               style={[
                 styles.markAsReadButton,
@@ -270,7 +192,7 @@ export default function HomeScreen() {
             ref={thoughtsRef}
             data={powerThoughts}
             renderItem={renderPowerThought}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item._id}
             horizontal
             pagingEnabled
             showsHorizontalScrollIndicator={false}

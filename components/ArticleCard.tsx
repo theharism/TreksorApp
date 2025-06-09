@@ -2,12 +2,12 @@ import { Article } from "@/types/article";
 // import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import {
-    Dimensions,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 const ArticleCard = ({
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   textContent: {
     flex: 1,
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
     height:150,
     gap:8,
     textAlign:'left',
