@@ -7,20 +7,21 @@ import { useEvent } from "expo"
 import { BlurView } from "expo-blur"
 import { LinearGradient } from "expo-linear-gradient"
 import { router, useLocalSearchParams } from "expo-router"
+import * as Speech from 'expo-speech'
 import { StatusBar } from "expo-status-bar"
 import { useVideoPlayer, VideoView } from "expo-video"
 import { useEffect, useState } from "react"
 import {
-    Dimensions,
-    Animated as RNAnimated,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Dimensions,
+  Pressable,
+  Animated as RNAnimated,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-
 const { width, height } = Dimensions.get("window")
 
 interface WorkoutStats {
@@ -93,7 +94,7 @@ export default function WorkoutInfoScreen() {
     setIsRead(true)
     // Here you could save the read status to storage
     console.log("Marked as read:", workout?.title)
-    updateExerciseStatus(id,"pull-ups-or-lat-pulldown")
+    updateExerciseStatus(id as string,"pull-ups-or-lat-pulldown")
   }
 
   const handlePlayVideo = () => {
@@ -105,6 +106,12 @@ export default function WorkoutInfoScreen() {
         player.play();
       }
   }
+
+  const handleSpeak = (title: string, description: string, goals: string[]) => {
+    const goalsText = goals.map((goal, i) => `Goal ${i + 1}: ${goal}`).join('. ');
+    const speechText = `${title}. ${description.replace(/<[^>]+>/g, '')}. ${goalsText}`;
+    Speech.speak(speechText);
+  };
 
   // Parse HTML content (simple implementation)
   const parseHTMLContent = (htmlString: string) => {
@@ -182,7 +189,12 @@ export default function WorkoutInfoScreen() {
 
           {/* Content Section */}
           <View style={styles.contentSection}>
-            <Text style={styles.workoutTitle}>{workout.title}</Text>
+            <View style={styles.titleRow}>
+              <Text style={styles.workoutTitle}>{workout.title}</Text>
+              <Pressable onPress={() => handleSpeak(workout.title, workout.content.description, workout.content.goals.items)}>
+                <Ionicons name="volume-high-outline" size={24} color="gray" />
+              </Pressable>
+            </View>
 
             <Text style={styles.description}>{parseHTMLContent(workout.content.description)}</Text>
 
@@ -335,7 +347,6 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     color: "#FFFFFF",
-    marginBottom: 16,
   },
   description: {
     fontSize: 16,
@@ -413,4 +424,10 @@ const styles = StyleSheet.create({
   controlsContainer: {
     padding: 10,
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },  
 })

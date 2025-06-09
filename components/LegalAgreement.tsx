@@ -26,9 +26,9 @@ const LegalAgreement: React.FC<LegalAgreementProps> = ({ onAgreementChange, requ
   })
 
   // Replace these URLs with your actual PDF URLs
-  const TERMS_URL = "http://localhost:3000/public/terms-of-service.pdf"
-  const PRIVACY_URL = "http://localhost:3000/public/privacy-policy.pdf"
-  const DISCLAIMER_URL = "http://localhost:3000/public/disclaimer.pdf"
+  const TERMS_URL = "https://app.treksor.com/public/terms-of-service.pdf"
+  const PRIVACY_URL = "https://app.treksor.com/public/privacy-policy.pdf"
+  const DISCLAIMER_URL = "https://app.treksor.com/public/disclaimer.pdf"
 
   const handleTermsChange = (agreed: boolean) => {
     setAgreedToTerms(agreed)
