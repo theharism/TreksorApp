@@ -194,8 +194,8 @@ export const useAuthStore = create<AuthState>()(
           {
             set({ loading: false, isChangePassword: false, isVerified: false, isAuthenticated:false });
             return response.data.resetToken;
-          }
-          set({ loading: false, token: response.data.token });
+          }      
+          set({ loading: false, token: response.data.token, isAuthenticated: true });
         } catch (error: any) {
           console.error("verifyOtp error:", {error:error.response.data });
           set({ error: error.response.data.message, loading: false });

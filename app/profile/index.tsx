@@ -23,14 +23,14 @@ export default function ProfileScreen() {
       url: "",
     });
   
-  const TERMS_URL = "http://localhost:3000/public/terms-of-service.pdf"
-  const PRIVACY_URL = "http://localhost:3000/public/privacy-policy.pdf"
-  const DISCLAIMER_URL = "http://localhost:3000/public/disclaimer.pdf"
+  const TERMS_URL = "https://app.treksor.com/public/terms-of-service.pdf"
+  const PRIVACY_URL = "https://app.treksor.com/public/privacy-policy.pdf"
+  const DISCLAIMER_URL = "https://app.treksor.com/public/disclaimer.pdf"
 
   // Check if user is authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      router.replace("/login")
+      router.replace("/")
     }
   }, [isAuthenticated])
 
@@ -93,7 +93,7 @@ export default function ProfileScreen() {
             <Text style={styles.email}>{user.email}</Text>
           </View>
 
-          <Button onPress={handleEditProfile} style={styles.editButton}>
+          <Button onPress={handleEditProfile}>
             EDIT PROFILE
           </Button>
         </View>
