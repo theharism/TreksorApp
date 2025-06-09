@@ -31,10 +31,19 @@ export default function HomeScreen() {
   const [currentThoughtIndex, setCurrentThoughtIndex] = useState(0);
   const [readThoughts, setReadThoughts] = useState<Set<string>>(new Set());
   const thoughtsRef = useRef<FlatList>(null);
+  const [expandedThoughts, setExpandedThoughts] = useState<Set<string>>(new Set());
 
   useEffect(()=>{
     fetchPowerThoughts();
   },[]);
+
+  const toggleExpand = (id: string) => {
+    setExpandedThoughts(prev => {
+      const newSet = new Set(prev);
+      newSet.has(id) ? newSet.delete(id) : newSet.add(id);
+      return newSet;
+    });
+  };
 
   const handleMarkAsRead = () => {
     const currentThought = powerThoughts[currentThoughtIndex];
@@ -111,6 +120,7 @@ export default function HomeScreen() {
     index: number;
   }) => {
     const isRead = readThoughts.has(item._id);
+    const isExpanded = expandedThoughts.has(item._id);
 
     return (
       <View style={styles.powerThoughtCard}>
@@ -128,8 +138,10 @@ export default function HomeScreen() {
             end={{ x: 1, y: 1 }}
             style={styles.innerGradient}
           >
-            <Text style={styles.powerThoughtCategory}>Power Thought</Text>
-            <Text style={styles.powerThoughtContent}>{item.thought}</Text>
+            <View>
+              <Text style={styles.powerThoughtCategory}>Power Thought</Text>
+              <Text style={styles.powerThoughtContent} onPress={() => toggleExpand(item._id)} numberOfLines={isExpanded ? undefined: 3}>{item.thought}</Text>
+            </View>
             <TouchableOpacity
               style={[
                 styles.markAsReadButton,
@@ -347,6 +359,7 @@ const styles = StyleSheet.create({
     marginBottom: 100,
   },
   powerThoughtCard: {
+    minHeight: 200,
     width: width - 40,
     // backgroundColor: "#1A1A1A",
     borderRadius: 16,
@@ -367,6 +380,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     lineHeight: 32,
     marginBottom: 20,
+    overflow: "hidden",
   },
   markAsReadButton: {
     flexDirection: "row",
@@ -418,6 +432,7 @@ const styles = StyleSheet.create({
   borderGradient: {
     borderRadius: 12,
     padding: 1, // This creates the border thickness
+    minHeight: 200,
   },
   innerGradient: {
     // flexDirection: "row",
@@ -425,6 +440,8 @@ const styles = StyleSheet.create({
     // alignItems: "center",
     borderRadius: 11, // Slightly smaller than outer radius
     padding: 10,
+    minHeight: 200,
+    justifyContent:'space-between',
   },
   checkmarkContainer: {
     width: 20,
