@@ -7,14 +7,13 @@ import { LinearGradient } from "expo-linear-gradient"
 import { router, useLocalSearchParams } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useEffect, useState } from "react"
-import { Dimensions, FlatList, Animated as RNAnimated, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Dimensions, FlatList, Animated as RNAnimated, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 interface Ingredient {
   id: string
   name: string
   measurement: string
-  category: string
 }
 
 interface BeverageData {
@@ -22,7 +21,9 @@ interface BeverageData {
   name: string
   description: string
   backgroundImage: string
+  quantity: string
   ingredients: Ingredient[]
+  footNote?: string
 }
 
 const BeveragesDetails = () => {
@@ -135,10 +136,17 @@ const BeveragesDetails = () => {
           <Text style={styles.headerTitle}>{beverage.name}</Text>
           <View style={styles.headerSpacer} />
         </View>
-
-        {/* Content */}
-        <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
-          {/* Dark overlay for better text readability */}
+  
+        {/* Scrollable Content */}
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={[styles.scrollContentContainer, { paddingBottom: insets.bottom + 30 }]}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={{ width: '100%' }}>
+            <Text style={{ color: "#FFFFFF", fontSize: 16, marginBottom: 20, fontWeight: 'bold' }}>{beverage.description}</Text>
+          </View>
+  
           <LinearGradient
             colors={["transparent", "rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 0.95)"]}
             style={styles.contentOverlay}
@@ -146,8 +154,8 @@ const BeveragesDetails = () => {
             end={{ x: 0, y: 1 }}
           >
             <View style={styles.ingredientsSection}>
-              <Text style={styles.ingredientsTitle}>Ingredients:</Text>
-
+              <Text style={styles.ingredientsTitle}>Ingredients {beverage.quantity}:</Text>
+  
               <FlatList
                 data={beverage.ingredients}
                 renderItem={renderIngredientCard}
@@ -156,14 +164,19 @@ const BeveragesDetails = () => {
                 columnWrapperStyle={styles.row}
                 contentContainerStyle={styles.gridContainer}
                 scrollEnabled={false}
-                showsVerticalScrollIndicator={false}
               />
             </View>
           </LinearGradient>
-        </View>
+  
+          {beverage.footNote && (
+            <View style={{ width: '100%', marginTop: 10 }}>
+              <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: '400' }}>{beverage.footNote}</Text>
+            </View>
+          )}
+        </ScrollView>
       </ImageBackground>
     </View>
-  )
+  )  
 }
 
 export default BeveragesDetails
@@ -225,7 +238,6 @@ const styles = StyleSheet.create({
   },
   contentOverlay: {
     width: "100%",
-    paddingTop: 60,
   },
   ingredientsSection: {
     width: "100%",
@@ -240,7 +252,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 2,
   },
   gridContainer: {
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   row: {
     justifyContent: "space-between",
@@ -276,4 +288,13 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     lineHeight: 18,
   },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContentContainer: {
+    flexGrow: 1,
+    paddingHorizontal: 20,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },  
 })
