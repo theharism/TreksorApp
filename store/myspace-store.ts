@@ -15,6 +15,8 @@ interface MySpaceState {
   error: string | null;
   addMySpace: (data: addMySpaceRequest) => void;
   fetchMySpace: (id: string) => void;
+  updateMySpace: (id: string, updates: any) => void,
+  deleteMySpace: (id: string) => void,
 }
 
 export const useMySpaceStore = create<MySpaceState>()(
@@ -43,6 +45,19 @@ export const useMySpaceStore = create<MySpaceState>()(
         const newSpaces = [payload, ...get().myspaces]
         set({ myspaces: newSpaces });
       },
+
+      updateMySpace: (id, updates) => {
+        set((state) => ({
+          myspaces: state.myspaces.map((space) => (space.id === id ? { ...space, ...updates } : space)),
+        }))
+      },
+
+      deleteMySpace: (id) => {
+        set((state) => ({
+          myspaces: state.myspaces.filter((space) => space.id !== id),
+        }))
+      },
+
     }),
     {
       name: "myspace-storage",

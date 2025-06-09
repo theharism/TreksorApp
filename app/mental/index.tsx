@@ -1,5 +1,4 @@
 import Button from "@/components/ui/Button";
-import AnimatedDonutChart from "@/components/ui/Donut";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
@@ -25,14 +24,14 @@ const BodyHome = () => {
           <View style={styles.headerSpacer} />
         </View> */}
         <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
-          <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+          {/* <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
             <AnimatedDonutChart
                 percentage={60}
                 size={250}
                 strokeWidth={25}
                 color="#EFB33F"
             />
-          </View>
+          </View> */}
           <Button onPress={()=>router.push("/mental/thoughts")} icon={require("@/assets/images/mental-power-thoughts.png")}>Power Thoughts</Button>
           <Button onPress={()=>router.push("/mental/articles")} icon={require("@/assets/images/mental-articles.png")}>Articles</Button>
           <Button onPress={()=>router.push("/mental/myspace")} icon={require("@/assets/images/mental-my-space.png")}>My Space</Button>
