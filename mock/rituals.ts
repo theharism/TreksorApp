@@ -34,9 +34,8 @@ export const ritualCards: RitualCard[] = [
     ritualsCompleted: 0,
     totalRituals: 0,
     image: require("@/assets/images/locked-ritual.png"),
-    isLocked: true,
     availableDate: "Available August 2025",
     backgroundColor: "#2D2D2D",
-    route: "/body",
+    route: "/purpose",
   },
 ];
