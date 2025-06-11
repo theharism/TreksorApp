@@ -256,6 +256,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     paddingBottom: 100,
+    gap: 20,
   },
   footerLoader: {
     flexDirection: "row",

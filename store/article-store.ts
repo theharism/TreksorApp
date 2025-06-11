@@ -1,6 +1,7 @@
 import { api } from "@/api/axios";
-import { errorHandler, secureStorage } from "@/lib/utils";
+import { errorHandler } from "@/lib/utils";
 import { Article } from "@/types/article";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -57,7 +58,7 @@ export const useArticleStore = create<ArticleState>()(
     }),
     {
       name: "article-storage",
-      storage: createJSONStorage(() => secureStorage),
+      storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({
         articles: state.articles,
       }),

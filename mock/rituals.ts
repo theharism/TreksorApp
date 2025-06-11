@@ -26,7 +26,7 @@ export const ritualCards: RitualCard[] = [
     totalRituals: 4,
     image: require("@/assets/images/spiritual-ritual.png"),
     backgroundColor: "#4A3D2D",
-    route: "/body",
+    route: "/spiritual",
   },
   {
     id: "purpose",
