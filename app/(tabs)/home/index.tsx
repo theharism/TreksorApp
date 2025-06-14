@@ -1,7 +1,9 @@
 "use client";
 
+import { useNotifications } from "@/hooks/useNotifications";
 import { ritualCards } from "@/mock/rituals";
 import { usePowerThoughtStore } from "@/store/thought-store";
+import { useUserStore } from "@/store/user-store";
 import { PowerThought } from "@/types/powerThought";
 import { RitualCard } from "@/types/ritualCard";
 import { Ionicons } from "@expo/vector-icons";
@@ -32,10 +34,19 @@ export default function HomeScreen() {
   const [readThoughts, setReadThoughts] = useState<Set<string>>(new Set());
   const thoughtsRef = useRef<FlatList>(null);
   const [expandedThoughts, setExpandedThoughts] = useState<Set<string>>(new Set());
+  const {hasPermission, requestPermissions} = useNotifications();
+  const {savePushToken} = useUserStore();
 
   useEffect(()=>{
     fetchPowerThoughts();
-  },[]);
+    if(!hasPermission) {
+      requestPermissions().then((token) => {
+        if (token) {
+          savePushToken({ token });
+        }
+      })
+    }
+  },[fetchPowerThoughts, requestPermissions, hasPermission]);
 
   const toggleExpand = (id: string) => {
     setExpandedThoughts(prev => {
