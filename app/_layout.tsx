@@ -1,18 +1,20 @@
 // app/_layout.tsx
 import { useAuthStore } from "@/store/auth-store";
 import * as Linking from "expo-linking";
+import * as Notification from 'expo-notifications';
 import { router, Slot, SplashScreen } from "expo-router";
 import { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 
   const { error, clearError } = useAuthStore()
   const [initialURL, setInitialURL] = useState<string | null>(null)
   const [isNavigationReady, setIsNavigationReady] = useState(false)
-
+  SplashScreen.hideAsync();
+  Notification.getExpoPushTokenAsync().then(token => console.log(token)).catch(err => console.error("Error getting push token:", err))
   useEffect(()=>{
     const timer = setTimeout(() => {
       setIsNavigationReady(true)

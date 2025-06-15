@@ -35,12 +35,13 @@ export default function HomeScreen() {
   const thoughtsRef = useRef<FlatList>(null);
   const [expandedThoughts, setExpandedThoughts] = useState<Set<string>>(new Set());
   const {hasPermission, requestPermissions} = useNotifications();
-  const {savePushToken} = useUserStore();
+  const {savePushToken, pushToken} = useUserStore();
 
   useEffect(()=>{
     fetchPowerThoughts();
     if(!hasPermission) {
       requestPermissions().then((token) => {
+        console.log("Push token:", token);
         if (token) {
           savePushToken({ token });
         }
