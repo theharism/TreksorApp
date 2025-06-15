@@ -5,9 +5,9 @@ import { useWorkoutStore } from "@/store/workout-store";
 import { Exercise } from "@/types/workout";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import {
   Dimensions,
   ScrollView,
@@ -22,14 +22,14 @@ export default function WorkoutDetailScreen() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const { workoutId } = useLocalSearchParams();
-  const { workouts, getWorkoutExercies, updateExerciseStatus } = useWorkoutStore();
+  const { workouts, getWorkoutExercies, markExerciseAsRead } = useWorkoutStore();
   const [workout, setWorkout] = useState<Exercise[]>();
 
-  useEffect(() => {
+  useFocusEffect(() => {
     if (workoutId) {
       setWorkout(getWorkoutExercies(workoutId as string));
     }
-  }, [workoutId, workouts]);
+  });
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,10 +44,9 @@ export default function WorkoutDetailScreen() {
     })
   }, [navigation, workoutId])
 
-  const handleExercisePress = (exerciseId: string) => {
+  const handleExercisePress = (workoutId: string, exerciseId: string) => {
     if (!workout) return;
-    // updateExerciseStatus(workoutId as string,exerciseId);
-    router.push({pathname:"/body/workout/details",params:{id:exerciseId}})
+    router.push({pathname:"/body/workout/details",params:{id:exerciseId, workoutId}})
   };
 
   const renderExerciseCard = (
@@ -58,7 +57,7 @@ export default function WorkoutDetailScreen() {
     return (
         <TouchableOpacity
           style={styles.exerciseCard}
-          onPress={() => handleExercisePress(exercise.id)}
+          onPress={() => handleExercisePress(workoutId, exercise.id)}
           key={index}
         >
           <LinearGradient

@@ -1,6 +1,6 @@
 "use client"
 
-import { workoutContent } from "@/mock/workouts"
+// import { workoutContent } from "@/mock/workouts"
 import { useWorkoutStore } from "@/store/workout-store"
 import { Ionicons } from "@expo/vector-icons"
 import { useEvent } from "expo"
@@ -49,12 +49,12 @@ interface WorkoutInfo {
 
 export default function WorkoutInfoScreen() {
   const insets = useSafeAreaInsets()
-  const { id } = useLocalSearchParams()
-  const {workouts, updateExerciseStatus} = useWorkoutStore();
+  const { workoutId, id } = useLocalSearchParams()
+  const { workouts, workoutContent, markExerciseAsRead} = useWorkoutStore();
   const [workout, setWorkout] = useState<WorkoutInfo | null>(null)
-  const [isRead, setIsRead] = useState(false)
   const [fadeAnim] = useState(new RNAnimated.Value(0))
   const [slideAnim] = useState(new RNAnimated.Value(30))
+  const [isCompleted, setIsCompleted] = useState(false)
 
   const player = useVideoPlayer("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", player => {
     player.loop = true;
@@ -86,15 +86,18 @@ export default function WorkoutInfoScreen() {
     }
   }, [id])
 
+  useEffect(()=>{
+    if(!workoutId || !id) return;
+    workouts.find(workout => workout.id === workoutId)?.exercises.find(exercise => exercise.id === id)?.completed && setIsCompleted(true);
+  },[workouts, workoutId, id])
+
   const handleBackPress = () => {
     router.back()
   }
 
   const handleMarkAsRead = () => {
-    setIsRead(true)
-    // Here you could save the read status to storage
-    console.log("Marked as read:", workout?.title)
-    updateExerciseStatus(id as string,"pull-ups-or-lat-pulldown")
+    markExerciseAsRead(workoutId as string, id as string);
+    setIsCompleted(true);
   }
 
   const handlePlayVideo = () => {
@@ -214,18 +217,18 @@ export default function WorkoutInfoScreen() {
       {/* Mark as Read Button */}
       <View style={styles.bottomSection}>
         <TouchableOpacity
-          style={[styles.markAsReadButton, isRead && styles.markAsReadButtonRead]}
+          style={[styles.markAsReadButton, isCompleted && styles.markAsReadButtonRead]}
           onPress={handleMarkAsRead}
-          disabled={isRead}
+          disabled={isCompleted}
           activeOpacity={0.8}
         >
           <LinearGradient
-            colors={isRead ? ["#4CAF50", "#45A049"] : ["#F39C12", "#E67E22"]}
+            colors={isCompleted ? ["#4CAF50", "#45A049"] : ["#F39C12", "#E67E22"]}
             style={styles.buttonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
           >
-            <Text style={styles.buttonText}>{isRead ? "Read ✓" : "Mark as read"}</Text>
+            <Text style={styles.buttonText}>{isCompleted ? "Read ✓" : "Mark as read"}</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>

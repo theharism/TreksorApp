@@ -9,5 +9,5 @@ export interface Mediation {
   videoUrl: string
   content: MediationContentData
   tip: string
-  isRead: boolean
+  isRead?: boolean
 }

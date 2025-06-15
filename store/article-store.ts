@@ -17,7 +17,7 @@ export interface ArticleResponse {
 }
 
 interface ArticleState {
-  articles: Article[]
+  articles: Record<string, Article[]>
   loading: boolean;
   error: string | null;
   fetchArticles: (query: string) => Promise<void>;
@@ -27,15 +27,24 @@ interface ArticleState {
 export const useArticleStore = create<ArticleState>()(
   persist(
     (set) => ({
-      articles:[],
+      articles: {},
       loading: false,
       error: null,
 
       fetchArticles: async (query) => {
         try {
           set({ loading: true, error: null });
-          const {data:response} = await api.get<ArticleResponse>(`article?${query}`);
-          set({ loading: false, articles: response.data });
+          const {data:response} = await api.get<ArticleResponse>(`article?${query}`); 
+          const params = new URLSearchParams(query);
+          const category = params.get("category") || "default";
+          const key = category === 'all' ? 'All Articles' : category
+          set((state) => ({
+            loading: false,
+            articles: {
+            ...state.articles,
+            [key]: response.data,
+            },
+          }));
         } catch (error: any) {
           console.error("fetchArticles error:", {error:error.response.data });
           set({ error: error.response.data.message, loading: false });

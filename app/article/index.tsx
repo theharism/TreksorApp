@@ -182,7 +182,7 @@ export default function ArticlesScreen({ mode = "tab", category = "All Articles"
           </View>
         ) : (
           <FlatList
-            data={articles}
+            data={articles[activeCategory]}
             renderItem={renderArticleCard}
             keyExtractor={(item) => item._id}
             contentContainerStyle={styles.listContainer}

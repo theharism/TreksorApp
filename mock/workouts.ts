@@ -1,4 +1,4 @@
-import { Workout } from "@/types/workout";
+import { Workout, WorkoutContent } from "@/types/workout";
 
 export const WorkoutsData: Workout[] = [
   {
@@ -136,7 +136,7 @@ export const WorkoutsData: Workout[] = [
   },
 ];
 
-export const workoutContent = {
+export const workoutContent: WorkoutContent = {
   "barbell-wide-bench-press": {
     id: "barbell-wide-bench-press-info",
     title: "Barbell Wide Bench Press",

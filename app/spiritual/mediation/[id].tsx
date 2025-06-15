@@ -11,28 +11,25 @@ import { StatusBar } from "expo-status-bar"
 import { useVideoPlayer, VideoView } from "expo-video"
 import { useEffect, useLayoutEffect, useState } from "react"
 import {
-    Dimensions,
-    Pressable,
-    Animated as RNAnimated,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View
+  Pressable,
+  Animated as RNAnimated,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
 } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-const { width, height } = Dimensions.get("window")
 
 export default function MediationDetailScreen() {
   const insets = useSafeAreaInsets()
   const { id } = useLocalSearchParams()
-  const {fetchMediationById} = useMediationStore();
+  const {fetchMediationById, markMediationAsRead} = useMediationStore();
   const [mediation, setMediation] = useState<Mediation | null>(null)
-  const [isRead, setIsRead] = useState(false)
   const [fadeAnim] = useState(new RNAnimated.Value(0))
   const [slideAnim] = useState(new RNAnimated.Value(30))
   const navigation = useNavigation();
-
+  
   const player = useVideoPlayer("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", player => {
     player.loop = true;
     player.play();
@@ -72,12 +69,11 @@ export default function MediationDetailScreen() {
     });
   }, [id])
 
-  const handleBackPress = () => {
-    router.back()
-  }
-
   const handleMarkAsRead = () => {
-    setIsRead(true)
+    if(mediation)
+    {
+      markMediationAsRead(mediation.id);
+    }
   }
 
   const handleSpeak = (title: string, description: string, experience: string[]) => {
@@ -162,18 +158,18 @@ export default function MediationDetailScreen() {
       {/* Mark as Read Button */}
       <View style={styles.bottomSection}>
         <TouchableOpacity
-          style={[styles.markAsReadButton, isRead && styles.markAsReadButtonRead]}
+          style={[styles.markAsReadButton, mediation.isRead && styles.markAsReadButtonRead]}
           onPress={handleMarkAsRead}
-          disabled={isRead}
+          disabled={mediation.isRead}
           activeOpacity={0.8}
         >
           <LinearGradient
-            colors={isRead ? ["#4CAF50", "#45A049"] : ["#F39C12", "#E67E22"]}
+            colors={mediation.isRead ? ["#4CAF50", "#45A049"] : ["#F39C12", "#E67E22"]}
             style={styles.buttonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
           >
-            <Text style={styles.buttonText}>{isRead ? "Read ✓" : "Mark as read"}</Text>
+            <Text style={styles.buttonText}>{mediation.isRead ? "Read ✓" : "Mark as read"}</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
