@@ -80,7 +80,16 @@ export const useMediationStore = create<MediationState>()(
         const existingMediations = get().mediation;
         const mediationIndex = existingMediations.findIndex(thought => thought.id === id)
         existingMediations[mediationIndex].isRead = true;
-        set({ mediation: existingMediations});
+        const locked: string[] = [];
+        const beginnerMediation = existingMediations.find((mediation) => mediation.id === "beginner");
+        const intermediateMediation = existingMediations.find((mediation) => mediation.id === "intermediate");
+        if (!beginnerMediation?.isRead) {
+          locked.push("intermediate");
+        }
+        if (!intermediateMediation?.isRead) {
+          locked.push("advanced");
+        }
+        set({ mediation: existingMediations, locked});
       }
 
     }),
