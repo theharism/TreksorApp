@@ -10,6 +10,7 @@ interface PowerThoughtState {
   loading: boolean;
   error: string | null;
   fetchPowerThoughts: () => Promise<void>;
+  markPowerThoughtAsRead: (id: string) => void;
 }
 
 export const usePowerThoughtStore = create<PowerThoughtState>()(
@@ -45,6 +46,13 @@ export const usePowerThoughtStore = create<PowerThoughtState>()(
           errorHandler(error);
         }
       },
+
+      markPowerThoughtAsRead: (id) => {
+        const existingThoughts = get().powerThoughts;
+        const thoughtIndex = existingThoughts.findIndex(thought => thought._id === id)
+        existingThoughts[thoughtIndex].isRead = true;
+        set({ powerThoughts: existingThoughts});
+      }
 
     }),
     {

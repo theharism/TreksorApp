@@ -1,7 +1,9 @@
 "use client";
 
+import { useNotifications } from "@/hooks/useNotifications";
 import { ritualCards } from "@/mock/rituals";
 import { usePowerThoughtStore } from "@/store/thought-store";
+import { useUserStore } from "@/store/user-store";
 import { PowerThought } from "@/types/powerThought";
 import { RitualCard } from "@/types/ritualCard";
 import { Ionicons } from "@expo/vector-icons";
@@ -27,15 +29,23 @@ const { width } = Dimensions.get("window");
 const cardWidth = (width - 60) / 2; // Account for padding and gap
 
 export default function HomeScreen() {
-  const {powerThoughts, fetchPowerThoughts} = usePowerThoughtStore();
+  const {powerThoughts, fetchPowerThoughts, markPowerThoughtAsRead} = usePowerThoughtStore();
   const [currentThoughtIndex, setCurrentThoughtIndex] = useState(0);
-  const [readThoughts, setReadThoughts] = useState<Set<string>>(new Set());
   const thoughtsRef = useRef<FlatList>(null);
   const [expandedThoughts, setExpandedThoughts] = useState<Set<string>>(new Set());
+  const {hasPermission, requestPermissions} = useNotifications();
+  const {savePushToken} = useUserStore();
 
   useEffect(()=>{
     fetchPowerThoughts();
-  },[]);
+    if(!hasPermission) {
+      requestPermissions().then((token) => {
+        if (token) {
+          savePushToken({ token });
+        }
+      })
+    }
+  },[fetchPowerThoughts, requestPermissions, hasPermission]);
 
   const toggleExpand = (id: string) => {
     setExpandedThoughts(prev => {
@@ -47,7 +57,8 @@ export default function HomeScreen() {
 
   const handleMarkAsRead = () => {
     const currentThought = powerThoughts[currentThoughtIndex];
-    setReadThoughts((prev) => new Set([...prev, currentThought._id]));
+    markPowerThoughtAsRead(currentThought._id);
+    // setReadThoughts((prev) => new Set([...prev, currentThought._id]));
   };
 
   const handleRitualPress = (ritual: RitualCard) => {
@@ -119,7 +130,7 @@ export default function HomeScreen() {
     item: PowerThought;
     index: number;
   }) => {
-    const isRead = readThoughts.has(item._id);
+    const isRead = item.isRead;
     const isExpanded = expandedThoughts.has(item._id);
 
     return (
@@ -399,7 +410,7 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
   markAsReadTextRead: {
-    color: "#F39C12",
+    color: "#000000",
   },
   paginationContainer: {
     flexDirection: "row",

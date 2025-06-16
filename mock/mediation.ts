@@ -14,7 +14,6 @@ export const mediations: Mediation[] = [
             ]
         },
         tip: 'Practice Pranayama before work, during breaks, or before sleep to reset your state of mind.',
-        isRead: false
     },
     {
         id: 'intermediate',
@@ -29,7 +28,6 @@ export const mediations: Mediation[] = [
             ]
         },
         tip: 'Practice Pranayama before work, during breaks, or before sleep to reset your state of mind.',
-        isRead: false
     },
     {
         id: 'advanced',
@@ -44,6 +42,5 @@ export const mediations: Mediation[] = [
             ]
         },
         tip: 'Practice Pranayama before work, during breaks, or before sleep to reset your state of mind.',
-        isRead: false
     },
 ]

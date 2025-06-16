@@ -50,7 +50,7 @@ const SpiritualHome = () => {
 
           <Text style={{fontSize: 22, fontWeight: 'bold', color: '#FFFFFF', marginVertical: 20}}>Articles</Text>
             <FlatList
-            data={articles.slice(0, 3)}
+            data={articles["Spiritual"].slice(0, 3)}
             renderItem={renderArticleCard}
             keyExtractor={(item) => item._id}
             contentContainerStyle={styles.listContainer}
@@ -66,7 +66,7 @@ const SpiritualHome = () => {
             }}
           />
           <View style={styles.paginationContainer}>
-            {articles.map((_, index) => (
+            {articles["Spiritual"].map((_, index) => (
               <View
                 key={index}
                 style={[

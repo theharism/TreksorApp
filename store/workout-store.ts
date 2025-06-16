@@ -1,38 +1,38 @@
-import { WorkoutsData } from "@/mock/workouts";
-import { Exercise, Workout } from "@/types/workout";
+import { workoutContent, WorkoutsData } from "@/mock/workouts";
+import { Exercise, Workout, WorkoutContent } from "@/types/workout";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface WorkoutState {
     workouts: Workout[];
+    workoutContent: WorkoutContent;
     getWorkoutExercies:(id:string)=>Exercise[] | undefined;
-    updateExerciseStatus:(workoutId: string, exerciseId: string) => void;
+    markExerciseAsRead:(workoutId: string, exerciseId: string) => void;
 }
 
 export const useWorkoutStore = create<WorkoutState>()(
   persist(
     (set,get) => ({
         workouts: WorkoutsData,
+        workoutContent: workoutContent,
 
         getWorkoutExercies: (id) => {
           const workout = get().workouts.find(workout => workout.id === id);
           return workout?.exercises;
         },
 
-        updateExerciseStatus: (workoutId: string, exerciseId: string) => {
-          set((state) => {
-            const updatedWorkouts = state.workouts.map((workout) => {
-              if (workout.id !== workoutId) return workout;
-      
-              return {
-                ...workout,
-                exercises: [],
-              };
-            });
-        
-            return { workouts: updatedWorkouts };
+        markExerciseAsRead: (workoutId: string, exerciseId: string) => {
+          const existingWorkouts = get().workouts;
+          const existingWorkoutIndex = existingWorkouts.findIndex((workout) => workout.id === workoutId);
+          const updatedExercises = existingWorkouts[existingWorkoutIndex].exercises.map((exercise) => {
+            if (exercise.id === exerciseId) {
+              return { ...exercise, completed: true };
+            }
+            return exercise;
           });
+          existingWorkouts[existingWorkoutIndex].exercises = updatedExercises;
+          set({workouts: existingWorkouts});
         }        
     }),
     {

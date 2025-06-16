@@ -18,6 +18,7 @@ interface MediationState {
   fetchMediationById: (data: fetchMediationRequest) => Promise<Mediation | undefined>;
   fetchMediationLockedStatus: (id: string) => boolean;
   updateLockedStatus: () => void;
+  markMediationAsRead: (id: string) => void;
 }
 
 export const useMediationStore = create<MediationState>()(
@@ -75,12 +76,19 @@ export const useMediationStore = create<MediationState>()(
 
         set({ locked });
       },
+      markMediationAsRead: (id) => {
+        const existingMediations = get().mediation;
+        const mediationIndex = existingMediations.findIndex(thought => thought.id === id)
+        existingMediations[mediationIndex].isRead = true;
+        set({ mediation: existingMediations});
+      }
+
     }),
     {
       name: "mediation-storage",
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({
-        articles: state.mediation,
+        mediation: state.mediation,
         locked: state.locked,
       }),
     }
