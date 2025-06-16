@@ -1,6 +1,7 @@
 import ArticleCard from "@/components/ArticleCard";
 import Button from "@/components/ui/Button";
 import { useArticleStore } from "@/store/article-store";
+import { useMediationStore } from "@/store/mediation-store";
 import { Article } from "@/types/article";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -12,6 +13,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const SpiritualHome = () => {
   const insets = useSafeAreaInsets();
   const { fetchArticles, loading, articles } = useArticleStore();
+  const {fetchMediationLockedStatus} = useMediationStore();
   const [currentThoughtIndex, setCurrentThoughtIndex] = useState(0);
 
   useEffect(()=>{
@@ -42,9 +44,9 @@ const SpiritualHome = () => {
       <StatusBar style="light" />
         <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
           <Text style={{fontSize: 22, fontWeight: 'bold', color: '#FFFFFF', marginVertical: 20}}>Mediation</Text>
-          <Button onPress={()=>router.push("/spiritual/mediation/beginner")} icon={require("@/assets/images/beginner.png")}>Beginner</Button>
-          <Button onPress={()=>router.push("/spiritual/mediation/intermediate")} icon={require("@/assets/images/intermediate.png")}>Intermediate</Button>
-          <Button onPress={()=>router.push("/spiritual/mediation/advanced")} icon={require("@/assets/images/advanced.png")}>Advanced</Button>
+          <Button onPress={()=>router.push("/spiritual/mediation/beginner")} icon={require("@/assets/images/beginner.png")} disabled={fetchMediationLockedStatus('beginner')}>Beginner</Button>
+          <Button onPress={()=>router.push("/spiritual/mediation/intermediate")} icon={require("@/assets/images/intermediate.png")} disabled={fetchMediationLockedStatus('intermediate')}>Intermediate</Button>
+          <Button onPress={()=>router.push("/spiritual/mediation/advanced")} icon={require("@/assets/images/advanced.png")} disabled={fetchMediationLockedStatus('advanced')}>Advanced</Button>
 
           <Text style={{fontSize: 22, fontWeight: 'bold', color: '#FFFFFF', marginVertical: 20}}>Articles</Text>
             <FlatList

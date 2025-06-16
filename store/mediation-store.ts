@@ -11,16 +11,20 @@ export interface fetchMediationRequest {
 
 interface MediationState {
   mediation: Mediation[]
+  locked: string[]
   loading: boolean;
   error: string | null;
   fetchMediations: (query: string) => Promise<void>;
   fetchMediationById: (data: fetchMediationRequest) => Promise<Mediation | undefined>;
+  fetchMediationLockedStatus: (id: string) => boolean;
+  updateLockedStatus: () => void;
 }
 
 export const useMediationStore = create<MediationState>()(
   persist(
-    (set,get) => ({
-      mediation:mediations,
+    (set, get) => ({
+      mediation: mediations,
+      locked: ["intermediate", "advanced"],
       loading: false,
       error: null,
 
@@ -30,7 +34,7 @@ export const useMediationStore = create<MediationState>()(
           // const {data:response} = await api.get<ArticleResponse>(`article?${query}`);
           // set({ loading: false, articles: response.data });
         } catch (error: any) {
-          console.error("fetchMediations error:", {error:error.response.data });
+          console.error("fetchMediations error:", { error: error.response.data });
           set({ error: error.response.data.message, loading: false });
           errorHandler(error);
         }
@@ -38,8 +42,8 @@ export const useMediationStore = create<MediationState>()(
 
       fetchMediationById: async (data) => {
         try {
-          set({ loading: true, error: null })
-          const mediation = get().mediation.find(mediation => mediation.id === data.id);
+          set({ loading: true, error: null });
+          const mediation = get().mediation.find((mediation) => mediation.id === data.id);
           set({ loading: false });
           return mediation;
         } catch (error: any) {
@@ -48,12 +52,36 @@ export const useMediationStore = create<MediationState>()(
           errorHandler(error);
         }
       },
+
+      fetchMediationLockedStatus: (id: string) => {
+        const locked = get().locked.includes(id);
+        return locked;
+      },
+
+      updateLockedStatus: () => {
+        const mediations = get().mediation;
+        const locked: string[] = [];
+
+        const beginnerMediation = mediations.find((mediation) => mediation.id === "beginner");
+        const intermediateMediation = mediations.find((mediation) => mediation.id === "intermediate");
+
+        if (!beginnerMediation?.isRead) {
+          locked.push("intermediate");
+        }
+
+        if (!intermediateMediation?.isRead) {
+          locked.push("advanced");
+        }
+
+        set({ locked });
+      },
     }),
     {
       name: "mediation-storage",
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({
         articles: state.mediation,
+        locked: state.locked,
       }),
     }
   )

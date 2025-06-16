@@ -15,25 +15,34 @@ type ButtonProps = {
   onPress?: () => void;
   loading?: boolean;
   icon?: string;
+  disabled?: boolean;
 };
 
-const Button = ({ children, onPress, loading, icon }: ButtonProps) => {
+const Button = ({ children, onPress, loading, icon, disabled }: ButtonProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={onPress}
-      style={styles.buttonContainer}
+      onPress={!disabled ? onPress : undefined}
+      style={[
+        styles.buttonContainer,
+        disabled && styles.disabledButtonContainer,
+      ]}
+      disabled={disabled}
     >
       {/* Outer LinearGradient for the border */}
       <LinearGradient
-        colors={["rgba(255, 255, 255, 0.3)", "rgba(255, 255, 255, 0.4)"]}
+        colors={
+          disabled
+            ? ["rgba(255, 255, 255, 0.1)", "rgba(255, 255, 255, 0.2)"]
+            : ["rgba(255, 255, 255, 0.3)", "rgba(255, 255, 255, 0.4)"]
+        }
         start={{ x: 0.2, y: 0 }}
         end={{ x: 0.8, y: 1 }}
         style={styles.borderGradient}
       >
         {/* Inner LinearGradient for the button background */}
         <LinearGradient
-          colors={["#262626", "#0a0a0a"]}
+          colors={disabled ? ["#3a3a3a", "#1a1a1a"] : ["#262626", "#0a0a0a"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={styles.innerGradient}
@@ -42,8 +51,11 @@ const Button = ({ children, onPress, loading, icon }: ButtonProps) => {
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : typeof children === "string" ? (
             icon ? (
-              <View style={{ flexDirection: "row", alignItems:'center' }}>
-                <Image source={icon} style={{ marginRight: 10, width:20, height:20 }} />
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
+                <Image
+                  source={icon}
+                  style={{ marginRight: 10, width: 20, height: 20 }}
+                />
                 <Text style={styles.buttonText}>{children}</Text>
               </View>
             ) : (
@@ -67,6 +79,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     overflow: "hidden",
     marginVertical: 10,
+  },
+  disabledButtonContainer: {
+    opacity: 0.5, // Reduce opacity for disabled state
   },
   borderGradient: {
     flex: 1,
