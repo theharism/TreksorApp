@@ -1,5 +1,6 @@
 "use client";
 
+import ChatModal from "@/components/ChatModal";
 import { useNotifications } from "@/hooks/useNotifications";
 import { ritualCards } from "@/mock/rituals";
 import { usePowerThoughtStore } from "@/store/thought-store";
@@ -14,6 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   FlatList,
+  Image,
   ImageBackground,
   ScrollView,
   StyleSheet,
@@ -35,6 +37,7 @@ export default function HomeScreen() {
   const [expandedThoughts, setExpandedThoughts] = useState<Set<string>>(new Set());
   const {hasPermission, requestPermissions} = useNotifications();
   const {savePushToken} = useUserStore();
+  const [showChat, setShowChat] = useState(false)
 
   useEffect(()=>{
     fetchPowerThoughts();
@@ -241,16 +244,12 @@ export default function HomeScreen() {
           </View>
 
           {/* Power Thought Icon */}
-          {/* <View style={styles.powerThoughtIcon}>
-            <LinearGradient
-              colors={["#F39C12", "#E67E22"]}
-              style={styles.iconGradient}
-            >
-              <Ionicons name="bulb" size={24} color="#000000" />
-            </LinearGradient>
-          </View> */}
+          <TouchableOpacity style={styles.powerThoughtIcon} onPress={() => setShowChat(true)}>
+              <Image source={require("@/assets/images/chatbot.png")} style={{ width: 75, height: 75 }} />
+          </TouchableOpacity>
         </View>
       </ScrollView>
+      <ChatModal visible={showChat} onClose={() => setShowChat(false)} />
     </SafeAreaView>
   );
 }
@@ -430,8 +429,8 @@ const styles = StyleSheet.create({
   },
   powerThoughtIcon: {
     position: "absolute",
-    bottom: 60,
-    left: 40,
+    bottom: -10,
+    left: 10,
   },
   iconGradient: {
     width: 48,
