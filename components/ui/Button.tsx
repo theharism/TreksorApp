@@ -15,10 +15,18 @@ type ButtonProps = {
   onPress?: () => void;
   loading?: boolean;
   icon?: string;
+  iconStyle?: object; // Optional custom styles for the icon image
   disabled?: boolean;
 };
 
-const Button = ({ children, onPress, loading, icon, disabled }: ButtonProps) => {
+const Button = ({
+  children,
+  onPress,
+  loading,
+  icon,
+  iconStyle,
+  disabled,
+}: ButtonProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.8}
@@ -54,7 +62,7 @@ const Button = ({ children, onPress, loading, icon, disabled }: ButtonProps) => 
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Image
                   source={icon}
-                  style={{ marginRight: 10, width: 20, height: 20 }}
+                  style={[{ marginRight: 10, width: 20, height: 20 }, iconStyle]} // Apply custom styles
                 />
                 <Text style={styles.buttonText}>{children}</Text>
               </View>

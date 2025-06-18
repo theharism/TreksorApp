@@ -4,13 +4,14 @@ import Header from "@/components/ui/Header"
 import { useMediationStore } from "@/store/mediation-store"
 import { Mediation } from "@/types/mediation"
 import { Ionicons } from "@expo/vector-icons"
+import { Audio } from 'expo-av'
 import { LinearGradient } from "expo-linear-gradient"
 import { router, useLocalSearchParams, useNavigation } from "expo-router"
 import * as Speech from 'expo-speech'
 import { StatusBar } from "expo-status-bar"
-import { useVideoPlayer, VideoView } from "expo-video"
 import { useEffect, useLayoutEffect, useState } from "react"
 import {
+  Image,
   Pressable,
   Animated as RNAnimated,
   ScrollView,
@@ -25,15 +26,32 @@ export default function MediationDetailScreen() {
   const insets = useSafeAreaInsets()
   const { id } = useLocalSearchParams()
   const {fetchMediationById, markMediationAsRead} = useMediationStore();
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
   const [mediation, setMediation] = useState<Mediation | null>(null)
   const [fadeAnim] = useState(new RNAnimated.Value(0))
   const [slideAnim] = useState(new RNAnimated.Value(30))
+  const [isPlaying, setIsPlaying] = useState(false);
   const navigation = useNavigation();
-  
-  const player = useVideoPlayer("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", player => {
-    player.loop = true;
-    player.play();
-  });
+
+  async function playSound() {
+    if(mediation)
+    {
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: mediation.audioUrl },
+        { shouldPlay: true }
+      );
+      setSound(sound);
+      setIsPlaying(true);
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, [sound]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -100,7 +118,7 @@ export default function MediationDetailScreen() {
   }
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={[styles.container]}>
       <StatusBar style="light" />
 
       {/* Custom Header */}
@@ -127,9 +145,53 @@ export default function MediationDetailScreen() {
           ]}
         >
           {/* Video/Image Section */}
-          <View style={styles.videoSection}>
-            <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture />
-          </View>
+          {/* <View style={styles.videoSection}> */}
+            {/* <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture /> */}
+            {mediation && (
+              <View style={{ position: 'relative' }}>
+              <Image
+                source={mediation.id === 'beginner' ? require(`@/assets/images/meditation-beginner.png`) : mediation.id === 'intermediate' ? require(`@/assets/images/meditation-intermediate.png`) : require(`@/assets/images/meditation-advanced.png`)}
+                style={styles.meditationImage}
+                resizeMode="cover"
+              />
+              <TouchableOpacity
+                style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: [{ translateX: -30 }, { translateY: -30 }],
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                borderRadius: 30,
+                width: 60,
+                height: 60,
+                justifyContent: 'center',
+                alignItems: 'center',
+                }}
+                onPress={async () => {
+                  if (sound) {
+                    const status = await sound.getStatusAsync();
+                    if (status.isPlaying) {
+                      await sound.pauseAsync();
+                      setIsPlaying(false);
+                    } else {
+                      await sound.playAsync();
+                      setIsPlaying(true);
+                    }
+                  } else {
+                    await playSound();
+                  }
+                }}
+                
+              >
+                <Ionicons
+                name={isPlaying ? 'pause' : 'play'}
+                size={30}
+                color="#FFFFFF"
+                />
+              </TouchableOpacity>
+              </View>
+            )}
+          {/* </View> */}
 
           {/* Content Section */}
           <View style={styles.contentSection}>
@@ -215,18 +277,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
+    paddingTop: 20,
     paddingBottom: 120,
   },
   animatedContainer: {
     flex: 1,
   },
-  videoSection: {
-    position: "relative",
-    marginHorizontal: 20,
-    marginTop: 20,
-    borderRadius: 16,
-    overflow: "hidden",
-  },
+  // videoSection: {
+  //   position: "relative",
+  //   marginHorizontal: 20,
+  //   marginTop: 20,
+  //   borderRadius: 16,
+  //   overflow: "hidden",
+  // },
   videoThumbnail: {
     width: "100%",
     height: "100%",
@@ -373,4 +436,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 16,
   },  
+  meditationImage: {
+    width: "93%",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "gray",
+    alignSelf: 'center',
+  },
 })

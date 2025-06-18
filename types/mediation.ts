@@ -6,7 +6,7 @@ export interface MediationContentData {
 export interface Mediation {
   id: string
   title: string
-  videoUrl: string
+  audioUrl: string
   content: MediationContentData
   tip: string
   isRead?: boolean
