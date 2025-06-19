@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "894029547682",
+    "project_id": "treksor-aa949",
+    "storage_bucket": "treksor-aa949.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:894029547682:android:dd46ba31ad038439b4affb",
+        "android_client_info": {
+          "package_name": "com.treksor.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "894029547682-ipk7monqii12tip9scf2lq3nvsk263mm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.treksor.app",
+            "certificate_hash": "305a02d2b6f78f0faeeb7df0bc6fce03f2a0dbb3"
+          }
+        },
+        {
+          "client_id": "894029547682-p9dcenr39r26nppsosheb35egjdaetlq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBU2AR-3nnzihx00MS0BgEJBqmFgf7WWnk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "894029547682-p9dcenr39r26nppsosheb35egjdaetlq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "894029547682-7ts2smp9pska8209lge6gkbphktbk24h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.treksor.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

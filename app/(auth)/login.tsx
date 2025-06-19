@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Animated,
   Keyboard,
@@ -18,6 +18,7 @@ import SocialButton from "@/components/ui/SocialButton";
 import TextInput from "@/components/ui/TextInput";
 import { useAuthStore } from "@/store/auth-store";
 import { Ionicons } from "@expo/vector-icons";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { router } from "expo-router";
 
 export default function Login() {
@@ -30,6 +31,12 @@ export default function Login() {
   // Animation values
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const slideAnim = React.useRef(new Animated.Value(50)).current;
+
+  useEffect(()=>{
+    GoogleSignin.configure({
+      webClientId: '894029547682-p9dcenr39r26nppsosheb35egjdaetlq.apps.googleusercontent.com'
+    });
+  },[])
 
   React.useEffect(() => {
     // Start animations when component mounts
@@ -86,6 +93,17 @@ export default function Login() {
           }
         });
       });
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const user = GoogleSignin.signIn();
+      console.log("Google user:", user);
+    }
+    catch (error) {
+      console.error("Google login error:", error);
     }
   };
 
@@ -163,7 +181,7 @@ export default function Login() {
                   icon="logo-google"
                   label="Google"
                   color="#DB4437"
-                  onPress={() => console.log("Google login")}
+                  onPress={handleGoogleLogin}
                 />
                 <SocialButton
                   icon="logo-apple"

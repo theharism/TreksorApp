@@ -1,4 +1,4 @@
-{
+export default {
   "expo": {
     "name": "TreksorApp",
     "slug": "TreksorApp",
@@ -9,14 +9,18 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.treksor.app",
+      "googleServicesFile": process.env.GOOGLE_SERVICES_INFOPLIST
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.treksor.app",
+      "googleServicesFile": process.env.GOOGLE_SERVICES_JSON
     },
     "web": {
       "bundler": "metro",
@@ -42,14 +46,17 @@
         }
       ],
       [
-        "@react-native-google-signin/google-signin",
-        {
-          "iosUrlScheme": "com.googleusercontent.apps.1211"
-        }
+        "@react-native-google-signin/google-signin"
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f85180bc-a756-4c74-bddc-59615dab92af"
+      }
     }
   }
 }

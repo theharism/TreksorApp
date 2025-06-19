@@ -5,7 +5,7 @@ import { router, Slot, SplashScreen } from "expo-router";
 import { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 
