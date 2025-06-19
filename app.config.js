@@ -11,7 +11,10 @@ export default {
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.treksor.app",
-      "googleServicesFile": process.env.GOOGLE_SERVICES_INFOPLIST
+      "googleServicesFile": process.env.GOOGLE_SERVICES_INFOPLIST,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
