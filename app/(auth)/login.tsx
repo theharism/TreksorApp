@@ -19,15 +19,17 @@ import TextInput from "@/components/ui/TextInput";
 import { useAuthStore } from "@/store/auth-store";
 import { Ionicons } from "@expo/vector-icons";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import * as AppleAuthentication from 'expo-apple-authentication';
 import { router } from "expo-router";
 import Toast from "react-native-toast-message";
 
 export default function Login() {
-  const { login, loading, getCurrentUser, requestOtp, signInWithGoogle } =
+  const { login, loading, getCurrentUser, requestOtp, signInWithThirdParty } =
     useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ email: "", password: "" });
+  const [isAppleSigninAvailable, setIsAppleSigninAvailable] = useState(false);
 
   // Animation values
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
@@ -35,7 +37,16 @@ export default function Login() {
 
   useEffect(()=>{
     try {
-      GoogleSignin.configure();      
+      GoogleSignin.configure({
+        webClientId: '894029547682-p9dcenr39r26nppsosheb35egjdaetlq.apps.googleusercontent.com',
+        offlineAccess: true,
+        iosClientId: '894029547682-7ts2smp9pska8209lge6gkbphktbk24h.apps.googleusercontent.com'
+      });
+      const checkAvailable = async () => {
+        const isAvailable = await AppleAuthentication.isAvailableAsync();
+        setIsAppleSigninAvailable(isAvailable && Platform.OS === 'ios');
+      }      
+      checkAvailable();
     } catch (error) {
       console.error("Google Signin configuration error:", error);
     }
@@ -129,7 +140,7 @@ export default function Login() {
         })
         return;
       }
-      signInWithGoogle({ email, name, photo }).then(() => {
+      signInWithThirdParty({ email, name, photo, provider: 'google' }).then(() => {
         getCurrentUser();
       });
     } catch (error) {
@@ -141,6 +152,28 @@ export default function Login() {
       })
     }
   };
+
+  const handleAppleLogin = async () => {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      })
+      console.log(credential);
+      // signInWithThirdParty({ email, name, photo, provider: 'apple' }).then(() => {
+      //   getCurrentUser();
+      // });
+    } catch (error) {
+      console.error("Apple Sign in failed: ", error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Apple sign-in failed",
+      })
+    }
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -218,12 +251,12 @@ export default function Login() {
                   color="#DB4437"
                   onPress={handleGoogleLogin}
                 />
-                <SocialButton
+                {isAppleSigninAvailable && <SocialButton
                   icon="logo-apple"
                   label="Apple"
                   color="#000000"
-                  onPress={() => console.log("Apple login")}
-                />
+                  onPress={handleAppleLogin}
+                />}
               </View>
             </View>
 
