@@ -1,5 +1,6 @@
 import { api } from "@/api/axios";
 import { errorHandler } from "@/lib/utils";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { ImagePickerAsset } from "expo-image-picker";
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
@@ -15,6 +16,12 @@ export interface RegisterRequest {
   email: string;
   password: string;
   role: string;
+}
+
+export interface SignInWithGoogleRequest {
+  name: string;
+  email: string;
+  photo?: string | null;
 }
 
 export interface VerifyOtpRequest {
@@ -67,6 +74,7 @@ interface AuthState {
     email: string;
     role: string;
     avatar?: string;
+    authProvider?: string;
   };
   token: string | null;
   loading: boolean;
@@ -74,6 +82,7 @@ interface AuthState {
   login: (data: LoginRequest) => Promise<void>;
   logout: () => void;
   register: (data: RegisterRequest) => Promise<void>;
+  signInWithGoogle: (data: SignInWithGoogleRequest) => Promise<void>;
   resetPassword: (data: ResetPasswordRequest) => Promise<void>;
   requestResetPassword: (data: RequestResetPasswordRequest) => Promise<void>;
   verifyOtp: (data: VerifyOtpRequest) => Promise<string | undefined>;
@@ -97,7 +106,7 @@ const secureStorage = {
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       isAuthenticated: false,
       isVerified: false,
       isChangePassword: false,
@@ -141,7 +150,27 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      logout: () => {
+      signInWithGoogle: async (data: SignInWithGoogleRequest) => {
+        try {
+          set({ loading: true, error: null });
+          const {data:response} = await api.post<AuthResponse>("auth/google", data);
+          set({
+            token: response.data.token,
+            isAuthenticated: true,
+            loading: false,
+          });
+        } catch (error: any) {
+          console.error("register error:", {error:error.response.data });
+          set({ error: error.response.data.message, loading: false });
+          errorHandler(error);
+        }
+      },
+
+      logout: async () => {
+        if (get().user.authProvider === 'google') {
+          await GoogleSignin.revokeAccess();
+          await GoogleSignin.signOut();
+        }
         set({
           isAuthenticated: false,
           isVerified: false,

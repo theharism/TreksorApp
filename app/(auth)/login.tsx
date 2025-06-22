@@ -20,9 +20,10 @@ import { useAuthStore } from "@/store/auth-store";
 import { Ionicons } from "@expo/vector-icons";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { router } from "expo-router";
+import Toast from "react-native-toast-message";
 
 export default function Login() {
-  const { login, loading, getCurrentUser, requestOtp, isVerified } =
+  const { login, loading, getCurrentUser, requestOtp, signInWithGoogle } =
     useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,9 +34,12 @@ export default function Login() {
   const slideAnim = React.useRef(new Animated.Value(50)).current;
 
   useEffect(()=>{
-    GoogleSignin.configure({
-      webClientId: '894029547682-p9dcenr39r26nppsosheb35egjdaetlq.apps.googleusercontent.com'
-    });
+    try {
+      GoogleSignin.configure();      
+    } catch (error) {
+      console.error("Google Signin configuration error:", error);
+    }
+
   },[])
 
   React.useEffect(() => {
@@ -98,12 +102,43 @@ export default function Login() {
 
   const handleGoogleLogin = async () => {
     try {
-      await GoogleSignin.hasPlayServices();
-      const user = GoogleSignin.signIn();
-      console.log("Google user:", user);
-    }
-    catch (error) {
-      console.error("Google login error:", error);
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      const currentUser = GoogleSignin.getCurrentUser();
+      if(currentUser) {
+        console.log("Already signed in with Google:", currentUser);
+        return;
+      }
+      const response = await GoogleSignin.signIn();
+      console.log("Google sign-in response:", response)
+      // const response = {"data": {"user": {"email": "chaudharyhouse1211@gmail.com", "familyName": null, "givenName": "Chaudhary", "id": "107538304071486047850", "name": "Chaudhary", "photo": null}}, "type": "success"}
+      const user = response?.data ? response.data.user : null;
+      if (!user) {
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Google sign-in failed: No user data received",
+        })
+        return;
+      }
+      const { email, photo, name } = user;
+      if (!email || !name) {
+        Toast.show({
+          type: "error",
+          text1: "Error",
+          text2: "Google sign-in failed: Missing email or name",
+        })
+        return;
+      }
+      signInWithGoogle({ email, name, photo }).then(() => {
+        getCurrentUser();
+      });
+    } catch (error) {
+      console.error("Google sign-in error:", error);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Google sign-in failed",
+      })
     }
   };
 

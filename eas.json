@@ -11,8 +11,8 @@
         "simulator": true
       },
       "env": {
-        "GOOGLE_SERVICES_INFOPLIST": "./GoogleService-Info-2.plist",
-        "GOOGLE_SERVICES_JSON": "./google-services-2.json"
+        "GOOGLE_SERVICES_INFOPLIST": "./GoogleService-Info.plist",
+        "GOOGLE_SERVICES_JSON": "./google-services.json"
       }
     },
     "preview": {
@@ -21,8 +21,8 @@
     "production": {
       "autoIncrement": true,
       "env": {
-        "GOOGLE_SERVICES_INFOPLIST": "./GoogleService-Info-2.plist",
-        "GOOGLE_SERVICES_JSON": "./google-services-2.json"
+        "GOOGLE_SERVICES_INFOPLIST": "./GoogleService-Info.plist",
+        "GOOGLE_SERVICES_JSON": "./google-services.json"
       }
     }
   },
