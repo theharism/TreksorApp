@@ -102,9 +102,7 @@ export default function ArticlesScreen({ mode = "tab", category = "All Articles"
   };
 
   const handleArticlePress = (article: Article) => {
-    // Navigate to article detail screen
-    console.log("Navigate to article:", article.title);
-    const path = activeCategory === 'All Articles' ? `/(tabs)/articles/${article._id}` : `/${category.toLowerCase()}/articles/${article._id}`;
+    const path = activeCategory === 'All Articles' ? `/(tabs)/articles/${article._id}` : `/${activeCategory.toLowerCase()}/articles/${article._id}`; 
     router.push(path);
   };
 
