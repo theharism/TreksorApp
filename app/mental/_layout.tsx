@@ -15,7 +15,7 @@ const MentalLayout = () => {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: true,
+          headerShown: false,
           header: () => (
             <Header
               title="MENTAL"

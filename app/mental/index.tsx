@@ -1,8 +1,10 @@
 import Button from "@/components/ui/Button";
+import { Ionicons } from "@expo/vector-icons";
+import { ImageBackground } from "expo-image";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const BodyHome = () => {
@@ -10,19 +12,19 @@ const BodyHome = () => {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-      {/* <ImageBackground
-        source={require("@/assets/images/body-home.png")}
+      <ImageBackground
+        source={require("@/assets/images/mental-bg.jpg")}
         contentFit="cover"
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}
-      > */}
-        {/* <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+      >
+        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
           <TouchableOpacity style={styles.backButton} onPress={()=>router.back()}>
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>MENTAL</Text>
           <View style={styles.headerSpacer} />
-        </View> */}
+        </View>
         <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
           {/* <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
             <AnimatedDonutChart
@@ -36,7 +38,7 @@ const BodyHome = () => {
           <Button onPress={()=>router.push("/mental/articles")} icon={require("@/assets/images/mental-articles.png")}>Articles</Button>
           <Button onPress={()=>router.push("/mental/myspace")} icon={require("@/assets/images/mental-my-space.png")}>My Space</Button>
         </View>
-      {/* </ImageBackground> */}
+      </ImageBackground>
     </View>
   );
 };
