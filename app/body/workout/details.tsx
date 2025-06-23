@@ -97,6 +97,12 @@ export default function WorkoutInfoScreen() {
     workouts.find(workout => workout.id === workoutId)?.exercises.find(exercise => exercise.id === id)?.completed && setIsCompleted(true);
   },[workouts, workoutId, id])
 
+  useEffect(() => {
+    return () => {
+      Speech.stop();
+    };
+  }, []);
+
   const handleBackPress = () => {
     router.back()
   }
@@ -104,16 +110,6 @@ export default function WorkoutInfoScreen() {
   const handleMarkAsRead = () => {
     markExerciseAsRead(workoutId as string, id as string);
     setIsCompleted(true);
-  }
-
-  const handlePlayVideo = () => {
-    console.log("Play workout video:", workout?.title)
-    // Navigate to video player or open video
-    if (isPlaying) {
-        player.pause();
-      } else {
-        player.play();
-      }
   }
 
   const handleSpeak = (title: string, description: string, goals: string[]) => {

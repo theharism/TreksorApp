@@ -87,6 +87,12 @@ export default function MediationDetailScreen() {
     });
   }, [id])
 
+  useEffect(() => {
+    return () => {
+      Speech.stop();
+    };
+  }, []);
+
   const handleMarkAsRead = () => {
     if(mediation)
     {

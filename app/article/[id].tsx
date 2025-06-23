@@ -1,14 +1,17 @@
 "use client";
 
 import { useArticleStore } from "@/store/article-store";
+import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
+import * as Speech from 'expo-speech';
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
   Image,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -35,8 +38,6 @@ interface ArticlesDetailsScreenProps {
 }
 
 export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsScreenProps) {
-  console.log(mode);
-  
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams();
   const [article, setArticle] = useState<Article | null>(null);
@@ -52,9 +53,21 @@ export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsS
     }
   }, [id]);
 
+  useEffect(() => {
+    return () => {
+      Speech.stop();
+    };
+  }, []);
+
   const handleMarkAsRead = () => {
     setIsRead(true)
   }
+
+  const handleSpeak = (title: string, description: string, body: string) => {
+    const plainBody = body.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+    const speechText = `${title}. ${description.replace(/<[^>]+>/g, '')}. ${plainBody}`;
+    Speech.speak(speechText);
+  };
 
   if (loading) {
     return (
@@ -100,7 +113,7 @@ export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsS
       <StatusBar style="light" />
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: mode === 'tab' ? insets.bottom + 140 : 0}}
+      contentContainerStyle={{ paddingBottom: mode === 'tab' ? insets.bottom + 40 : 0}}
       >
         {/* Article Image */}
         <Image
@@ -112,7 +125,12 @@ export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsS
         {/* Article Content */}
         <View style={styles.articleContent}>
           {/* <Text style={styles.category}>{article?.category}</Text> */}
-          <Text style={styles.title}>{article?.title}</Text>
+          <View style={styles.titleRow}>          
+            <Text style={styles.title}>{article?.title}</Text>
+            <Pressable onPress={() => handleSpeak(article?.title, article?.description, article?.body)}>
+              <Ionicons name="volume-high-outline" size={24} color="gray" />
+            </Pressable>
+          </View>
           <Text style={styles.description}>{article?.description}</Text>
 
           {/* Article Body */}
@@ -120,7 +138,7 @@ export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsS
             <WebView
               source={{ html: htmlContent }}
               style={styles.webView}
-              scrollEnabled={false}
+              scrollEnabled={true}
               showsVerticalScrollIndicator={false}
               backgroundColor="transparent"
             />
@@ -243,4 +261,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },  
 });

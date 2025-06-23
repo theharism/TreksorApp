@@ -33,10 +33,7 @@ export default function NewEntryScreen() {
   const [showMoodDropdown, setShowMoodDropdown] = useState(false)
 
   const handleAddEntry = () => {
-    // Here you would save the entry with the selected mood and text
-    console.log("Adding entry with mood:", mood, "and text:", entryText)
     addMySpace({mood,text:entryText})
-    // Navigate back after saving
     router.push('/mental/myspace/new-entry-success');
   }
 
