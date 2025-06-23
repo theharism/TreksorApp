@@ -20,3 +20,15 @@ export const secureStorage = {
     await SecureStore.deleteItemAsync(name);
   },
 };
+
+export const generateRandomId = (length: number = 6): string => {
+  const characters = "0123456789";
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  return result;
+};
+
+export const calcPercentage = (done: number, total: number) =>
+  total > 0 ? Math.round((done / total) * 100) : 0;
