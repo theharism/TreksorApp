@@ -1,6 +1,6 @@
 "use client"
 
-import { Ionicons } from "@expo/vector-icons"
+import { AntDesign, Ionicons } from "@expo/vector-icons"
 import { router } from "expo-router"
 import { useEffect, useState } from "react"
 import { Alert, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
@@ -9,10 +9,12 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import Button from "@/components/ui/Button"
 import PDFViewer from "@/components/ui/PDFViewer"
 import { useAuthStore } from "@/store/auth-store"
+import { useUserStore } from "@/store/user-store"
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const {isAuthenticated, logout, user, loading, requestResetPassword} = useAuthStore();
+  const {deactivateAccount} = useUserStore();
   const [showPDF, setShowPDF] = useState<{
       visible: boolean
       title: string
@@ -64,6 +66,27 @@ export default function ProfileScreen() {
       })
   }
 
+  const handleDeactivateAccount = () => {
+    Alert.alert(
+      "Deactivate Account",
+      "Are you sure you want to deactivate account? The action is irreversible",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Deactivate",
+          style: "destructive",
+          onPress: () => {
+            deactivateAccount().then(() => logout());
+          }
+        },
+      ],
+      { cancelable: true },
+    )
+  }
+
   const openPDF = (title: string, url: string) => {
     setShowPDF({ visible: true, title, url })
   }
@@ -110,6 +133,12 @@ export default function ProfileScreen() {
           <TouchableOpacity style={styles.menuItem} onPress={handleChangePassword}>
             <Ionicons name="lock-closed-outline" size={22} color="#FFFFFF" style={styles.menuIcon} />
             <Text style={styles.menuText}>Change Password</Text>
+            <Ionicons name="chevron-forward" size={20} color="#AAAAAA" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.menuItem, {backgroundColor: 'red',opacity:0.8}]} onPress={handleDeactivateAccount}>
+            <AntDesign name="deleteuser" size={22} color="#FFFFFF" style={styles.menuIcon} />
+            <Text style={styles.menuText}>Deactivate Account</Text>
             <Ionicons name="chevron-forward" size={20} color="#AAAAAA" />
           </TouchableOpacity>
 

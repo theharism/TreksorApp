@@ -13,6 +13,11 @@ export interface SavePushTokenResonse {
   success: boolean;
 }
 
+export interface DeactivateAccountResponse {
+  message: string;
+  success: boolean;
+}
+
 interface UserState {
   // user: {
   //   id: string;
@@ -23,6 +28,7 @@ interface UserState {
   // };
   pushToken: string | null;
   savePushToken: (data: savePushTokenRequest) => Promise<void>;
+  deactivateAccount: () => Promise<void>;
   // token: string | null;
   loading: boolean;
   error: string | null;
@@ -62,6 +68,18 @@ export const useUserStore = create<UserState>()(
           set({ loading: false });
         } catch (error: any) {
           console.error("savePushToken error:", { error:error.response.data });
+          set({ error: error.response.data.message, loading: false });
+          errorHandler(error);
+        }
+      },
+
+      deactivateAccount: async () => {
+        try {
+          set({ loading: true, error: null });
+          await api.delete<DeactivateAccountResponse>("user/deactivate");
+          set({ loading: false });
+        } catch (error: any) {
+          console.error("deactivateAccount error:", { error:error.response.data });
           set({ error: error.response.data.message, loading: false });
           errorHandler(error);
         }
