@@ -14,7 +14,8 @@ export default {
       "googleServicesFile": process.env.GOOGLE_SERVICES_INFOPLIST,
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
-      }
+      },
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
@@ -33,6 +34,7 @@ export default {
     "plugins": [
       "expo-router",
       "expo-web-browser",
+      "expo-apple-authentication",
       [
         "expo-splash-screen",
         {

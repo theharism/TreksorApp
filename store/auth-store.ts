@@ -26,10 +26,11 @@ export interface RegisterRequest {
   role: string;
 }
 
-export interface SignInWithGoogleRequest {
+export interface ThirdPartyAuthRequest {
   name: string;
   email: string;
   photo?: string | null;
+  provider: string
 }
 
 export interface VerifyOtpRequest {
@@ -90,7 +91,7 @@ interface AuthState {
   login: (data: LoginRequest) => Promise<void>;
   logout: () => void;
   register: (data: RegisterRequest) => Promise<void>;
-  signInWithGoogle: (data: SignInWithGoogleRequest) => Promise<void>;
+  signInWithThirdParty: (data: ThirdPartyAuthRequest) => Promise<void>;
   resetPassword: (data: ResetPasswordRequest) => Promise<void>;
   requestResetPassword: (data: RequestResetPasswordRequest) => Promise<void>;
   verifyOtp: (data: VerifyOtpRequest) => Promise<string | undefined>;
@@ -158,10 +159,10 @@ export const useAuthStore = create<AuthState>()(
         }
       },
 
-      signInWithGoogle: async (data: SignInWithGoogleRequest) => {
+      signInWithThirdParty: async (data: ThirdPartyAuthRequest) => {
         try {
           set({ loading: true, error: null });
-          const {data:response} = await api.post<AuthResponse>("auth/google", data);
+          const {data:response} = await api.post<AuthResponse>("auth/third-party", data);
           set({
             token: response.data.token,
             isAuthenticated: true,
