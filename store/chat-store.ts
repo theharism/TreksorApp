@@ -10,6 +10,7 @@ interface ChatState {
     loading: boolean;
     error: string | null;
     sendMessage: (message: string) => Promise<void>;
+    clearData: () => void;
 }
 
 export const useChatStore = create<ChatState>()(
@@ -42,6 +43,10 @@ export const useChatStore = create<ChatState>()(
                     set({ messages: [...get().messages, errorMessage], error: error.message, loading: false });
                     errorHandler(error)
                 }
+            },
+
+            clearData: () => {
+                set({messages:[],loading:false,error:null})
             },
         }),
         {

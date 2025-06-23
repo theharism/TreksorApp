@@ -5,6 +5,14 @@ import { ImagePickerAsset } from "expo-image-picker";
 import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { useArticleStore } from "./article-store";
+import { useChatStore } from "./chat-store";
+import { useMediationStore } from "./mediation-store";
+import { useMySpaceStore } from "./myspace-store";
+import { usePowerThoughtStore } from "./thought-store";
+import { useTrackingStore } from "./tracking-store";
+import { useUserStore } from "./user-store";
+import { useWorkoutStore } from "./workout-store";
 
 export interface LoginRequest {
   email: string;
@@ -177,6 +185,14 @@ export const useAuthStore = create<AuthState>()(
           user: { id: "", name: "", email: "", role: "" },
           token: null,
         });
+        useArticleStore.getState().clearData();
+        useChatStore.getState().clearData();
+        useMediationStore.getState().clearData();
+        useMySpaceStore.getState().clearData();
+        usePowerThoughtStore.getState().clearData();
+        useTrackingStore.getState().clearData();
+        useUserStore.getState().clearData();
+        useWorkoutStore.getState().clearData();
       },
 
       requestResetPassword: async (data: RequestResetPasswordRequest) => {

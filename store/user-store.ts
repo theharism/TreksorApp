@@ -32,6 +32,7 @@ interface UserState {
   // token: string | null;
   loading: boolean;
   error: string | null;
+  clearData: () => void;
   // getCurrentUser: () => Promise<boolean | undefined>;
   // updateProfile: (data: updateProfileRequest) => Promise<void>;
 }
@@ -83,6 +84,14 @@ export const useUserStore = create<UserState>()(
           set({ error: error.response.data.message, loading: false });
           errorHandler(error);
         }
+      },
+
+      clearData: () => {
+        set({
+          pushToken: null,
+          loading: false,
+          error: null,
+        })
       },
 
       // getCurrentUser: async () => {

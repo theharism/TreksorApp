@@ -11,6 +11,7 @@ interface PowerThoughtState {
   error: string | null;
   fetchPowerThoughts: () => Promise<void>;
   markPowerThoughtAsRead: (id: string) => void;
+  clearData: () => void;
 }
 
 export const usePowerThoughtStore = create<PowerThoughtState>()(
@@ -52,6 +53,14 @@ export const usePowerThoughtStore = create<PowerThoughtState>()(
         const thoughtIndex = existingThoughts.findIndex(thought => thought._id === id)
         existingThoughts[thoughtIndex].isRead = true;
         set({ powerThoughts: existingThoughts});
+      },
+
+      clearData: () => {
+        set({
+          powerThoughts:[],
+          loading: false,
+          error: null,
+        })
       }
 
     }),

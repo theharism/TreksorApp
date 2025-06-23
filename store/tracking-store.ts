@@ -1,123 +1,3 @@
-// import { errorHandler } from "@/lib/utils";
-// import { trackingData } from "@/mock/tracking";
-// import { TrackingCategory } from "@/types/tracking";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { create } from "zustand";
-// import { createJSONStorage, persist } from "zustand/middleware";
-// import { useArticleStore } from "./article-store";
-// import { useMediationStore } from "./mediation-store";
-// import { useMySpaceStore } from "./myspace-store";
-// import { usePowerThoughtStore } from "./thought-store";
-// import { useWorkoutStore } from "./workout-store";
-
-// interface TrackingStore {
-//   trackingData: TrackingCategory[]
-//   loading: boolean;
-//   error: string | null;
-//   fetchTrackingData: () => Promise<void>;
-// }
-
-// export const useTrackingStore = create<TrackingStore>()(
-//   persist(
-//     (set, get) => ({
-//       trackingData: trackingData,
-//       loading: false,
-//       error: null,
-
-//       fetchTrackingData: async () => {
-//         try {
-//           set({ loading: true, error: null });
-//           const countRead = (items: { isRead?: boolean }[]) => items.filter(i => i.isRead).length;
-
-//           // Articles
-//           const { articles } = useArticleStore.getState();
-//           const bodyArticles = articles["Body"] || [];
-//           const mentalArticles = articles["Mental"] || [];
-//           const spiritualArticles = articles["Spiritual"] || [];
-
-//           const bodyRead = countRead(bodyArticles);
-//           const mentalRead = countRead(mentalArticles);
-//           const spiritualRead = countRead(spiritualArticles);
-
-//           // Workouts
-//           const workouts = useWorkoutStore.getState().workouts || [];
-//           const totalWorkouts = workouts.reduce(
-//             (total, w) => total + w.exercises.length,
-//             0
-//           );
-//           const completedWorkouts = workouts.reduce(
-//             (total, w) => total + w.exercises.filter(e => e.completed).length,
-//             0
-//           );
-
-//           // Meditations
-//           const meditations = useMediationStore.getState().mediation || [];
-//           const totalMeditations = meditations.length;
-//           const readMeditations = countRead(meditations);
-
-//           // Power Thoughts
-//           const powerThoughts = usePowerThoughtStore.getState().powerThoughts || [];
-//           const totalThoughts = powerThoughts.length;
-//           const readThoughts = countRead(powerThoughts);
-
-//           // Journal Entries (assumed always completed)
-//           const journalEntries = useMySpaceStore.getState().myspaces || [];
-//           const totalJournals = journalEntries.length;
-
-//           // Helper to calculate percentage
-//           const calcPercentage = (done: number, total: number) =>
-//             total > 0 ? Math.round((done / total) * 100) : 0;
-
-//           set({ trackingData: [
-//             {
-//               title: "Body",
-//               percentage: calcPercentage(completedWorkouts + bodyRead, totalWorkouts + bodyArticles.length),
-//               items: [
-//                 { label: "Workouts", value: `${completedWorkouts}/${totalWorkouts}` },
-//                 { label: "Articles Completed", value: `${bodyRead}/${bodyArticles.length}` },
-//               ],
-//             },
-//             {
-//               title: "Mental",
-//               percentage: calcPercentage(
-//                 readThoughts + mentalRead + totalJournals,
-//                 totalThoughts + mentalArticles.length + totalJournals
-//               ),
-//               items: [
-//                 { label: "Power Thought Read", value: `${readThoughts}/${totalThoughts}` },
-//                 { label: "Articles Completed", value: `${mentalRead}/${mentalArticles.length}` },
-//                 { label: "General Entries", value: `${totalJournals}` },
-//               ],
-//             },
-//             {
-//               title: "Spiritual",
-//               percentage: calcPercentage(
-//                 readMeditations + spiritualRead,
-//                 totalMeditations + spiritualArticles.length
-//               ),
-//               items: [
-//                 { label: "Meditations", value: `${readMeditations}/${totalMeditations}` },
-//                 { label: "Articles Read", value: `${spiritualRead}/${spiritualArticles.length}` },
-//               ],
-//             },
-//           ]});
-//         } catch (error: any) {
-//           console.error("fetchArticles error:", {error:error.response.data });
-//           set({ error: error.response.data.message, loading: false });
-//           errorHandler(error);
-//         }
-//       }
-//     }),
-//     {
-//       name: "temp-tracking-storage",
-//       storage: createJSONStorage(() => AsyncStorage),
-//       partialize: (state) => ({
-//         trackingData: state.trackingData,
-//       }),
-//     }
-//   )
-// );
-
 import { calcPercentage, errorHandler, generateRandomId } from "@/lib/utils";
 import { trackingData as initialTrackingData } from "@/mock/tracking";
 import { TrackingCategory } from "@/types/tracking";
@@ -139,6 +19,7 @@ interface TrackingStore {
   updateTrackingCategory: (title: string, updated: Partial<TrackingCategory>) => void;
   deleteTrackingCategory: (title: string) => void;
   getTrackingCategoryByTitle: (title: string) => TrackingCategory | undefined;
+  clearData: () => void;
 }
 
 export const useTrackingStore = create<TrackingStore>()(
@@ -282,9 +163,17 @@ export const useTrackingStore = create<TrackingStore>()(
       getTrackingCategoryByTitle: (id) => {
         return get().trackingData.find((item) => item.id === id);
       },
+
+      clearData: () => {
+        set({
+          trackingData: initialTrackingData,
+          loading: false,
+          error: null,
+        })
+      }
     }),
     {
-      name: "temp-tracking-storage-6",
+      name: "tracking-storage",
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({
         trackingData: state.trackingData,

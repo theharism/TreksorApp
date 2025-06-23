@@ -22,6 +22,7 @@ interface ArticleState {
   error: string | null;
   fetchArticles: (query: string) => Promise<void>;
   fetchArticleById: (data: fetchArticleRequest) => Promise<Article | undefined>;
+  clearData: () => void;
 }
 
 export const useArticleStore = create<ArticleState>()(
@@ -64,6 +65,11 @@ export const useArticleStore = create<ArticleState>()(
           errorHandler(error);
         }
       },
+
+      clearData: () => {
+        set({articles:{},loading:false,error:null})
+      }
+
     }),
     {
       name: "article-storage",

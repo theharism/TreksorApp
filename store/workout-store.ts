@@ -9,6 +9,7 @@ interface WorkoutState {
     workoutContent: WorkoutContent;
     getWorkoutExercies:(id:string)=>Exercise[] | undefined;
     markExerciseAsRead:(workoutId: string, exerciseId: string) => void;
+    clearData: () => void;
 }
 
 export const useWorkoutStore = create<WorkoutState>()(
@@ -33,7 +34,14 @@ export const useWorkoutStore = create<WorkoutState>()(
           });
           existingWorkouts[existingWorkoutIndex].exercises = updatedExercises;
           set({workouts: existingWorkouts});
-        }        
+        },
+        
+        clearData: () => {
+          set({
+            workouts: WorkoutsData,
+            workoutContent: workoutContent,
+          })
+        }
     }),
     {
       name: "workout-storage",

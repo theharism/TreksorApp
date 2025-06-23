@@ -1,4 +1,3 @@
-import { mySpaces } from "@/mock/myspace";
 import { MySpace } from "@/types/myspace";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from "zustand";
@@ -17,12 +16,13 @@ interface MySpaceState {
   fetchMySpace: (id: string) => void;
   updateMySpace: (id: string, updates: any) => void,
   deleteMySpace: (id: string) => void,
+  clearData: () => void;
 }
 
 export const useMySpaceStore = create<MySpaceState>()(
   persist(
     (set,get) => ({
-      myspaces:mySpaces,
+      myspaces:[],
       loading: false,
       error: null,
 
@@ -57,6 +57,14 @@ export const useMySpaceStore = create<MySpaceState>()(
           myspaces: state.myspaces.filter((space) => space.id !== id),
         }))
       },
+
+      clearData: () => {
+        set({
+          myspaces:[],
+          loading: false,
+          error: null,
+        })
+      }
 
     }),
     {
