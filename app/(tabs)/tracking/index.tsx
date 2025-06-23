@@ -6,9 +6,11 @@ import TrackingCard from "@/components/TrackingCard";
 import CalendarModal from "@/components/ui/CalendarModal";
 import { useTrackingStore } from "@/store/tracking-store";
 import { Ionicons } from "@expo/vector-icons";
+import { useFocusEffect } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
+  ActivityIndicator,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -18,7 +20,7 @@ import {
 } from "react-native";
 
 export default function TrackingScreen() {
-  const { trackingData, fetchTrackingData } = useTrackingStore();
+  const { trackingData, fetchTrackingData, loading } = useTrackingStore();
 
   const [showAddTracker, setShowAddTracker] = useState(false);
   const [showActivityLog, setShowActivityLog] = useState(false);
@@ -31,9 +33,11 @@ export default function TrackingScreen() {
     string | undefined
   >();
 
-  useEffect(() => {
-    fetchTrackingData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchTrackingData();
+    }, [])
+  );
 
   const handleDateSelect = (date: string) => {   
     setSelectedDate(date);
@@ -50,9 +54,14 @@ export default function TrackingScreen() {
     setShowCalendar(true);
   };
 
-  useEffect(() => {
-    fetchTrackingData();
-  }, []);
+  if(loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#F39C12" />
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    )
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -61,8 +70,8 @@ export default function TrackingScreen() {
       {/* Streak Section */}
       <View style={styles.streakContainer}>
         <View style={styles.streakContent}>
-          <Ionicons name="flame" size={24} color="#EFB33F" />
-          <Text style={styles.streakText}>4-Day Streak</Text>
+          {/* <Ionicons name="flame" size={24} color="#EFB33F" /> */}
+          {/* <Text style={styles.streakText}>4-Day Streak</Text> */}
         </View>
         <View style={{ flexDirection: "row", gap: 5 }}>
           <TouchableOpacity
@@ -156,5 +165,15 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 10,
     paddingBottom: 100,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    color: "#AAAAAA",
+    fontSize: 16,
+    marginTop: 10,
   },
 });
