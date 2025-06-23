@@ -50,16 +50,22 @@ interface WorkoutInfo {
 export default function WorkoutInfoScreen() {
   const insets = useSafeAreaInsets()
   const { workoutId, id } = useLocalSearchParams()
-  const { workouts, workoutContent, markExerciseAsRead} = useWorkoutStore();
+  const { workouts, workoutContent, markExerciseAsRead, clearData} = useWorkoutStore();
   const [workout, setWorkout] = useState<WorkoutInfo | null>(null)
   const [fadeAnim] = useState(new RNAnimated.Value(0))
   const [slideAnim] = useState(new RNAnimated.Value(30))
   const [isCompleted, setIsCompleted] = useState(false)
+  const videoUrl = workout?.videoUrl || "https://app.treksor.com/uploads/loading.mp4";
+  
+  const player = useVideoPlayer(videoUrl);
 
-  const player = useVideoPlayer("https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", player => {
-    player.loop = true;
-    player.play();
-  });
+  // Start playback once video and player are available
+  useEffect(() => {
+    if (workout?.videoUrl && player) {
+      player.loop = true;
+      player.play();
+    }
+  }, [player, workout?.videoUrl]);
 
   const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
 
@@ -282,7 +288,7 @@ const styles = StyleSheet.create({
   videoSection: {
     position: "relative",
     height: height * 0.35,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
     marginTop: 20,
     borderRadius: 16,
     overflow: "hidden",
@@ -421,8 +427,9 @@ const styles = StyleSheet.create({
   },
   video: {
     width: "100%",
-    height: 275,
-    borderRadius:12,
+    height: 250,
+    borderRadius: 12,
+    backgroundColor: '#F5F5F5', // Very light gray
   },
   controlsContainer: {
     padding: 10,

@@ -140,7 +140,7 @@ export const workoutContent: WorkoutContent = {
   "barbell-wide-bench-press": {
     id: "barbell-wide-bench-press-info",
     title: "Barbell Wide Bench Press",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Barbell-Wide-Bench-Press.mp4",
     stats: {
       burn: "500 Kcal",
       time: "20 Min"
@@ -160,7 +160,7 @@ export const workoutContent: WorkoutContent = {
   "cable-middle-fly": {
     id: "cable-middle-fly-info",
     title: "Cable Middle Fly",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Cable-Middle-Fly.mp4",
     stats: {
       burn: "300 Kcal",
       time: "15 Min"
@@ -180,7 +180,7 @@ export const workoutContent: WorkoutContent = {
   "dumbbell-lateral-raises": {
     id: "dumbbell-lateral-raises-info",
     title: "Dumbbell Lateral Raises",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Dumbbell-Lateral-Raises.mp4",
     stats: {
       burn: "250 Kcal",
       time: "15 Min"
@@ -200,7 +200,7 @@ export const workoutContent: WorkoutContent = {
   "standing-dumbbell-shoulder-press": {
     id: "standing-dumbbell-shoulder-press-info",
     title: "Standing Dumbbell Shoulder Press",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Standing-Dumbbell-Shoulder-Press.mp4",
     stats: {
       burn: "400 Kcal",
       time: "20 Min"
@@ -220,7 +220,7 @@ export const workoutContent: WorkoutContent = {
   "dumbbell-incline-triceps-extension": {
     id: "dumbbell-incline-triceps-extension-info",
     title: "Dumbbell Incline Triceps Extension",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Dumbbell-Incline-Triceps-Extension.mp4",
     stats: {
       burn: "300 Kcal",
       time: "15 Min"
@@ -240,7 +240,7 @@ export const workoutContent: WorkoutContent = {
   "cable-triceps-pushdown-ez-bar-close-grip": {
     id: "cable-triceps-pushdown-ez-bar-close-grip-info",
     title: "Cable Triceps Pushdown (EZ Bar, Close Grip)",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Cable-Triceps-Pushdown.mp4",
     stats: {
       burn: "280 Kcal",
       time: "15 Min"
@@ -260,7 +260,7 @@ export const workoutContent: WorkoutContent = {
   "cable-bar-lateral-pulldown": {
     id: "cable-bar-lateral-pulldown-info",
     title: "Cable Bar Lateral Pulldown",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Cable-Bar-Lateral-Pulldown.mp4",
     stats: {
       burn: "420 Kcal",
       time: "20 Min"
@@ -280,7 +280,7 @@ export const workoutContent: WorkoutContent = {
   "cable-seated-supine-grip-row": {
     id: "cable-seated-supine-grip-row-info",
     title: "Cable Seated Supine Grip Row",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Cable-Seated-Supine-Grip-Row.mp4",
     stats: {
       burn: "380 Kcal",
       time: "18 Min"
@@ -300,7 +300,7 @@ export const workoutContent: WorkoutContent = {
   "preacher-curl-ez-bar-wide-grip": {
     id: "preacher-curl-ez-bar-wide-grip-info",
     title: "Preacher Curl EZ Bar (Wide Grip)",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Preacher-Curl-EZ-Bar.mp4",
     stats: {
       burn: "320 Kcal",
       time: "15 Min"
@@ -320,7 +320,7 @@ export const workoutContent: WorkoutContent = {
   "dumbbell-hammer-curl": {
     id: "dumbbell-hammer-curl-info",
     title: "Dumbbell Hammer Curl",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Dumbbell-Hammer-Curl.mp4",
     stats: {
       burn: "300 Kcal",
       time: "15 Min"
@@ -340,7 +340,7 @@ export const workoutContent: WorkoutContent = {
   "captains-chair-leg-raise": {
     id: "captains-chair-leg-raise-info",
     title: "Captain’s Chair Leg Raise",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Captain-Chair-Leg-Raise.mp4",
     stats: {
       burn: "220 Kcal",
       time: "12 Min"
@@ -360,7 +360,7 @@ export const workoutContent: WorkoutContent = {
   "dumbbell-side-bend": {
     id: "dumbbell-side-bend-info",
     title: "Dumbbell Side Bend",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Dumbbell-Side-Bend.mp4",
     stats: {
       burn: "200 Kcal",
       time: "10 Min"
@@ -380,7 +380,7 @@ export const workoutContent: WorkoutContent = {
   "seated-leg-curl-machine": {
     id: "seated-leg-curl-machine-info",
     title: "Seated Leg Curl Machine",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Seated-Leg-Curl-Machine.mp4",
     stats: {
       burn: "350 Kcal",
       time: "18 Min"
@@ -400,7 +400,7 @@ export const workoutContent: WorkoutContent = {
   "lying-leg-curl-machine": {
     id: "lying-leg-curl-machine-info",
     title: "Lying Leg Curl Machine",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Lying-Leg-Curl-Machine.mp4",
     stats: {
       burn: "350 Kcal",
       time: "18 Min"
@@ -420,7 +420,7 @@ export const workoutContent: WorkoutContent = {
   "dumbbell-rear-lunge-stretch": {
     id: "dumbbell-rear-lunge-stretch-info",
     title: "Dumbbell Rear Lunge Stretch",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Dumbbell-Rear-Lunge-Stretch.mp4",
     stats: {
       burn: "400 Kcal",
       time: "20 Min"
@@ -440,7 +440,7 @@ export const workoutContent: WorkoutContent = {
   "alternate-arm-leg-plank": {
     id: "alternate-arm-leg-plank-info",
     title: "Alternate Arm-Leg Plank",
-    videoUrl: "https://www.youtube.com/watch?v=qr1AvisQcV8",
+    videoUrl: "https://app.treksor.com/uploads/Alternate-Arm-Leg-Plank.mp4",
     stats: {
       burn: "220 Kcal",
       time: "12 Min"
