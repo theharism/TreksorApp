@@ -8,18 +8,18 @@ import { BlurView } from "expo-blur"
 import { LinearGradient } from "expo-linear-gradient"
 import { useEffect, useRef, useState } from "react"
 import {
-    Dimensions,
-    FlatList,
-    Image,
-    KeyboardAvoidingView,
-    Modal,
-    Platform,
-    Animated as RNAnimated,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  FlatList,
+  Image,
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Animated as RNAnimated,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -31,9 +31,9 @@ interface ChatModalProps {
 }
 
 const quickActions = [
-  { id: "1", text: "💡 What is WappGPT?", icon: "💡" },
-  { id: "2", text: "🔒 Pricing", icon: "🔒" },
-  { id: "3", text: "🤔 FAQs", icon: "🤔" },
+  // { id: "1", text: "💡 What is WappGPT?", icon: "💡" },
+  // { id: "2", text: "🔒 Pricing", icon: "🔒" },
+  // { id: "3", text: "🤔 FAQs", icon: "🤔" },
 ]
 
 export default function ChatModal({ visible, onClose }: ChatModalProps) {
@@ -75,6 +75,10 @@ export default function ChatModal({ visible, onClose }: ChatModalProps) {
     }
   }, [visible])
 
+  useEffect(()=>{
+    flatListRef.current?.scrollToEnd({ animated: true })
+  },[messages])
+
   const handleSendMessage = () => {
     if (inputText.trim() && !loading) {
       sendMessage(inputText.trim())
@@ -90,8 +94,8 @@ export default function ChatModal({ visible, onClose }: ChatModalProps) {
   }
 
   const renderMessage = ({ item }: { item: Message }) => (
-    <View style={[styles.messageContainer, item.isUser ? styles.userMessageContainer : styles.aiMessageContainer]}>
-      {!item.isUser && (
+    <View style={[styles.messageContainer, item.role === 'user' ? styles.userMessageContainer : styles.aiMessageContainer]}>
+      {!(item.role === 'user') && (
         <View style={styles.aiAvatar}>
           <Image
             source={require("@/assets/images/chatbot.png")}
@@ -100,13 +104,13 @@ export default function ChatModal({ visible, onClose }: ChatModalProps) {
         </View>
       )}
 
-      <View style={[styles.messageBubble, item.isUser ? styles.userBubble : styles.aiBubble]}>
-        <Text style={[styles.messageText, item.isUser ? styles.userMessageText : styles.aiMessageText]}>
-          {item.text}
+      <View style={[styles.messageBubble, item.role === 'user' ? styles.userBubble : styles.aiBubble]}>
+        <Text style={[styles.messageText, item.role === 'user' ? styles.userMessageText : styles.aiMessageText]}>
+          {item.content}
         </Text>
       </View>
 
-      {item.isUser && (
+      {item.role === 'user' && (
         <View style={styles.userAvatar}>
             {user?.avatar ? (
               <Image
@@ -176,17 +180,17 @@ export default function ChatModal({ visible, onClose }: ChatModalProps) {
                 />
 
                 {/* Typing Indicator */}
-                {loading && (
-                  <View style={styles.typingContainer}>
-                    <View style={styles.aiAvatar}>
-                      <Image
-                        source={require("@/assets/images/chatbot.png")}
-                        style={{ width: 30, height: 30 }}
-                        />
-                    </View>
-                    <View style={styles.typingBubble}>
-                      <Text style={styles.typingText}>Typing...</Text>
-                    </View>
+                {loading && messages.length > 0 && (
+                  <View style={[styles.typingContainer, { alignSelf: messages[messages.length - 1].role === 'user' ? 'flex-start' : 'flex-end' }]}>
+                  <View style={styles.aiAvatar}>
+                    <Image
+                    source={require("@/assets/images/chatbot.png")}
+                    style={{ width: 30, height: 30 }}
+                    />
+                  </View>
+                  <View style={styles.typingBubble}>
+                    <Text style={styles.typingText}>Typing...</Text>
+                  </View>
                   </View>
                 )}
 
@@ -393,6 +397,7 @@ const styles = StyleSheet.create({
   typingContainer: {
     flexDirection: "row",
     alignItems: "center",
+    alignSelf:"flex-start",
     gap: 8,
     paddingHorizontal: 20,
     paddingBottom: 10,

@@ -1,7 +1,7 @@
 export interface Message {
     id: string
-    text: string
-    isUser: boolean
+    content: string
+    role: string
     timestamp: string
     isTyping?: boolean
 }
