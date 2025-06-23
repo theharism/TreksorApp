@@ -29,7 +29,14 @@ interface Article {
   image: string;
 }
 
-export default function ArticleDetailScreen() {
+interface ArticlesDetailsScreenProps {
+  mode?: "tab" | "stack";
+  category?: string
+}
+
+export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsScreenProps) {
+  console.log(mode);
+  
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams();
   const [article, setArticle] = useState<Article | null>(null);
@@ -51,7 +58,11 @@ export default function ArticleDetailScreen() {
 
   if (loading) {
     return (
-      <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View
+        style={[
+          styles.container,
+        ]}
+      >
         <StatusBar style="light" />
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#F39C12" />
@@ -85,10 +96,12 @@ export default function ArticleDetailScreen() {
   `;
 
   return (
-    <View style={[styles.container, { paddingBottom: 100 }]}>
+    <View style={[styles.container, { paddingBottom: insets.bottom + (mode === "tab" ? 80 : 20) }]}>
       <StatusBar style="light" />
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: mode === 'tab' ? insets.bottom + 140 : 0}}
+      >
         {/* Article Image */}
         <Image
           source={{ uri: imageUrl }}
@@ -115,7 +128,7 @@ export default function ArticleDetailScreen() {
         </View>
       </ScrollView>
 
-      <View style={styles.bottomSection}>
+      <View style={[styles.bottomSection, { bottom: mode === 'tab' ? insets.bottom + 20 : 0 }]}>
           <TouchableOpacity
             style={[styles.markAsReadButton, isRead && styles.markAsReadButtonRead]}
             onPress={handleMarkAsRead}
@@ -175,7 +188,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   articleContent: {
-    padding: 20,
+    paddingVertical: 20,
   },
   category: {
     fontSize: 14,
