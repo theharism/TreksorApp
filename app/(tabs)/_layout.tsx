@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/store/auth-store";
-import { AntDesign, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, MaterialIcons, SimpleLineIcons } from "@expo/vector-icons";
 import { Redirect, Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
@@ -28,6 +28,7 @@ export default function TabLayout() {
               backgroundColor: "#02050C",
             },
           }),
+          tabBarActiveTintColor: "#EFB33F", // Set the selected tab color to yellow
           headerShown: false,
         }}
       >
@@ -40,6 +41,17 @@ export default function TabLayout() {
             ),
           }}
         />
+
+        <Tabs.Screen
+          name="tracking"
+          options={{
+            title: "Tracking",
+            tabBarIcon: ({ color }) => (
+              <SimpleLineIcons name="graph" size={24} color={color} />
+            ),
+          }}
+        />
+
         <Tabs.Screen
           name="articles"
           options={{
@@ -49,6 +61,7 @@ export default function TabLayout() {
             ),
           }}
         />
+
         <Tabs.Screen
           name="index"
           redirect
