@@ -2,12 +2,12 @@
 
 import { useMySpaceStore } from "@/store/myspace-store"
 import { Ionicons } from "@expo/vector-icons"
+import { Image } from "expo-image"
 import { router } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useState } from "react"
 import {
   Dimensions,
-  Image,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -54,7 +54,7 @@ export default function NewEntryScreen() {
             <Image
               source={require("@/assets/images/new-entry.png")}
               style={styles.illustration}
-              resizeMode="contain"
+              contentFit="contain"
             />
           </View>
 

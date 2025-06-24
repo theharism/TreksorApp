@@ -1,6 +1,7 @@
+import { Image } from 'expo-image'
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
-import { Dimensions, Image, SafeAreaView, StyleSheet, View } from 'react-native'
+import { Dimensions, SafeAreaView, StyleSheet, View } from 'react-native'
 
 const NewEntrySuccessScreen = () => {
   return (
@@ -10,7 +11,7 @@ const NewEntrySuccessScreen = () => {
             <Image
                 source={require("@/assets/images/new-entry-success.png")}
                 style={styles.illustration}
-                resizeMode="contain"
+                contentFit="contain"
             />
         </View>
     </SafeAreaView>

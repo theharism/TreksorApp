@@ -44,9 +44,9 @@ const SpiritualHome = () => {
       <StatusBar style="light" />
         <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
           <Text style={{fontSize: 22, fontWeight: 'bold', color: '#FFFFFF', marginVertical: 20}}>Mediation</Text>
-          <Button onPress={()=>router.push("/spiritual/mediation/beginner")} icon={require("@/assets/images/beginner.png")} disabled={fetchMediationLockedStatus('beginner')} iconStyle={{width: 40, height: 13}} >Beginner</Button>
-          <Button onPress={()=>router.push("/spiritual/mediation/intermediate")} icon={require("@/assets/images/intermediate.png")} disabled={fetchMediationLockedStatus('intermediate')} iconStyle={{width: 40, height: 13}}>Intermediate</Button>
-          <Button onPress={()=>router.push("/spiritual/mediation/advanced")} icon={require("@/assets/images/advanced.png")} disabled={fetchMediationLockedStatus('advanced')} iconStyle={{width: 40, height: 13}}>Advanced</Button>
+          <Button onPress={()=>router.push("/spiritual/mediation/beginner")} icon={require("@/assets/images/beginner.png")} disabled={fetchMediationLockedStatus('beginner')} iconStyle={{width: 40, height: 13}} buttonStyle={{width: width - 20}}>Beginner</Button>
+          <Button onPress={()=>router.push("/spiritual/mediation/intermediate")} icon={require("@/assets/images/intermediate.png")} disabled={fetchMediationLockedStatus('intermediate')} iconStyle={{width: 40, height: 13}} buttonStyle={{width: width - 20}}>Intermediate</Button>
+          <Button onPress={()=>router.push("/spiritual/mediation/advanced")} icon={require("@/assets/images/advanced.png")} disabled={fetchMediationLockedStatus('advanced')} iconStyle={{width: 40, height: 13}} buttonStyle={{width: width - 20}}>Advanced</Button>
 
           <Text style={{fontSize: 22, fontWeight: 'bold', color: '#FFFFFF', marginVertical: 20}}>Articles</Text>
             <FlatList

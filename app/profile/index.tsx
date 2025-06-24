@@ -1,15 +1,16 @@
 "use client"
 
-import { AntDesign, Ionicons } from "@expo/vector-icons"
-import { router } from "expo-router"
-import { useEffect, useState } from "react"
-import { Alert, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-
 import Button from "@/components/ui/Button"
 import PDFViewer from "@/components/ui/PDFViewer"
 import { useAuthStore } from "@/store/auth-store"
 import { useUserStore } from "@/store/user-store"
+import { AntDesign, Ionicons } from "@expo/vector-icons"
+import * as Application from 'expo-application'
+import { Image } from "expo-image"
+import { router } from "expo-router"
+import { useEffect, useState } from "react"
+import { Alert, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
@@ -198,7 +199,7 @@ export default function ProfileScreen() {
             LOGOUT
           </Button>
 
-          <Text style={styles.versionText}>Treksor v1.0.0</Text>
+          <Text style={styles.versionText}>Treksor v{Application.nativeApplicationVersion}</Text>
         </View>
       </ScrollView>
       <Modal visible={showPDF.visible} animationType="slide" presentationStyle="fullScreen">

@@ -16,6 +16,7 @@ type ButtonProps = {
   loading?: boolean;
   icon?: string;
   iconStyle?: object; // Optional custom styles for the icon image
+  buttonStyle?: object;
   disabled?: boolean;
 };
 
@@ -25,6 +26,7 @@ const Button = ({
   loading,
   icon,
   iconStyle,
+  buttonStyle,
   disabled,
 }: ButtonProps) => {
   return (
@@ -34,6 +36,7 @@ const Button = ({
       style={[
         styles.buttonContainer,
         disabled && styles.disabledButtonContainer,
+        buttonStyle,
       ]}
       disabled={disabled}
     >

@@ -164,14 +164,7 @@ export default function WorkoutInfoScreen() {
         >
           {/* Video/Image Section */}
           <View style={styles.videoSection}>
-            {/* <Image source={{ uri: workout.videoUrl }} style={styles.videoThumbnail} /> */}
-            <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture />
-            {/* {!isPlaying && <TouchableOpacity style={styles.playButton} onPress={handlePlayVideo} activeOpacity={0.8}>
-              <BlurView intensity={20} style={styles.playButtonBlur}>
-                <Ionicons name="play" size={32} color="#FFFFFF" />
-              </BlurView>
-            </TouchableOpacity>} */}
-
+            <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture nativeControls={false} />
             {/* Stats Overlay */}
             <View style={styles.statsOverlay}>
               <BlurView intensity={40} style={styles.statsBlur}>
@@ -423,7 +416,8 @@ const styles = StyleSheet.create({
   },
   video: {
     width: "100%",
-    height: 250,
+    // height: 250,
+    height: height * 0.3,
     borderRadius: 12,
     backgroundColor: '#F5F5F5', // Very light gray
   },

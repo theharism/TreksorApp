@@ -15,7 +15,7 @@ const PurposeHome = () => {
       <StatusBar style="light" />
       <ImageBackground
         source={require("@/assets/images/purpose-background.png")}
-        contentFit="cover"
+        contentFit="contain"
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}
       >
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
   },
   header: {
     flexDirection: "row",

@@ -8,7 +8,6 @@ import { useEffect, useState } from "react"
 import {
   ActivityIndicator,
   Alert,
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -22,6 +21,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 import Button from "@/components/ui/Button"
 import TextInput from "@/components/ui/TextInput"
 import { useAuthStore } from "@/store/auth-store"
+import { Image } from "expo-image"
 
 export default function EditProfile() {
   const insets = useSafeAreaInsets()

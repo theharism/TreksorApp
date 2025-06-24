@@ -139,14 +139,14 @@ const BeveragesDetails = () => {
   
         {/* Scrollable Content */}
         <ScrollView
-          style={styles.scrollView}
+          style={[styles.scrollView, { marginTop: insets.top + 60 }]} // Add marginTop to avoid overlapping
           contentContainerStyle={[styles.scrollContentContainer, { paddingBottom: insets.bottom + 30 }]}
           showsVerticalScrollIndicator={false}
         >
           <View style={{ width: '100%' }}>
             <Text style={{ color: "#FFFFFF", fontSize: 16, marginBottom: 20, fontWeight: 'bold' }}>{beverage.description}</Text>
           </View>
-  
+        
           <LinearGradient
             colors={["transparent", "rgba(0, 0, 0, 0.8)", "rgba(0, 0, 0, 0.95)"]}
             style={styles.contentOverlay}
@@ -155,19 +155,19 @@ const BeveragesDetails = () => {
           >
             <View style={styles.ingredientsSection}>
               <Text style={styles.ingredientsTitle}>Ingredients {beverage.quantity}:</Text>
-  
+        
               <FlatList
-                data={beverage.ingredients}
-                renderItem={renderIngredientCard}
-                keyExtractor={(item) => item.id}
-                numColumns={2}
-                columnWrapperStyle={styles.row}
-                contentContainerStyle={styles.gridContainer}
-                scrollEnabled={false}
+          data={beverage.ingredients}
+          renderItem={renderIngredientCard}
+          keyExtractor={(item) => item.id}
+          numColumns={2}
+          columnWrapperStyle={styles.row}
+          contentContainerStyle={styles.gridContainer}
+          scrollEnabled={false}
               />
             </View>
           </LinearGradient>
-  
+        
           {beverage.footNote && (
             <View style={{ width: '100%', marginTop: 10 }}>
               <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: '400' }}>{beverage.footNote}</Text>

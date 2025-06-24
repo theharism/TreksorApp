@@ -2,6 +2,7 @@
 
 import { useArticleStore } from "@/store/article-store";
 import { Ionicons } from "@expo/vector-icons";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
 import * as Speech from 'expo-speech';
@@ -10,7 +11,6 @@ import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
-  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -119,7 +119,7 @@ export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsS
         <Image
           source={{ uri: imageUrl }}
           style={styles.articleImage}
-          resizeMode="cover"
+           contentFit="cover"
         />
 
         {/* Article Content */}

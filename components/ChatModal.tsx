@@ -5,12 +5,12 @@ import { useChatStore } from "@/store/chat-store"
 import { Message } from "@/types/message"
 import { Ionicons } from "@expo/vector-icons"
 import { BlurView } from "expo-blur"
+import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { useEffect, useRef, useState } from "react"
 import {
   Dimensions,
   FlatList,
-  Image,
   KeyboardAvoidingView,
   Modal,
   Platform,

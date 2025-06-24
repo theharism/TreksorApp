@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     // paddingBottom: 100,
   },
   section: {
-    marginBottom: 30,
+    marginBottom: 20,
   },
   sectionTitle: {
     fontSize: 28,
@@ -167,19 +167,18 @@ const styles = StyleSheet.create({
     marginLeft: 4,
   },
   exercisesList: {
-    gap: 18,
+    gap: 0,
   },
   exerciseCard: {
     width: width - 40, // Full width minus margins
-    height: 67,
+    minHeight: 70,
     borderRadius: 12,
-    // overflow: "hidden",
-    // marginVertical: 10,
+    flexGrow: 1, // Allow the card to grow dynamically
   },
   cardContent: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
   },
   checkboxContainer: {
     marginRight: 16,

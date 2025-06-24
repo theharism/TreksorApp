@@ -2,22 +2,22 @@
 
 import { useMySpaceStore } from "@/store/myspace-store"
 import { Ionicons } from "@expo/vector-icons"
+import { Image } from "expo-image"
 import { router, useLocalSearchParams } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useEffect, useState } from "react"
 import {
-    Alert,
-    Dimensions,
-    Image,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -125,7 +125,7 @@ export default function EditEntryScreen() {
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
           {/* Illustration */}
           <View style={styles.illustrationContainer}>
-            <Image source={require("@/assets/images/new-entry.png")} style={styles.illustration} resizeMode="contain" />
+            <Image source={require("@/assets/images/new-entry.png")} style={styles.illustration} contentFit="contain" />
           </View>
 
           {/* Mood Selector */}

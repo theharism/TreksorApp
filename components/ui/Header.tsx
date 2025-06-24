@@ -2,10 +2,11 @@
 
 import { useAuthStore } from "@/store/auth-store"
 import { Ionicons } from "@expo/vector-icons"
+import { Image } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
 import { router } from "expo-router"
 import type React from "react"
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 interface HeaderProps {

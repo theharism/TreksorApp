@@ -9,14 +9,13 @@ import { PowerThought } from "@/types/powerThought";
 import { RitualCard } from "@/types/ritualCard";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
+import { Image, ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   FlatList,
-  Image,
-  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,

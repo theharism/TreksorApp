@@ -1,9 +1,8 @@
 import { Article } from "@/types/article";
-// import { Image } from "expo-image";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   Dimensions,
-  Image,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -45,7 +44,7 @@ const ArticleCard = ({
               <Image
                 source={{ uri: imageUrl }}
                 style={styles.articleImage}
-                resizeMode="cover"
+                contentFit="cover"
               />
             </View>
 
