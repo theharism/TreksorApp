@@ -1,10 +1,12 @@
 "use client"
 
+import AudioControlButton from "@/components/AudioControlButton"
 import Header from "@/components/ui/Header"
 import { useMediationStore } from "@/store/mediation-store"
 import { Mediation } from "@/types/mediation"
 import { Ionicons } from "@expo/vector-icons"
 import { Audio } from 'expo-av'
+import * as FileSystem from 'expo-file-system'
 import { LinearGradient } from "expo-linear-gradient"
 import { router, useLocalSearchParams, useNavigation } from "expo-router"
 import * as Speech from 'expo-speech'
@@ -31,17 +33,78 @@ export default function MediationDetailScreen() {
   const [fadeAnim] = useState(new RNAnimated.Value(0))
   const [slideAnim] = useState(new RNAnimated.Value(30))
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isAudioDownloaded, setIsAudioDownloaded] = useState(false);
+  const [downloadProgress, setDownloadProgress] = useState<number>(0);
+  const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const navigation = useNavigation();
 
+  // async function playSound() {
+  //   if(mediation)
+  //   {
+  //     const { sound } = await Audio.Sound.createAsync(
+  //       { uri: mediation.audioUrl },
+  //       { shouldPlay: true }
+  //     );
+  //     setSound(sound);
+  //     setIsPlaying(true);
+  //   }
+  // }
+
+  useEffect(() => {
+      async function checkforAudioFile(){
+        if(mediation) {
+          const filename = encodeURIComponent(mediation.audioUrl);
+          const fileUri = FileSystem.cacheDirectory + filename;
+          const fileInfo = await FileSystem.getInfoAsync(fileUri);
+      
+          if (fileInfo.exists) {
+            setIsAudioDownloaded(true);
+          }
+        }
+      }
+      checkforAudioFile();
+  },[mediation])
+
   async function playSound() {
-    if(mediation)
-    {
+    if (!mediation || !mediation.audioUrl) return;
+  
+    try {
+      const filename = encodeURIComponent(mediation.audioUrl);
+      const fileUri = FileSystem.cacheDirectory + filename;
+      const fileInfo = await FileSystem.getInfoAsync(fileUri);
+  
+      let localUri = fileUri;
+  
+      if (!fileInfo.exists) {
+        setIsDownloading(true);
+        const downloadResumable = FileSystem.createDownloadResumable(
+          mediation.audioUrl,
+          fileUri,
+          {},
+          (progress) => {
+            const progressPercent = progress.totalBytesWritten / progress.totalBytesExpectedToWrite;
+            setDownloadProgress(Math.round(progressPercent * 100)); // update state
+          }
+        );
+  
+        const { uri } = await downloadResumable.downloadAsync();
+        localUri = uri;
+
+        setIsAudioDownloaded(true);
+        setDownloadProgress(0);
+        setIsDownloading(false);
+      }
+  
+      // Load and play from local URI
       const { sound } = await Audio.Sound.createAsync(
-        { uri: mediation.audioUrl },
+        { uri: localUri },
         { shouldPlay: true }
       );
+  
       setSound(sound);
       setIsPlaying(true);
+    } catch (error) {
+      console.error("Error playing sound:", error);
     }
   }
 
@@ -123,6 +186,21 @@ export default function MediationDetailScreen() {
     )
   }
 
+  async function handleAudioControlPress() {
+    if (sound) {
+      const status = await sound.getStatusAsync();
+      if (status.isPlaying) {
+        await sound.pauseAsync();
+        setIsPlaying(false);
+      } else {
+        await sound.playAsync();
+        setIsPlaying(true);
+      }
+    } else {
+      await playSound();
+    }
+  }
+
   return (
     <View style={[styles.container]}>
       <StatusBar style="light" />
@@ -160,7 +238,7 @@ export default function MediationDetailScreen() {
                 style={styles.meditationImage}
                 resizeMode="cover"
               />
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                 position: 'absolute',
                 top: '50%',
@@ -190,11 +268,18 @@ export default function MediationDetailScreen() {
                 
               >
                 <Ionicons
-                name={isPlaying ? 'pause' : 'play'}
+                name={!isAudioDownloaded ? 'download' : isPlaying ? 'pause' : 'play'}
                 size={30}
                 color="#FFFFFF"
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+               <AudioControlButton
+                  isAudioDownloaded={isAudioDownloaded}
+                  isPlaying={isPlaying}
+                  downloadProgress={downloadProgress}
+                  isDownloading={isDownloading}
+                  onPress={handleAudioControlPress}
+                />
               </View>
             )}
           {/* </View> */}
