@@ -35,7 +35,7 @@ export const useArticleStore = create<ArticleState>()(
       fetchArticles: async (query) => {
         try {
           set({ loading: true, error: null });
-          const {data:response} = await api.get<ArticleResponse>(`article?${query}`); 
+          const {data:response} = await api.get<ArticleResponse>(`article?${query}&date=${new Date().toISOString().split('T')[0]}`); 
           const params = new URLSearchParams(query);
           const category = params.get("category") || "default";
           const key = category === 'all' ? 'All Articles' : category

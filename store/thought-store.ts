@@ -24,7 +24,7 @@ export const usePowerThoughtStore = create<PowerThoughtState>()(
       fetchPowerThoughts: async () => {
         try {
           set({ loading: true, error: null });
-          const {data:response} = await api.get<PowerThoughtResponse>("power-thought");
+          const {data:response} = await api.get<PowerThoughtResponse>(`power-thought?date=${new Date().toISOString().split('T')[0]}`);
           const existingThoughts = get().powerThoughts;
           const existingIds = new Set(existingThoughts.map(t => t._id));
           const newThoughts = response.data

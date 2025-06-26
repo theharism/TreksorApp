@@ -47,7 +47,7 @@ export default function HomeScreen() {
   },[pushToken,savePushToken])
 
   useEffect(()=>{
-    // fetchPowerThoughts();
+    fetchPowerThoughts();
     // if(!hasPermission) {
     //   requestPermissions().then((token) => {
     //     console.log(token);
