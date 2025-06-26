@@ -117,6 +117,10 @@ export default function Login() {
       const currentUser = GoogleSignin.getCurrentUser();
       if(currentUser) {
         console.log("Already signed in with Google:", currentUser);
+        const {user} = currentUser;
+        signInWithThirdParty({ email:user.email, name:user.name, photo:user.photo, provider: 'google' }).then(() => {
+          getCurrentUser();
+        });
         return;
       }
       const response = await GoogleSignin.signIn();
@@ -244,7 +248,7 @@ export default function Login() {
                 <View style={styles.dividerLine} />
               </View>
 
-              <View style={styles.socialButtons}>
+              <View style={[styles.socialButtons,{justifyContent:isAppleSigninAvailable?'space-between':'center'}]}>
                 <SocialButton
                   icon="logo-google"
                   label="Google"
@@ -343,7 +347,6 @@ const styles = StyleSheet.create({
   },
   socialButtons: {
     flexDirection: "row",
-    justifyContent: "space-between",
     width: "100%",
   },
   footer: {

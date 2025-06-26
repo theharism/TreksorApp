@@ -5,7 +5,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface savePushTokenRequest {
-  token: string;
+  pushToken: string;
 }
 
 export interface SavePushTokenResonse {
@@ -64,8 +64,10 @@ export const useUserStore = create<UserState>()(
 
       savePushToken: async (data: savePushTokenRequest) => {
         try {
-          set({ loading: true, error: null });
-          await api.post<SavePushTokenResonse>("user/save-push-token", data);
+          set({ loading: true, error: null });          
+          const {data:data1} = await api.post<SavePushTokenResonse>("user/save-push-token", data);
+          console.log(data1);
+
           set({ loading: false });
         } catch (error: any) {
           console.error("savePushToken error:", { error:error.response.data });

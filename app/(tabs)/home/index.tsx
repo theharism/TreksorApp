@@ -34,20 +34,30 @@ export default function HomeScreen() {
   const [currentThoughtIndex, setCurrentThoughtIndex] = useState(0);
   const thoughtsRef = useRef<FlatList>(null);
   const [expandedThoughts, setExpandedThoughts] = useState<Set<string>>(new Set());
-  const {hasPermission, requestPermissions} = useNotifications();
+  const {pushToken, notification} = useNotifications();
   const {savePushToken} = useUserStore();
   const [showChat, setShowChat] = useState(false)
+  // console.log(hasPermission);
+  console.log(JSON.stringify(notification,null,2));
+  
+  useEffect(()=>{
+    if(pushToken && pushToken?.data) {
+      savePushToken({ pushToken:pushToken?.data });
+    }
+  },[pushToken,savePushToken])
 
   useEffect(()=>{
-    fetchPowerThoughts();
-    if(!hasPermission) {
-      requestPermissions().then((token) => {
-        if (token) {
-          savePushToken({ token });
-        }
-      })
-    }
-  },[fetchPowerThoughts, requestPermissions, hasPermission]);
+    // fetchPowerThoughts();
+    // if(!hasPermission) {
+    //   requestPermissions().then((token) => {
+    //     console.log(token);
+        
+    //     if (token) {
+    //       savePushToken({ token });
+    //     }
+    //   }).catch(err => console.error(err))
+    // }
+  },[fetchPowerThoughts]);
 
   const toggleExpand = (id: string) => {
     setExpandedThoughts(prev => {

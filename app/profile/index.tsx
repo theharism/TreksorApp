@@ -9,7 +9,7 @@ import * as Application from 'expo-application'
 import { Image } from "expo-image"
 import { router } from "expo-router"
 import { useEffect, useState } from "react"
-import { Alert, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Alert, Linking, Modal, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 export default function ProfileScreen() {
@@ -96,6 +96,14 @@ export default function ProfileScreen() {
     setShowPDF({ visible: false, title: "", url: "" })
   }
 
+  const openNotificationSettings = () => {
+    if (Platform.OS === 'ios') {
+      Linking.openURL('app-settings:'); // Opens app settings (including notification toggle)
+    } else {
+      Linking.openSettings(); // Android: opens app settings
+    }
+  };  
+
   const imageUrl = `https://app.treksor.com/${user?.avatar}`;
 
   return (
@@ -143,11 +151,11 @@ export default function ProfileScreen() {
             <Ionicons name="chevron-forward" size={20} color="#AAAAAA" />
           </TouchableOpacity>
 
-          {/* <TouchableOpacity style={styles.menuItem} onPress={() => router.push("/profile/notifications")}>
+          <TouchableOpacity style={styles.menuItem} onPress={openNotificationSettings}>
             <Ionicons name="notifications-outline" size={22} color="#FFFFFF" style={styles.menuIcon} />
-            <Text style={styles.menuText}>Notification Settings</Text>
+              <Text style={styles.menuText}>Notification Settings</Text>
             <Ionicons name="chevron-forward" size={20} color="#AAAAAA" />
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
 
         {/* <View style={styles.section}>
