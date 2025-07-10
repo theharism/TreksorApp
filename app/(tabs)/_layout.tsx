@@ -1,5 +1,5 @@
 import { useAuthStore } from "@/store/auth-store";
-import { AntDesign, MaterialIcons, SimpleLineIcons } from "@expo/vector-icons";
+import { AntDesign, MaterialIcons, Octicons, SimpleLineIcons } from "@expo/vector-icons";
 import { Redirect, Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
@@ -38,6 +38,16 @@ export default function TabLayout() {
             title: "Home",
             tabBarIcon: ({ color }) => (
               <AntDesign name="home" size={24} color={color} />
+            ),
+          }}
+        />
+
+        <Tabs.Screen
+          name="chat"
+          options={{
+            title: "Chat",
+            tabBarIcon: ({ color }) => (
+              <Octicons name="dependabot" size={24} color={color} />
             ),
           }}
         />

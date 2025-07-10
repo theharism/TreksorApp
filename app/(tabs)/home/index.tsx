@@ -1,6 +1,5 @@
 "use client";
 
-import ChatModal from "@/components/ChatModal";
 import { useNotifications } from "@/hooks/useNotifications";
 import { ritualCards } from "@/mock/rituals";
 import { usePowerThoughtStore } from "@/store/thought-store";
@@ -9,7 +8,7 @@ import { PowerThought } from "@/types/powerThought";
 import { RitualCard } from "@/types/ritualCard";
 import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
-import { Image, ImageBackground } from "expo-image";
+import { ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
@@ -36,9 +35,6 @@ export default function HomeScreen() {
   const [expandedThoughts, setExpandedThoughts] = useState<Set<string>>(new Set());
   const {pushToken, notification} = useNotifications();
   const {savePushToken} = useUserStore();
-  const [showChat, setShowChat] = useState(false)
-  // console.log(hasPermission);
-  console.log(JSON.stringify(notification,null,2));
   
   useEffect(()=>{
     if(pushToken && pushToken?.data) {
@@ -253,12 +249,8 @@ export default function HomeScreen() {
           </View>
 
           {/* Power Thought Icon */}
-          <TouchableOpacity style={styles.powerThoughtIcon} onPress={() => setShowChat(true)}>
-              <Image source={require("@/assets/images/chatbot.png")} style={{ width: 75, height: 75 }} />
-          </TouchableOpacity>
         </View>
       </ScrollView>
-      <ChatModal visible={showChat} onClose={() => setShowChat(false)} />
     </SafeAreaView>
   );
 }
