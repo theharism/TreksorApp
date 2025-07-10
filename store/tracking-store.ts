@@ -70,7 +70,7 @@ export const useTrackingStore = create<TrackingStore>()(
               title: "Body",
               percentage: calcPercentage(completedWorkouts + bodyRead, totalWorkouts + bodyArticles.length),
               items: [
-                { id: generateRandomId(), label: "Workouts", value: `${completedWorkouts}/${totalWorkouts}` },
+                // { id: generateRandomId(), label: "Workouts", value: `${completedWorkouts}/${totalWorkouts}` },
                 { id: generateRandomId(), label: "Articles Completed", value: `${bodyRead}/${bodyArticles.length}` },
               ],
               custom: false,
@@ -83,9 +83,9 @@ export const useTrackingStore = create<TrackingStore>()(
                 totalThoughts + mentalArticles.length + totalJournals
               ),
               items: [
-                { id: generateRandomId(), label: "Power Thought Read", value: `${readThoughts}/${totalThoughts}` },
+                // { id: generateRandomId(), label: "Power Thought Read", value: `${readThoughts}/${totalThoughts}` },
                 { id: generateRandomId(), label: "Articles Completed", value: `${mentalRead}/${mentalArticles.length}` },
-                { id: generateRandomId(), label: "General Entries", value: `${totalJournals}` },
+                // { id: generateRandomId(), label: "General Entries", value: `${totalJournals}` },
               ],
               custom: false,
             },
@@ -97,7 +97,7 @@ export const useTrackingStore = create<TrackingStore>()(
                 totalMeditations + spiritualArticles.length
               ),
               items: [
-                { id: generateRandomId(), label: "Meditations", value: `${readMeditations}/${totalMeditations}` },
+                // { id: generateRandomId(), label: "Meditations", value: `${readMeditations}/${totalMeditations}` },
                 { id: generateRandomId(), label: "Articles Read", value: `${spiritualRead}/${spiritualArticles.length}` },
               ],
               custom: false,

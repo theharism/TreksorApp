@@ -38,6 +38,13 @@ export default function CalendarModal({ visible, onClose, onDateSelect, selected
       days.push(new Date(year, month, day))
     }
 
+    // Add empty cells for days after the last day of the month
+    const totalCells = 42 // 6 weeks * 7 days
+    const emptyCells = totalCells - days.length
+    for (let i = 0; i < emptyCells; i++) {
+      days.push(null)
+    }
+
     return days
   }
 
