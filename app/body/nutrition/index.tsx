@@ -29,7 +29,7 @@ const NutritionHome = () => {
           <Text style={styles.headerTitle}>Nutrition</Text>
           <View style={styles.headerSpacer} />
         </View>
-        <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
+        <View style={[styles.content, { paddingBottom: insets.bottom + height * 0.15 }]}>
           <Button onPress={()=>router.push("/body/nutrition/beverages")} icon={require("@/assets/images/beverages.png")}>BEVERAGES</Button>
           <Button onPress={()=>router.push("/body/nutrition/supplements")} icon={require("@/assets/images/supplements.png")}>SUPPLEMENTS</Button>
         </View>
