@@ -1,3 +1,4 @@
+import { useArticleStore } from "@/store/article-store";
 import { useAuthStore } from "@/store/auth-store";
 import { AntDesign, MaterialIcons, Octicons, SimpleLineIcons } from "@expo/vector-icons";
 import { Redirect, Tabs } from "expo-router";
@@ -69,6 +70,10 @@ export default function TabLayout() {
             tabBarIcon: ({ color }) => (
               <MaterialIcons name="article" size={24} color={color} />
             ),
+            tabBarBadge: (() => {
+              const count = useArticleStore.getState().getUnreadArticlesCount();
+              return count > 0 ? count : undefined;
+            })(),
           }}
         />
 

@@ -102,7 +102,9 @@ export default function ArticlesScreen({ mode = "tab", category = "All Articles"
   };
 
   const handleArticlePress = (article: Article) => {
-    const path = activeCategory === 'All Articles' ? `/(tabs)/articles/${article._id}` : `/${activeCategory.toLowerCase()}/articles/${article._id}`; 
+    const path = activeCategory === 'All Articles' 
+      ? `/(tabs)/articles/${article._id}?category=${activeCategory}` 
+      : `/${activeCategory.toLowerCase()}/articles/${article._id}?category=${activeCategory}`;
     router.push(path);
   };
 

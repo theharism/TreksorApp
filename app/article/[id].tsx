@@ -39,16 +39,17 @@ interface ArticlesDetailsScreenProps {
 
 export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsScreenProps) {
   const insets = useSafeAreaInsets();
-  const { id } = useLocalSearchParams();
+  const { id, category } = useLocalSearchParams();
   const [article, setArticle] = useState<Article | null>(null);
   const [isRead, setIsRead] = useState(false)
-  const { fetchArticleById, loading } = useArticleStore();
-  
+  const { fetchArticleById, loading, markArticleAsRead } = useArticleStore();
+ 
   useEffect(() => {
     if (id) {
-      fetchArticleById({ id: id as string }).then((res) => {
+      fetchArticleById({ id: id as string, category: category as string }).then((res) => {
         if (res) {
           setArticle(res);
+          setIsRead(res?.isRead || false)
         }
       });
     }
@@ -62,6 +63,7 @@ export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsS
 
   const handleMarkAsRead = () => {
     setIsRead(true)
+    markArticleAsRead(category as string, id as string);
   }
 
   const handleSpeak = async (title: string, description: string, body: string) => {
