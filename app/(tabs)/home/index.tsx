@@ -31,6 +31,7 @@ const cardWidth = (width - 60) / 2; // Account for padding and gap
 export default function HomeScreen() {
   const {powerThoughts, fetchPowerThoughts, markPowerThoughtAsRead} = usePowerThoughtStore();
   const [currentThoughtIndex, setCurrentThoughtIndex] = useState(0);
+  const [homePowerThoughts, setHomePowerThoughts] = useState<PowerThought[]>([]);
   const thoughtsRef = useRef<FlatList>(null);
   const [expandedThoughts, setExpandedThoughts] = useState<Set<string>>(new Set());
   const {pushToken, notification} = useNotifications();
@@ -44,16 +45,15 @@ export default function HomeScreen() {
 
   useEffect(()=>{
     fetchPowerThoughts();
-    // if(!hasPermission) {
-    //   requestPermissions().then((token) => {
-    //     console.log(token);
-        
-    //     if (token) {
-    //       savePushToken({ token });
-    //     }
-    //   }).catch(err => console.error(err))
-    // }
   },[fetchPowerThoughts]);
+
+  useEffect(() => {
+    if(powerThoughts){
+      const firstUnreadThoughts = powerThoughts.filter(thought => !thought.isRead).slice(0, 3);
+      console.log("First 3 unread thoughts:", firstUnreadThoughts);
+      setHomePowerThoughts(firstUnreadThoughts);
+    }
+  },[powerThoughts])
 
   const toggleExpand = (id: string) => {
     setExpandedThoughts(prev => {
@@ -64,7 +64,7 @@ export default function HomeScreen() {
   };
 
   const handleMarkAsRead = () => {
-    const currentThought = powerThoughts[currentThoughtIndex];
+    const currentThought = homePowerThoughts[currentThoughtIndex];
     markPowerThoughtAsRead(currentThought._id);
     // setReadThoughts((prev) => new Set([...prev, currentThought._id]));
   };
@@ -221,7 +221,7 @@ export default function HomeScreen() {
         <View style={styles.powerThoughtSection}>
           <FlatList
             ref={thoughtsRef}
-            data={powerThoughts}
+            data={homePowerThoughts}
             renderItem={renderPowerThought}
             keyExtractor={(item) => item._id}
             horizontal
@@ -237,7 +237,7 @@ export default function HomeScreen() {
 
           {/* Pagination Dots */}
           <View style={styles.paginationContainer}>
-            {powerThoughts.map((_, index) => (
+            {homePowerThoughts.map((_, index) => (
               <View
                 key={index}
                 style={[

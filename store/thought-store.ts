@@ -39,7 +39,7 @@ export const usePowerThoughtStore = create<PowerThoughtState>()(
               }),
               isToday: new Date(thought.date).toDateString() === new Date().toDateString(),
             }));            
-          const updatedThoughts = [...existingThoughts, ...newThoughts];          
+            const updatedThoughts = [...newThoughts, ...existingThoughts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
           set({ loading: false, powerThoughts: updatedThoughts});
         } catch (error: any) {
           console.error("fetchPowerThoughts error:", {error:error.response.data });
