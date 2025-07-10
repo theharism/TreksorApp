@@ -13,7 +13,7 @@ const BodyHome = () => {
     <View style={styles.container}>
       <StatusBar style="light" />
       <ImageBackground
-        source={require("@/assets/images/mental-bg.jpg")}
+        source={require("@/assets/images/mental-home-bg.jpeg")}
         contentFit="cover"
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}
