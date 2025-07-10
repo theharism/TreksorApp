@@ -43,6 +43,7 @@ export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsS
   const [article, setArticle] = useState<Article | null>(null);
   const [isRead, setIsRead] = useState(false)
   const { fetchArticleById, loading, markArticleAsRead } = useArticleStore();
+  const [webViewHeight, setWebViewHeight] = useState(0);
  
   useEffect(() => {
     if (id) {
@@ -147,10 +148,16 @@ export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsS
           <View style={styles.bodyContainer}>
             <WebView
               source={{ html: htmlContent }}
-              style={styles.webView}
-              scrollEnabled={true}
-              showsVerticalScrollIndicator={false}
-              backgroundColor="transparent"
+              style={[styles.webView, { height: webViewHeight }]}
+              scrollEnabled={false}
+              injectedJavaScript="
+                setTimeout(() => {
+                  window.ReactNativeWebView.postMessage(document.body.scrollHeight);
+                }, 500);
+              "
+              onMessage={event => {
+                setWebViewHeight(Number(event.nativeEvent.data));
+              }}
             />
           </View>
         </View>

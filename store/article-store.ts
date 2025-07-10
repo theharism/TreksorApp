@@ -86,20 +86,20 @@ export const useArticleStore = create<ArticleState>()(
       },
 
       getUnreadArticlesCount: (): number => {
-        const countRead = (items: { isRead?: boolean }[]): number => items.filter(i => i.isRead).length;
+        const countRead = (items) => items.filter(i => i.isRead).length;
 
-        const { articles }: { articles: Record<string, { isRead?: boolean }[]> } = useArticleStore.getState();
+        const { articles } = useArticleStore.getState();
      
-        const bodyArticles: { isRead?: boolean }[] = articles["Body"] || [];
-        const mentalArticles: { isRead?: boolean }[] = articles["Mental"] || [];
-        const spiritualArticles: { isRead?: boolean }[] = articles["Spiritual"] || [];
+        const bodyArticles = articles["Body"] || [];
+        const mentalArticles = articles["Mental"] || [];
+        const spiritualArticles = articles["Spiritual"] || [];
 
-        const bodyRead: number = countRead(bodyArticles);
-        const mentalRead: number = countRead(mentalArticles);
-        const spiritualRead: number = countRead(spiritualArticles);
+        const bodyRead = countRead(bodyArticles);
+        const mentalRead = countRead(mentalArticles);
+        const spiritualRead = countRead(spiritualArticles);
 
-        const totalArticles: number = bodyArticles.length + mentalArticles.length + spiritualArticles.length;
-        const totalArticlesRead: number = bodyRead + mentalRead + spiritualRead;
+        const totalArticles = bodyArticles.length + mentalArticles.length + spiritualArticles.length;
+        const totalArticlesRead = bodyRead + mentalRead + spiritualRead;
 
         return totalArticles - totalArticlesRead;
       },
@@ -112,13 +112,13 @@ export const useArticleStore = create<ArticleState>()(
           const articleIndex = existingArticles.findIndex(article => article._id === id);
           if (articleIndex !== -1) {
             existingArticles[articleIndex].isRead = true;
+            const existingCategoryArticles = allArticles[existingArticles[articleIndex].category] || [];
+            const categoryArticleIndex = existingCategoryArticles.findIndex(article => article._id === id);
+            if (categoryArticleIndex !== -1) {
+              existingCategoryArticles[categoryArticleIndex].isRead = true;
+            }
+            allArticles[existingArticles[articleIndex].category] = existingCategoryArticles;
           }
-          const existingCategoryArticles = allArticles[existingArticles[articleIndex].category] || [];
-          const categoryArticleIndex = existingCategoryArticles.findIndex(article => article._id === id);
-          if (categoryArticleIndex !== -1) {
-            existingCategoryArticles[categoryArticleIndex].isRead = true;
-          }
-          allArticles[existingArticles[articleIndex].category] = existingCategoryArticles;
         } else {
           const existingArticles = allArticles[type] || [];
           const articleIndex = existingArticles.findIndex(article => article._id === id);
@@ -132,6 +132,7 @@ export const useArticleStore = create<ArticleState>()(
           }
           allArticles['All Articles'] = existingCategoryArticles;
         }
+        
         set({ articles: allArticles });
       },
 
