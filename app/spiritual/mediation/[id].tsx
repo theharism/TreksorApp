@@ -4,17 +4,14 @@ import AudioControlButton from "@/components/AudioControlButton"
 import Header from "@/components/ui/Header"
 import { useMediationStore } from "@/store/mediation-store"
 import { Mediation } from "@/types/mediation"
-import { Ionicons } from "@expo/vector-icons"
 import { Audio } from 'expo-av'
 import * as FileSystem from 'expo-file-system'
 import { LinearGradient } from "expo-linear-gradient"
 import { router, useLocalSearchParams, useNavigation } from "expo-router"
-import * as Speech from 'expo-speech'
 import { StatusBar } from "expo-status-bar"
 import { useEffect, useLayoutEffect, useState } from "react"
 import {
   Image,
-  Pressable,
   Animated as RNAnimated,
   ScrollView,
   StyleSheet,
@@ -150,11 +147,6 @@ export default function MediationDetailScreen() {
     });
   }, [id])
 
-  useEffect(() => {
-    return () => {
-      Speech.stop();
-    };
-  }, []);
 
   const handleMarkAsRead = () => {
     if(mediation)
@@ -163,11 +155,6 @@ export default function MediationDetailScreen() {
     }
   }
 
-  const handleSpeak = (title: string, description: string, experience: string[]) => {
-    const experienceText = experience.map((goal, i) => `Experience ${i + 1}: ${goal}`).join('. ');
-    const speechText = `${title}. ${description.replace(/<[^>]+>/g, '')}. ${experienceText}`;
-    Speech.speak(speechText);
-  };
 
   // Parse HTML content (simple implementation)
   const parseHTMLContent = (htmlString: string) => {
@@ -288,9 +275,6 @@ export default function MediationDetailScreen() {
           <View style={styles.contentSection}>
             <View style={styles.titleRow}>
               <Text style={styles.workoutTitle}>{mediation.title}</Text>
-              <Pressable onPress={() => handleSpeak(mediation.title, mediation.content.description, mediation.content.experience)}>
-                <Ionicons name="volume-high-outline" size={24} color="gray" />
-              </Pressable>
             </View>
 
             <Text style={styles.description}>{parseHTMLContent(mediation.content.description)}</Text>

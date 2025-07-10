@@ -7,13 +7,11 @@ import { useEvent } from "expo"
 import { BlurView } from "expo-blur"
 import { LinearGradient } from "expo-linear-gradient"
 import { router, useLocalSearchParams } from "expo-router"
-import * as Speech from 'expo-speech'
 import { StatusBar } from "expo-status-bar"
 import { useVideoPlayer, VideoView } from "expo-video"
 import { useEffect, useState } from "react"
 import {
   Dimensions,
-  Pressable,
   Animated as RNAnimated,
   ScrollView,
   StyleSheet,
@@ -97,11 +95,6 @@ export default function WorkoutInfoScreen() {
     workouts.find(workout => workout.id === workoutId)?.exercises.find(exercise => exercise.id === id)?.completed && setIsCompleted(true);
   },[workouts, workoutId, id])
 
-  useEffect(() => {
-    return () => {
-      Speech.stop();
-    };
-  }, []);
 
   const handleBackPress = () => {
     router.back()
@@ -112,11 +105,6 @@ export default function WorkoutInfoScreen() {
     setIsCompleted(true);
   }
 
-  const handleSpeak = (title: string, description: string, goals: string[]) => {
-    const goalsText = goals.map((goal, i) => `Goal ${i + 1}: ${goal}`).join('. ');
-    const speechText = `${title}. ${description.replace(/<[^>]+>/g, '')}. ${goalsText}`;
-    Speech.speak(speechText);
-  };
 
   // Parse HTML content (simple implementation)
   const parseHTMLContent = (htmlString: string) => {
@@ -189,9 +177,6 @@ export default function WorkoutInfoScreen() {
           <View style={styles.contentSection}>
             <View style={styles.titleRow}>
               <Text style={styles.workoutTitle}>{workout.title}</Text>
-              <Pressable onPress={() => handleSpeak(workout.title, workout.content.description, workout.content.goals.items)}>
-                <Ionicons name="volume-high-outline" size={24} color="gray" />
-              </Pressable>
             </View>
 
             <Text style={styles.description}>{parseHTMLContent(workout.content.description)}</Text>

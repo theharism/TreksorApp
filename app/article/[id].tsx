@@ -43,6 +43,7 @@ export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsS
   const [article, setArticle] = useState<Article | null>(null);
   const [isRead, setIsRead] = useState(false)
   const { fetchArticleById, loading } = useArticleStore();
+  
   useEffect(() => {
     if (id) {
       fetchArticleById({ id: id as string }).then((res) => {
@@ -63,10 +64,17 @@ export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsS
     setIsRead(true)
   }
 
-  const handleSpeak = (title: string, description: string, body: string) => {
+  const handleSpeak = async (title: string, description: string, body: string) => {
     const plainBody = body.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
     const speechText = `${title}. ${description.replace(/<[^>]+>/g, '')}. ${plainBody}`;
-    Speech.speak(speechText);
+    const voices = await Speech.getAvailableVoicesAsync();
+    const preferred = voices.find(v => v.language === 'fr-FR' && ['Daniel', 'Fred', 'Tom', 'Alex'].includes(v.name)
+    );
+    Speech.speak(speechText, {
+      voice: preferred?.identifier || voices[0]?.identifier, // fallback to default if not found
+      rate: 0.9,
+      pitch: 1.0
+    });
   };
 
   if (loading) {
