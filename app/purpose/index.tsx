@@ -1,9 +1,16 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Image, ImageBackground } from "expo-image";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("window");
@@ -20,18 +27,81 @@ const PurposeHome = () => {
         imageStyle={styles.imageStyle}
       >
         <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
-          <TouchableOpacity style={styles.backButton} onPress={()=>router.back()}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>PURPOSE</Text>
           <View style={styles.headerSpacer} />
         </View>
         <View style={[styles.content]}>
-          <Image 
-            source={require("@/assets/images/purpose-home.png")} 
-            style={{ width: '80%', height: undefined, aspectRatio: 1 }}
+          <Image
+            source={require("@/assets/images/purpose-home-icon.png")}
+            style={{ width: "30%", height: "15%" }}
             contentFit="contain"
           />
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "bold",
+              color: "#FFFFFF",
+              textAlign: "center",
+              marginTop: 20,
+            }}
+          >
+            Purpose
+          </Text>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: "medium",
+              color: "#FFFFFF",
+              textAlign: "center",
+              marginTop: 5,
+            }}
+          >
+            Annual Subscribers Only
+          </Text>
+          <LinearGradient
+            colors={['rgba(255,255,255,0.3)', 'rgba(255,255,255,0)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            locations={[0.3, 1]}  // start fully white at 30%, fade to transparent at the end
+            style={{
+              borderRadius: 12,
+              borderColor: "rgba(255,255,255,0.3)",
+              borderWidth: 1,
+              marginTop: 20,
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 20,
+              flexDirection: "row",
+            }}
+          >
+            <Text
+              style={{
+                color: "#FFFFFF",
+                fontSize: 18,
+                fontWeight: "semibold",
+                textAlign: "center",
+              }}
+            >
+              Avaibale{" "}
+            </Text>
+            <Text
+              style={{
+                color: "#EFB33F",
+                fontSize: 18,
+                fontWeight: "semibold",
+                textAlign: "center",
+              }}
+            >
+              December 2025
+            </Text>
+          {/* </View> */}
+          </LinearGradient>
         </View>
       </ImageBackground>
     </View>
