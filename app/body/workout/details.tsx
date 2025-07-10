@@ -4,7 +4,6 @@
 import { useWorkoutStore } from "@/store/workout-store"
 import { Ionicons } from "@expo/vector-icons"
 import { useEvent } from "expo"
-import { BlurView } from "expo-blur"
 import { LinearGradient } from "expo-linear-gradient"
 import { router, useLocalSearchParams } from "expo-router"
 import { StatusBar } from "expo-status-bar"
@@ -154,7 +153,7 @@ export default function WorkoutInfoScreen() {
           <View style={styles.videoSection}>
             <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture nativeControls={false} />
             {/* Stats Overlay */}
-            <View style={styles.statsOverlay}>
+            {/* <View style={styles.statsOverlay}>
               <BlurView intensity={40} style={styles.statsBlur}>
                 <View style={styles.statsContainer}>
                   <View style={styles.statItem}>
@@ -170,7 +169,7 @@ export default function WorkoutInfoScreen() {
                   </View>
                 </View>
               </BlurView>
-            </View>
+            </View> */}
           </View>
 
           {/* Content Section */}

@@ -154,6 +154,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
+    justifyContent:'center',
+    flexGrow: 1,
     // paddingBottom: 100,
   },
   section: {
