@@ -13,7 +13,9 @@ export default {
       "bundleIdentifier": "com.treksor.app",
       "googleServicesFile": process.env.GOOGLE_SERVICES_INFOPLIST,
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to let you pick and upload images.",
+        "NSCameraUsageDescription": "This app uses the camera to take photos and videos.",
       },
       "usesAppleSignIn": true
     },
