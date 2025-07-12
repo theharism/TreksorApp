@@ -9,16 +9,16 @@ import { router } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useEffect, useRef, useState } from "react"
 import {
-    Dimensions,
-    FlatList,
-    KeyboardAvoidingView,
-    Platform,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
@@ -139,7 +139,10 @@ export default function ChatScreen() {
       )}
 
       {/* Input */}
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}>
+      <KeyboardAvoidingView 
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? -(insets.bottom + 30) : 20}
+      >
         <View style={[styles.inputContainer,{paddingBottom: insets.bottom + 40}]}>
           <TextInput
             style={styles.textInput}
