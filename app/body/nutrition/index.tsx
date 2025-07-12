@@ -13,7 +13,7 @@ const NutritionHome = () => {
     <View style={styles.container}>
       <StatusBar style="light" />
       <ImageBackground
-        source={require("@/assets/images/nutrition-home.png")}
+        source={require("@/assets/images/nutrition-home.jpeg")}
         contentFit="cover"
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}
@@ -29,7 +29,7 @@ const NutritionHome = () => {
           <Text style={styles.headerTitle}>Nutrition</Text>
           <View style={styles.headerSpacer} />
         </View>
-        <View style={[styles.content, { paddingBottom: insets.bottom + height * 0.15 }]}>
+        <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
           <Button onPress={()=>router.push("/body/nutrition/beverages")} icon={require("@/assets/images/beverages.png")}>BEVERAGES</Button>
           <Button onPress={()=>router.push("/body/nutrition/supplements")} icon={require("@/assets/images/supplements.png")}>SUPPLEMENTS</Button>
         </View>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     height,
   },
   imageStyle: {
-    opacity: 1,
+    opacity: 0.8,
   },
   scrollView: {
     flex: 1,
