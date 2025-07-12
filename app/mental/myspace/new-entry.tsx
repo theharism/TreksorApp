@@ -7,6 +7,7 @@ import { router } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useState } from "react"
 import {
+  Alert,
   Dimensions,
   KeyboardAvoidingView,
   Platform,
@@ -33,6 +34,10 @@ export default function NewEntryScreen() {
   const [showMoodDropdown, setShowMoodDropdown] = useState(false)
 
   const handleAddEntry = () => {
+    if (!entryText.trim()) {
+      Alert.alert("Error", "Please enter some text for your entry.")
+      return
+    }
     addMySpace({mood,text:entryText})
     router.push('/mental/myspace/new-entry-success');
   }
@@ -43,11 +48,21 @@ export default function NewEntryScreen() {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { paddingTop: insets.top }]}>
+    <SafeAreaView style={[styles.container]}>
       <StatusBar style="light" />
 
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.keyboardAvoid}>
-        <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === "ios" ? "padding" : "height"} 
+        style={styles.keyboardAvoid}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+      >
+        <ScrollView 
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+        >
       
           {/* Illustration */}
           <View style={styles.illustrationContainer}>
@@ -67,7 +82,12 @@ export default function NewEntryScreen() {
             </TouchableOpacity>
 
             {showMoodDropdown && (
-              <ScrollView style={styles.dropdownMenu}>
+              <View style={styles.dropdownMenu}>
+              <ScrollView 
+                style={styles.dropdownScroll}
+                nestedScrollEnabled={true}
+                showsVerticalScrollIndicator={false}
+              >
                 {moodOptions.map((option) => (
                   <TouchableOpacity
                     key={option}
@@ -80,6 +100,7 @@ export default function NewEntryScreen() {
                   </TouchableOpacity>
                 ))}
               </ScrollView>
+              </View>
             )}
           </View>
 
@@ -101,6 +122,7 @@ export default function NewEntryScreen() {
           <TouchableOpacity style={styles.addButton} onPress={handleAddEntry} activeOpacity={0.8}>
             <Text style={styles.addButtonText}>Add</Text>
           </TouchableOpacity>
+          <View style={styles.bottomPadding} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -115,23 +137,28 @@ const styles = StyleSheet.create({
   keyboardAvoid: {
     flex: 1,
   },
+  scrollView: {
+    flex: 1,
+  },
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 20,
     paddingBottom: 30,
+    paddingVertical: 20,
   },
   illustrationContainer: {
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 20,
-    height: height * 0.25, // Responsive height
+    height: height * 0.2, // Responsive height
   },
   illustration: {
-    width: width * 0.8,
+    width: width * 0.6,
     height: "100%",
   },
   sectionContainer: {
-    marginBottom: 20,
+    marginBottom: 24,
+    zIndex: 1000,
   },
   sectionTitle: {
     fontSize: 18,
@@ -199,4 +226,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#000000",
   },
+  bottomPadding: {
+    height: 100, // Extra padding for keyboard
+  },
+  dropDownScroll: {
+    maxHeight: 200,
+  }
 })
