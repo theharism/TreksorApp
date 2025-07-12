@@ -9,6 +9,7 @@ interface WorkoutState {
     workoutContent: WorkoutContent;
     getWorkoutExercies:(id:string)=>Exercise[] | undefined;
     markExerciseAsRead:(workoutId: string, exerciseId: string) => void;
+    resetProgress: (workoutId: string) => void;
     clearData: () => void;
 }
 
@@ -41,7 +42,21 @@ export const useWorkoutStore = create<WorkoutState>()(
             workouts: WorkoutsData,
             workoutContent: workoutContent,
           })
-        }
+        },
+
+        resetProgress: (workoutId: string) => {
+            const updatedWorkouts = get().workouts.map(workout => {
+              if(workout.id !== workoutId) return workout;
+              return {
+                ...workout,
+                exercises: workout.exercises.map(exercise => ({
+                  ...exercise,
+                  completed: false,
+                })),
+              };
+            });
+            set({ workouts: updatedWorkouts });
+        },
     }),
     {
       name: "workout-storage",

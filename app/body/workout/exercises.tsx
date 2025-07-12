@@ -9,6 +9,7 @@ import { router, useFocusEffect, useLocalSearchParams, useNavigation } from "exp
 import { StatusBar } from "expo-status-bar";
 import { useLayoutEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
   ScrollView,
   StyleSheet,
@@ -22,7 +23,7 @@ export default function WorkoutDetailScreen() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
   const { workoutId } = useLocalSearchParams();
-  const { workouts, getWorkoutExercies, markExerciseAsRead } = useWorkoutStore();
+  const { workouts, getWorkoutExercies, resetProgress } = useWorkoutStore();
   const [workout, setWorkout] = useState<Exercise[]>();
 
   useFocusEffect(() => {
@@ -38,11 +39,35 @@ export default function WorkoutDetailScreen() {
           title={(workoutId as string).toUpperCase()}
           showBackButton={true}
           onBackPress={() => router.back()}
+          headerRightButton={
+            <TouchableOpacity onPress={_resetProgress}>
+                <Ionicons name="refresh" size={24} color="white" />
+            </TouchableOpacity>
+          }
           showAvatar={false}
         />
       ),
     })
   }, [navigation, workoutId])
+
+  const _resetProgress = () => {
+    Alert.alert(
+        "Reset Progress",
+        "Are you sure you want to reset progress?",
+        [
+          {
+            text: "Cancel",
+            style: "cancel",
+          },
+          {
+            text: "Reset",
+            style: "destructive",
+            onPress: () => resetProgress(workoutId as string),
+          },
+        ],
+        { cancelable: true },
+      )
+  };
 
   const handleExercisePress = (workoutId: string, exerciseId: string) => {
     if (!workout) return;

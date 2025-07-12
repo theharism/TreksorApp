@@ -13,6 +13,7 @@ interface HeaderProps {
   title?: string
   showAvatar?: boolean
   showBackButton?: boolean
+  headerRightButton?: React.ReactNode
   onBackPress?: () => void
 }
 
@@ -20,6 +21,7 @@ const Header: React.FC<HeaderProps> = ({
   title,
   showAvatar = true,
   showBackButton = false,
+  headerRightButton = null,
   onBackPress,
 }) => {
   const insets = useSafeAreaInsets()
@@ -72,6 +74,13 @@ const Header: React.FC<HeaderProps> = ({
           </View>
         </View>
 
+        {
+          headerRightButton && (
+            <View style={styles.headerRightButtonContainer}>
+              {headerRightButton}
+            </View>)
+        }
+
         {showAvatar && (
           <TouchableOpacity style={styles.avatarContainer} onPress={() => router.push("/profile")} activeOpacity={0.8}>
             {user?.avatar ? (
@@ -122,6 +131,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#3498db",
     justifyContent: "center",
     alignItems: "center",
+  },
+  headerRightButtonContainer: {
+    width: 'auto',
   },
   avatar: {
     width: 40,
