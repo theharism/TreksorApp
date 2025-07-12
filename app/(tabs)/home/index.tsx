@@ -50,7 +50,6 @@ export default function HomeScreen() {
   useEffect(() => {
     if(powerThoughts){
       const firstUnreadThoughts = powerThoughts.filter(thought => !thought.isRead).slice(0, 3);
-      console.log("First 3 unread thoughts:", firstUnreadThoughts);
       setHomePowerThoughts(firstUnreadThoughts);
     }
   },[powerThoughts])

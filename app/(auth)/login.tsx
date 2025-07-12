@@ -116,7 +116,6 @@ export default function Login() {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
       const currentUser = GoogleSignin.getCurrentUser();
       if(currentUser) {
-        console.log("Already signed in with Google:", currentUser);
         const {user} = currentUser;
         signInWithThirdParty({ email:user.email, name:user.name, photo:user.photo, provider: 'google' }).then(() => {
           getCurrentUser();
@@ -124,7 +123,6 @@ export default function Login() {
         return;
       }
       const response = await GoogleSignin.signIn();
-      console.log("Google sign-in response:", response)
       // const response = {"data": {"user": {"email": "chaudharyhouse1211@gmail.com", "familyName": null, "givenName": "Chaudhary", "id": "107538304071486047850", "name": "Chaudhary", "photo": null}}, "type": "success"}
       const user = response?.data ? response.data.user : null;
       if (!user) {
@@ -165,7 +163,6 @@ export default function Login() {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       })
-      console.log(credential);
       // signInWithThirdParty({ email, name, photo, provider: 'apple' }).then(() => {
       //   getCurrentUser();
       // });
