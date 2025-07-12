@@ -144,7 +144,7 @@ const BeveragesDetails = () => {
           showsVerticalScrollIndicator={false}
         >
           <View style={{ width: '100%' }}>
-            <Text style={{ color: "#FFFFFF", fontSize: 16, marginBottom: 20, fontWeight: 'bold' }}>{beverage.description}</Text>
+            <Text style={{ color: "#FFFFFF", fontSize: 18, marginBottom: 20, fontWeight: 'bold', fontFamily: 'Nunito-Regular' }}>{beverage.description}</Text>
           </View>
         
           <LinearGradient
@@ -170,7 +170,7 @@ const BeveragesDetails = () => {
         
           {beverage.footNote && (
             <View style={{ width: '100%', marginTop: 10 }}>
-              <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: '400' }}>{beverage.footNote}</Text>
+              <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: '400', fontFamily: 'Nunito-Regular' }}>{beverage.footNote}</Text>
             </View>
           )}
         </ScrollView>
@@ -250,6 +250,7 @@ const styles = StyleSheet.create({
     textShadowColor: "rgba(0, 0, 0, 0.5)",
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 2,
+    fontFamily: 'Nunito-Regular'
   },
   gridContainer: {
     paddingBottom: 10,
@@ -281,12 +282,14 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     marginBottom: 4,
     lineHeight: 20,
+    fontFamily: 'Nunito-Regular'
   },
   ingredientMeasurement: {
     fontSize: 14,
     color: "#F39C12",
     fontWeight: "500",
     lineHeight: 18,
+    fontFamily: 'Nunito-Regular'
   },
   scrollView: {
     flex: 1,

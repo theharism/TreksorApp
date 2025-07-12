@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
     maxHeight: 300,
   },
   productTitle: {
-    fontSize: 32,
+    fontSize: 34,
     fontWeight: "bold",
     color: "#FFFFFF",
     textAlign: "center",
@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
     textShadowColor: "rgba(0, 0, 0, 0.7)",
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
+    fontFamily: 'Nunito-Regular'
   },
   descriptionContainer: {
     width: "100%",
@@ -235,11 +236,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   description: {
-    fontSize: 16,
+    fontSize: 18,
     color: "#FFFFFF",
     lineHeight: 24,
     textAlign: "left",
     marginBottom: 20,
+    fontFamily: 'Nunito-Regular'
   },
   warningContainer: {
     // marginTop: 10,
@@ -248,10 +250,11 @@ const styles = StyleSheet.create({
     // borderTopColor: "rgba(243, 156, 18, 0.3)",
   },
   warningText: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#F39C12",
     fontWeight: "600",
     textAlign: "left",
     lineHeight: 20,
+    fontFamily: 'Nunito-Regular'
   },
 })

@@ -55,6 +55,25 @@ export default {
       ],
       [
         "@react-native-google-signin/google-signin"
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": ["assets/fonts/Nunito-Regular.ttf"],
+          "android": {
+            "fonts": [
+              {
+                "fontFamily": "Nunito-Regular",
+                "fontDefinitions": [
+                  {
+                    "path": "assets/fonts/Nunito-Regular.ttf",
+                    "weight": 800
+                  }
+                ]
+              }
+            ]
+          }
+        }
       ]
     ],
     "experiments": {
