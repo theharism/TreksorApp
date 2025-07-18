@@ -1,89 +1,93 @@
 export default {
-  "expo": {
-    "name": "TreksorApp",
-    "slug": "TreksorApp",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "treksorapp",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.treksor.app",
-      "googleServicesFile": process.env.GOOGLE_SERVICES_INFOPLIST,
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false,
-        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to let you pick and upload images.",
-        "NSCameraUsageDescription": "This app uses the camera to take photos and videos.",
+  expo: {
+    name: "TreksorApp",
+    slug: "TreksorApp",
+    version: "1.1.0",
+    orientation: "portrait",
+    icon: "./assets/images/appicon-treksor.png",
+    scheme: "treksorapp",
+    userInterfaceStyle: "automatic",
+    newArchEnabled: true,
+    splash: {
+      image: "./assets/images/splash-treksor.png",
+      resizeMode: "contain",
+      backgroundColor: "#000000",
+    },
+    ios: {
+      supportsTablet: true,
+      bundleIdentifier: "com.treksor.app",
+      googleServicesFile: process.env.GOOGLE_SERVICES_INFOPLIST,
+      buildNumber: "4",
+      infoPlist: {
+        ITSAppUsesNonExemptEncryption: false,
+        NSPhotoLibraryUsageDescription:
+          "This app needs access to your photo library to let you pick and upload images.",
+        NSCameraUsageDescription:
+          "This app uses the camera to take photos and videos.",
       },
-      "usesAppleSignIn": true
+      usesAppleSignIn: true,
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+    android: {
+      adaptiveIcon: {
+        foregroundImage: "./assets/images/adaptive-icon.png",
+        backgroundColor: "#ffffff",
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.treksor.app",
-      "googleServicesFile": process.env.GOOGLE_SERVICES_JSON
+      edgeToEdgeEnabled: true,
+      package: "com.treksor.app",
+      googleServicesFile: process.env.GOOGLE_SERVICES_JSON,
     },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
+    web: {
+      bundler: "metro",
+      output: "static",
+      favicon: "./assets/images/favicon.png",
     },
-    "plugins": [
+    plugins: [
       "expo-router",
       "expo-web-browser",
       "expo-apple-authentication",
       [
-        "expo-splash-screen",
+        "expo-image-picker",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
+          photosPermission:
+            "The app accesses your photos to let you change your profile picture.",
+        },
       ],
       [
         "expo-video",
         {
-          "supportsBackgroundPlayback": true,
-          "supportsPictureInPicture": true
-        }
+          supportsBackgroundPlayback: true,
+          supportsPictureInPicture: true,
+        },
       ],
-      [
-        "@react-native-google-signin/google-signin"
-      ],
+      ["@react-native-google-signin/google-signin"],
       [
         "expo-font",
         {
-          "fonts": ["assets/fonts/Nunito-Regular.ttf"],
-          "android": {
-            "fonts": [
+          fonts: ["assets/fonts/Nunito-Regular.ttf"],
+          android: {
+            fonts: [
               {
-                "fontFamily": "Nunito-Regular",
-                "fontDefinitions": [
+                fontFamily: "Nunito-Regular",
+                fontDefinitions: [
                   {
-                    "path": "assets/fonts/Nunito-Regular.ttf",
-                    "weight": 800
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      ]
+                    path: "assets/fonts/Nunito-Regular.ttf",
+                    weight: 800,
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      ],
     ],
-    "experiments": {
-      "typedRoutes": true
+    experiments: {
+      typedRoutes: true,
     },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "f85180bc-a756-4c74-bddc-59615dab92af"
-      }
-    }
-  }
-}
+    extra: {
+      router: {},
+      eas: {
+        projectId: "d5f9b141-617b-41ca-bed2-0c2fb862c6f8",
+      },
+    },
+  },
+};

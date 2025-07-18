@@ -145,6 +145,11 @@ export default function MediationDetailScreen() {
             ]).start()
         }
     });
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    }
   }, [id])
 
 

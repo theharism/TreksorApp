@@ -14,7 +14,6 @@ import {
 } from "react-native";
 
 import Button from "@/components/ui/Button";
-import SocialButton from "@/components/ui/SocialButton";
 import TextInput from "@/components/ui/TextInput";
 import { useAuthStore } from "@/store/auth-store";
 import { Ionicons } from "@expo/vector-icons";
@@ -239,13 +238,13 @@ export default function Login() {
                 SIGN IN
               </Button>
 
-              <View style={styles.divider}>
+              {/* <View style={styles.divider}>
                 <View style={styles.dividerLine} />
                 <Text style={styles.dividerText}>OR</Text>
                 <View style={styles.dividerLine} />
-              </View>
+              </View> */}
 
-              <View style={[styles.socialButtons,{justifyContent:isAppleSigninAvailable?'space-between':'center'}]}>
+              {/* <View style={[styles.socialButtons,{justifyContent:isAppleSigninAvailable?'space-between':'center'}]}>
                 <SocialButton
                   icon="logo-google"
                   label="Google"
@@ -258,7 +257,7 @@ export default function Login() {
                   color="#000000"
                   onPress={handleAppleLogin}
                 />}
-              </View>
+              </View> */}
             </View>
 
             <View style={styles.footer}>

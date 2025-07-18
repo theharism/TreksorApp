@@ -1,8 +1,4 @@
 {
-  "cli": {
-    "version": ">= 16.9.0",
-    "appVersionSource": "remote"
-  },
   "build": {
     "development": {
       "developmentClient": true,
@@ -19,14 +15,19 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true,
       "env": {
         "GOOGLE_SERVICES_INFOPLIST": "./GoogleService-Info.plist",
         "GOOGLE_SERVICES_JSON": "./google-services.json"
       }
     }
   },
-  "submit": {
-    "production": {}
+   "submit": {
+    "production": {
+      "ios": {
+        "appleId": "barbadeindio@gmail.com",
+        "ascAppId": "6748041252",
+        "appleTeamId": "ABUM4S9VHY"
+      }
+    }
   }
 }

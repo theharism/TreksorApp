@@ -88,7 +88,7 @@ const PurposeHome = () => {
                 textAlign: "center",
               }}
             >
-              Avaibale{" "}
+              Available{" "}
             </Text>
             <Text
               style={{

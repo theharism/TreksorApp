@@ -151,7 +151,7 @@ export default function WorkoutInfoScreen() {
         >
           {/* Video/Image Section */}
           <View style={styles.videoSection}>
-            <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture nativeControls={false} />
+            <VideoView  style={styles.video} player={player} allowsFullscreen allowsPictureInPicture nativeControls={false} />
             {/* Stats Overlay */}
             {/* <View style={styles.statsOverlay}>
               <BlurView intensity={40} style={styles.statsBlur}>
@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     // height: 250,
     height: height * 0.3,
     borderRadius: 12,
-    backgroundColor: '#F5F5F5', // Very light gray
+    backgroundColor: '#00000', // Very light gray
   },
   controlsContainer: {
     padding: 10,

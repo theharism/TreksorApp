@@ -10,6 +10,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   Pressable,
   ScrollView,
@@ -67,18 +68,40 @@ export default function ArticleDetailScreen({ mode = "stack" }: ArticlesDetailsS
     markArticleAsRead(category as string, id as string);
   }
 
-  const handleSpeak = async (title: string, description: string, body: string) => {
-    const plainBody = body.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
-    const speechText = `${title}. ${description.replace(/<[^>]+>/g, '')}. ${plainBody}`;
-    const voices = await Speech.getAvailableVoicesAsync();
-    const preferred = voices.find(v => v.language === 'fr-FR' && ['Daniel', 'Fred', 'Tom', 'Alex'].includes(v.name)
-    );
+const handleSpeak = async (title?: string, description?: string, body?: string) => {
+  if (!title || !description || !body) return;
+
+  const plainBody = body.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+  const speechText = `${title}. ${description.replace(/<[^>]+>/g, '')}. ${plainBody}`;
+  
+  try {
+    // const voices = await Speech.getAvailableVoicesAsync();
+
+    // console.log("Available voices:", voices);
+    // const preferred = voices.find(
+    //   (v) => v.language === "ar-001"  && v.name.toLowerCase().includes("majed")
+    // );
+
+    const isSpeaking = await Speech.isSpeakingAsync();
+    if (isSpeaking) await Speech.stop();
+    
     Speech.speak(speechText, {
-      voice: preferred?.identifier || voices[0]?.identifier, // fallback to default if not found
+      // voice: preferred?.identifier || voices[0]?.identifier,
       rate: 0.9,
-      pitch: 1.0
+      pitch: 1.0,
+      onDone: () => {
+        console.log("Speech finished.");
+      },
+      onError: (err) => {
+        console.log("Speech error:", err);
+        Alert.alert("Text-to-Speech Error", "Unable to speak the article. Make sure your phone isn't in silent mode and volume is up.");
+      },
     });
-  };
+  } catch (error) {
+    console.log("Error speaking article:", error);
+  }
+};
+
 
   if (loading) {
     return (
@@ -237,6 +260,7 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     lineHeight: 28,
     marginBottom: 16,
+    maxWidth:"80%"
   },
   description: {
     fontSize: 16,

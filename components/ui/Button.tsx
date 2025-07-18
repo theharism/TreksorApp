@@ -1,3 +1,4 @@
+import { Entypo } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
@@ -18,6 +19,8 @@ type ButtonProps = {
   iconStyle?: object; // Optional custom styles for the icon image
   buttonStyle?: object;
   disabled?: boolean;
+  iconImage?: boolean; // Optional custom icon component
+  iconImageIcon?: string; // Optional icon name for Entypo
 };
 
 const Button = ({
@@ -28,6 +31,8 @@ const Button = ({
   iconStyle,
   buttonStyle,
   disabled,
+  iconImage,
+  iconImageIcon
 }: ButtonProps) => {
   return (
     <TouchableOpacity
@@ -63,10 +68,10 @@ const Button = ({
           ) : typeof children === "string" ? (
             icon ? (
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Image
+                {!iconImage ? <Image
                   source={icon}
                   style={[{ marginRight: 10, width: 20, height: 20 }, iconStyle]} // Apply custom styles
-                />
+                />: <Entypo style={{ marginRight: 10 }} name={iconImageIcon} size={28} color="#FFFFFF" />}
                 <Text style={styles.buttonText}>{children}</Text>
               </View>
             ) : (
