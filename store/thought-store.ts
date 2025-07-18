@@ -1,9 +1,7 @@
 import { api } from "@/api/axios";
 import { errorHandler } from "@/lib/utils";
 import { PowerThought, PowerThoughtResponse } from "@/types/powerThought";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
 
 interface PowerThoughtState {
   powerThoughts: PowerThought[]
@@ -15,7 +13,7 @@ interface PowerThoughtState {
 }
 
 export const usePowerThoughtStore = create<PowerThoughtState>()(
-  persist(
+  // persist(
     (set, get) => ({
       powerThoughts:[],
       loading: false,
@@ -27,6 +25,7 @@ export const usePowerThoughtStore = create<PowerThoughtState>()(
           const {data:response} = await api.get<PowerThoughtResponse>(`power-thought?date=${new Date().toISOString().split('T')[0]}`);
           const existingThoughts = get().powerThoughts;
           const existingIds = new Set(existingThoughts.map(t => t._id));
+          
           const newThoughts = response.data
             .filter(thought => !existingIds.has(thought._id))
             .map(thought => ({
@@ -37,7 +36,7 @@ export const usePowerThoughtStore = create<PowerThoughtState>()(
                 month: 'long',
                 day: 'numeric',
               }),
-              isToday: new Date(thought.date).toDateString() === new Date().toDateString(),
+              isToday: new Date(thought.date).toISOString().split('T')[0] == new Date().toISOString().split('T')[0],
             }));            
             const updatedThoughts = [...newThoughts, ...existingThoughts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
           set({ loading: false, powerThoughts: updatedThoughts});
@@ -64,9 +63,9 @@ export const usePowerThoughtStore = create<PowerThoughtState>()(
       }
 
     }),
-    {
-      name: "thought-storage",
-      storage: createJSONStorage(() => AsyncStorage),
-    }
-  )
+  //   {
+  //     name: "thought-storage2",
+  //     storage: createJSONStorage(() => AsyncStorage),
+  //   }
+  // )
 );

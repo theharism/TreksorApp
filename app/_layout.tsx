@@ -1,7 +1,7 @@
 // app/_layout.tsx
 import { useAuthStore } from "@/store/auth-store";
 import * as Linking from "expo-linking";
-import { router, Slot, SplashScreen } from "expo-router";
+import { router, SplashScreen, Stack } from "expo-router";
 import { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
 
@@ -74,6 +74,20 @@ export default function RootLayout() {
   }, [error, clearError])
 
   return (
-        <Slot />
+        // <Slot />
+        <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: "#02050C",
+          },
+          animation: "slide_from_right",
+          gestureEnabled: true,
+          gestureDirection: "horizontal",
+          fullScreenGestureEnabled: true,
+        }}
+      />
+      //   <Stack.Screen name="body" />
+      //   </Stack>
   );
 }

@@ -1,5 +1,5 @@
 import { api } from "@/api/axios";
-import { errorHandler } from "@/lib/utils";
+import { countRead, errorHandler } from "@/lib/utils";
 import { Article } from "@/types/article";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
@@ -19,11 +19,12 @@ export interface ArticleResponse {
 
 interface ArticleState {
   articles: Record<string, Article[]>
+  unreadArticlesCount: number;
   loading: boolean;
   error: string | null;
   fetchArticles: (query: string) => Promise<void>;
   fetchArticleById: (data: fetchArticleRequest) => Promise<Article | undefined>;
-  getUnreadArticlesCount: () => number;
+  getUnreadArticlesCount: () => void;
   markArticleAsRead: (type: string, id: string) => void;
   clearData: () => void;
 }
@@ -32,6 +33,7 @@ export const useArticleStore = create<ArticleState>()(
   persist(
     (set, get) => ({
       articles: {},
+      unreadArticlesCount: 0,
       loading: false,
       error: null,
 
@@ -85,23 +87,14 @@ export const useArticleStore = create<ArticleState>()(
         set({ articles: {}, loading: false, error: null });
       },
 
-      getUnreadArticlesCount: (): number => {
-        const countRead = (items) => items.filter(i => i.isRead).length;
+      getUnreadArticlesCount: () => { 
 
         const { articles } = useArticleStore.getState();
-     
-        const bodyArticles = articles["Body"] || [];
-        const mentalArticles = articles["Mental"] || [];
-        const spiritualArticles = articles["Spiritual"] || [];
-
-        const bodyRead = countRead(bodyArticles);
-        const mentalRead = countRead(mentalArticles);
-        const spiritualRead = countRead(spiritualArticles);
-
-        const totalArticles = bodyArticles.length + mentalArticles.length + spiritualArticles.length;
-        const totalArticlesRead = bodyRead + mentalRead + spiritualRead;
-
-        return totalArticles - totalArticlesRead;
+      
+        const allArticles = articles['All Articles'] || [];
+        const allArticlesRead = allArticles ? countRead(allArticles) : 0;
+      
+        set({ unreadArticlesCount: allArticles.length - allArticlesRead });
       },
 
       markArticleAsRead: (type: string, id: string) => {
@@ -132,16 +125,19 @@ export const useArticleStore = create<ArticleState>()(
           }
           allArticles['All Articles'] = existingCategoryArticles;
         }
-        
-        set({ articles: allArticles });
+        const totalArticles = allArticles['All Articles'] || [];
+        const allArticlesRead = totalArticles ? countRead(totalArticles) : 0;
+      
+        set({ articles: allArticles, unreadArticlesCount: totalArticles.length - allArticlesRead });
       },
 
     }),
     {
-      name: "article-storage",
+      name: "article-storage-1.0",
       storage: createJSONStorage(() => AsyncStorage),
       partialize: (state) => ({
         articles: state.articles,
+        unreadArticlesCount: state.unreadArticlesCount,
       }),
     }
   )

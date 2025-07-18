@@ -3,18 +3,24 @@ import { useAuthStore } from "@/store/auth-store";
 import { AntDesign, MaterialIcons, Octicons, SimpleLineIcons } from "@expo/vector-icons";
 import { Redirect, Tabs } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 
 export default function TabLayout() {
 
   const { isAuthenticated, isVerified } = useAuthStore();
   if(!isAuthenticated || !isVerified) return <Redirect href="/" />;
+  const [badge,setBadge] = React.useState<number>(0);
+
+  useEffect(() => {
+    setBadge(useArticleStore.getState().unreadArticlesCount);
+  },[useArticleStore.getState().unreadArticlesCount])
 
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
       <Tabs
+        key={badge}
         screenOptions={{
           animation: "shift",
           sceneStyle:{
@@ -65,15 +71,15 @@ export default function TabLayout() {
 
         <Tabs.Screen
           name="articles"
-          options={{
-            title: "Articles",
-            tabBarIcon: ({ color }) => (
-              <MaterialIcons name="article" size={24} color={color} />
-            ),
-            tabBarBadge: (() => {
-              const count = useArticleStore.getState().getUnreadArticlesCount();
-              return count > 0 ? count : undefined;
-            })(),
+          options={() => {
+            const badge = useArticleStore.getState().unreadArticlesCount;
+            return {
+              title: "Articles",
+              tabBarIcon: ({ color }) => (
+                <MaterialIcons name="article" size={24} color={color} />
+              ),
+              tabBarBadge: badge > 0 ? badge : undefined,
+            };
           }}
         />
 

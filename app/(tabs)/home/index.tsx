@@ -2,6 +2,7 @@
 
 import { useNotifications } from "@/hooks/useNotifications";
 import { ritualCards } from "@/mock/rituals";
+import { useArticleStore } from "@/store/article-store";
 import { usePowerThoughtStore } from "@/store/thought-store";
 import { useUserStore } from "@/store/user-store";
 import { PowerThought } from "@/types/powerThought";
@@ -35,6 +36,7 @@ export default function HomeScreen() {
   const thoughtsRef = useRef<FlatList>(null);
   const [expandedThoughts, setExpandedThoughts] = useState<Set<string>>(new Set());
   const {pushToken, notification} = useNotifications();
+  const {getUnreadArticlesCount} = useArticleStore();
   const {savePushToken} = useUserStore();
   
   useEffect(()=>{
@@ -45,12 +47,19 @@ export default function HomeScreen() {
 
   useEffect(()=>{
     fetchPowerThoughts();
+    getUnreadArticlesCount();
   },[fetchPowerThoughts]);
 
   useEffect(() => {
-    if(powerThoughts){
+    if(powerThoughts){      
       const firstUnreadThoughts = powerThoughts.filter(thought => !thought.isRead).slice(0, 3);
-      setHomePowerThoughts(firstUnreadThoughts);
+      const todayThought = powerThoughts.find(thought => thought.isToday);
+      
+      if (todayThought) {
+        setHomePowerThoughts([todayThought, ...firstUnreadThoughts]);
+      } else {
+        setHomePowerThoughts(firstUnreadThoughts);
+      }
     }
   },[powerThoughts])
 
