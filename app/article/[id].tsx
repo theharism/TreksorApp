@@ -2,6 +2,7 @@
 
 import { useArticleStore } from "@/store/article-store";
 import { Ionicons } from "@expo/vector-icons";
+import { Audio } from "expo-av";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams } from "expo-router";
@@ -81,6 +82,13 @@ const handleSpeak = async (title?: string, description?: string, body?: string) 
     // const preferred = voices.find(
     //   (v) => v.language === "ar-001"  && v.name.toLowerCase().includes("majed")
     // );
+
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: false,
+      playsInSilentModeIOS: true,
+      shouldDuckAndroid: true,
+      staysActiveInBackground: false,
+    });
 
     const isSpeaking = await Speech.isSpeakingAsync();
     if (isSpeaking) await Speech.stop();

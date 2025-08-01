@@ -91,6 +91,13 @@ export default function MediationDetailScreen() {
         setDownloadProgress(0);
         setIsDownloading(false);
       }
+
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+        shouldDuckAndroid: true,
+        staysActiveInBackground: false,
+      });
   
       // Load and play from local URI
       const { sound } = await Audio.Sound.createAsync(
