@@ -6,57 +6,107 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface ChatState {
-    messages: Message[];
-    loading: boolean;
-    error: string | null;
-    sendMessage: (message: string) => Promise<void>;
-    clearData: () => void;
+  chats: Record<string, Message[]>;
+  currentUserId: string | null;
+  loading: boolean;
+  error: string | null;
+
+  setUserId: (userId: string) => void;
+  sendMessage: (message: string) => Promise<void>;
+  clearData: () => void;
+  getMessages: () => Message[];
 }
 
 interface MessageResponse {
-    data: Message;
-    success: boolean;
+  data: Message;
+  success: boolean;
 }
 
 export const useChatStore = create<ChatState>()(
-    persist(
-        (set,get) => ({
-            messages: [],
+  persist(
+    (set, get) => ({
+      chats: {},
+      currentUserId: null,
+      loading: false,
+      error: null,
+
+      setUserId: (userId: string) => {
+        set({ currentUserId: userId });
+      },
+
+      getMessages: () => {
+        const { currentUserId, chats } = get();
+        return currentUserId && chats[currentUserId] ? chats[currentUserId] : [];
+      },
+
+      sendMessage: async (message: string) => {
+        const { currentUserId, chats } = get();
+        if (!currentUserId) return;
+
+        const chatMessage: Message = {
+          id: generateRandomId(),
+          role: 'user',
+          content: message,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        };
+
+        const currentMessages = chats[currentUserId] || [];
+        const updatedUserMessages = [...currentMessages, chatMessage];
+
+        set({
+          loading: true,
+          error: null,
+          chats: {
+            ...chats,
+            [currentUserId]: updatedUserMessages,
+          },
+        });
+
+        try {
+          const { data: response } = await api.post<MessageResponse>('/chat', {
+            messages: updatedUserMessages,
+          });
+
+          set({
             loading: false,
-            error: null,
-
-            sendMessage: async (message) => {
-                try {
-                    const chatMessage : Message = {
-                        id: generateRandomId(),
-                        role: 'user',
-                        content: message,
-                        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-                    }
-                    set({ loading: true, error: null, messages: [...get().messages, chatMessage] });
-                    const {data:response} = await api.post<MessageResponse>('/chat', { messages:get().messages });  
-                    set({ messages: [...get().messages, response.data], loading: false });
-                } catch (error: any) {
-                    console.error('sendMessage error:', {error});
-                    const errorMessage: Message = {
-                        id: Date.now().toString(),
-                        role: 'assistant',
-                        content: 'Sorry, there was an error processing your request. Please try again.',
-                        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-                      };
-                
-                    set({ messages: [...get().messages, errorMessage], error: error.message, loading: false });
-                    errorHandler(error)
-                }
+            chats: {
+              ...get().chats,
+              [currentUserId]: [...get().chats[currentUserId], response.data],
             },
+          });
+        } catch (error: any) {
+          console.error('sendMessage error:', error);
+          const errorMessage: Message = {
+            id: Date.now().toString(),
+            role: 'assistant',
+            content: 'Sorry, there was an error processing your request. Please try again.',
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          };
 
-            clearData: () => {
-                set({messages:[],loading:false,error:null})
+          set({
+            loading: false,
+            error: error.message,
+            chats: {
+              ...get().chats,
+              [currentUserId]: [...get().chats[currentUserId], errorMessage],
             },
-        }),
-        {
-            name: 'chat-storage',
-            storage: createJSONStorage(() => AsyncStorage),
+          });
+
+          errorHandler(error);
         }
-    )
+      },
+
+      clearData: () => {
+        set({
+          chats: {},
+          loading: false,
+          error: null,
+        });
+      },
+    }),
+    {
+      name: 'chat-storage-by-user',
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
 );

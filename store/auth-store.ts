@@ -6,7 +6,6 @@ import * as SecureStore from "expo-secure-store";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { useArticleStore } from "./article-store";
-import { useChatStore } from "./chat-store";
 import { useMediationStore } from "./mediation-store";
 import { useMySpaceStore } from "./myspace-store";
 import { usePowerThoughtStore } from "./thought-store";
@@ -187,7 +186,7 @@ export const useAuthStore = create<AuthState>()(
           token: null,
         });
         useArticleStore.getState().clearData();
-        useChatStore.getState().clearData();
+        // useChatStore.getState().clearData();
         useMediationStore.getState().clearData();
         useMySpaceStore.getState().clearData();
         usePowerThoughtStore.getState().clearData();

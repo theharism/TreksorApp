@@ -26,10 +26,15 @@ const { width } = Dimensions.get("window")
 
 export default function ChatScreen() {
   const insets = useSafeAreaInsets()
-  const { messages, sendMessage, loading, error } = useChatStore()
+  const {getMessages,sendMessage, loading, error, setUserId } = useChatStore()
+  const messages = getMessages();
   const [inputText, setInputText] = useState("")
   const flatListRef = useRef<FlatList>(null)
   const { user } = useAuthStore()
+
+  useEffect(()=>{
+    setUserId(useAuthStore.getState().user.id)
+  },[setUserId])
 
   useEffect(() => {
     flatListRef.current?.scrollToEnd({ animated: true })
