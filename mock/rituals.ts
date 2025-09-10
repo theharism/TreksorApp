@@ -12,7 +12,7 @@ export const ritualCards: RitualCard[] = [
   },
   {
     id: "mental",
-    title: "Mental",
+    title: "MIND",
     ritualsCompleted: 5,
     totalRituals: 7,
     image: require("@/assets/images/mental-ritual.png"),

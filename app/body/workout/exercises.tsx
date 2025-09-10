@@ -4,6 +4,7 @@ import Header from "@/components/ui/Header";
 import { useWorkoutStore } from "@/store/workout-store";
 import { Exercise } from "@/types/workout";
 import { Ionicons } from "@expo/vector-icons";
+import { ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { router, useFocusEffect, useLocalSearchParams, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -124,10 +125,18 @@ export default function WorkoutDetailScreen() {
   if (!workout) {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
+        <ImageBackground
+                source={require("@/assets/images/exerciseBackground.png")}
+                contentFit="cover"
+                style={styles.backgroundImage}
+                imageStyle={styles.imageStyle}
+              >
+
         <StatusBar style="light" />
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>Loading workout...</Text>
         </View>
+              </ImageBackground>
       </View>
     );
   }
@@ -136,6 +145,14 @@ export default function WorkoutDetailScreen() {
 
   return (
     <View style={[styles.container]}>
+       <ImageBackground
+                source={require("@/assets/images/exerciseBackground.png")}
+                contentFit="cover"
+                style={styles.backgroundImage}
+                imageStyle={styles.imageStyle}
+              >
+
+              
       <StatusBar style="light" />
       <ScrollView
         style={styles.content}
@@ -154,11 +171,13 @@ export default function WorkoutDetailScreen() {
           </View>
         ))}
       </ScrollView>
+      </ImageBackground>
     </View>
   );
 }
 
-const { width } = Dimensions.get("window");
+// const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
@@ -179,9 +198,9 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 20,
-    // justifyContent:'center',
+    justifyContent:'center',
     flexGrow: 1,
-    // paddingBottom: 100,
+    paddingBottom: 100,
   },
   section: {
     marginBottom: 20,
@@ -253,5 +272,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 11, // Slightly smaller than outer radius
+  },
+   backgroundImage: {
+    width,
+    height,
+  },
+  imageStyle: {
+    opacity: 1,
   },
 });

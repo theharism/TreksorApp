@@ -2,7 +2,7 @@ export default {
   expo: {
     name: "TreksorApp",
     slug: "TreksorApp",
-    version: "1.1.0",
+    version: "1.3.0",
     orientation: "portrait",
     icon: "./assets/images/appicon-treksor.png",
     scheme: "treksorapp",
@@ -17,7 +17,7 @@ export default {
       supportsTablet: true,
       bundleIdentifier: "com.treksor.app",
       googleServicesFile: process.env.GOOGLE_SERVICES_INFOPLIST,
-      buildNumber: "4",
+      buildNumber: "6",
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
         NSPhotoLibraryUsageDescription:
@@ -88,6 +88,7 @@ export default {
       eas: {
         projectId: "d5f9b141-617b-41ca-bed2-0c2fb862c6f8",
       },
+      owner: "fahadzahidd24",
     },
   },
 };

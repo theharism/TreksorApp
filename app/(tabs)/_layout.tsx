@@ -9,12 +9,13 @@ import { Platform, StyleSheet, View } from "react-native";
 export default function TabLayout() {
 
   const { isAuthenticated, isVerified } = useAuthStore();
-  if(!isAuthenticated || !isVerified) return <Redirect href="/" />;
-  const [badge,setBadge] = React.useState<number>(0);
+  const [badge, setBadge] = React.useState<number>(0);
 
   useEffect(() => {
     setBadge(useArticleStore.getState().unreadArticlesCount);
-  },[useArticleStore.getState().unreadArticlesCount])
+  }, [useArticleStore.getState().unreadArticlesCount]);
+
+  if (!isAuthenticated || !isVerified) return <Redirect href="/" />;
 
   return (
     <View style={styles.container}>

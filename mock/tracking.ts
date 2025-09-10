@@ -13,7 +13,7 @@ export const trackingData: TrackingCategory[] = [
     },
     {
         id: "2",
-        title: "Mental",
+        title: "MIND",
         percentage: 0,
         items: [
             // { id: "2-1", label: "Power Thought Read", value: "" },

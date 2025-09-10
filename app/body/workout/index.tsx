@@ -12,7 +12,7 @@ const Selection = () => {
     <View style={styles.container}>
       <StatusBar style="light" />
       <ImageBackground
-        source={require("@/assets/images/workout-home.jpeg")}
+        source={require("@/assets/images/gymBackground.png")}
         contentFit="cover"
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}

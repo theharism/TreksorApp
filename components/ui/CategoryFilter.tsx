@@ -89,7 +89,7 @@ const CategoryFilter: React.FC<CategoryFilterProps> = ({ categories, activeCateg
                 activeCategory === category ? styles.activeCategoryText : styles.inactiveCategoryText,
               ]}
             >
-              {category}
+              {category === "Mental" ? "Mind" : category}
             </Text>
           </TouchableOpacity>
         ))}

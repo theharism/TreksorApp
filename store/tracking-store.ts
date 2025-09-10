@@ -77,7 +77,7 @@ export const useTrackingStore = create<TrackingStore>()(
             },
             {
               id: generateRandomId(),
-              title: "Mental",
+              title: "MIND",
               percentage: calcPercentage(
                 readThoughts + mentalRead + totalJournals,
                 totalThoughts + mentalArticles.length + totalJournals

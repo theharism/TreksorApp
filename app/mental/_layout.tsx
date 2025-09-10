@@ -18,7 +18,7 @@ const MentalLayout = () => {
           headerShown: false,
           header: () => (
             <Header
-              title="MENTAL"
+              title="MIND"
               showBackButton={true}
               onBackPress={() => router.back()}
               showAvatar={false}

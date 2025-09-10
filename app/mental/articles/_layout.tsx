@@ -18,7 +18,7 @@ const BodyArticles = () => {
           headerShown: true,
           header: () => (
             <Header
-              title="MENTAL ARTICLE"
+              title="MIND ARTICLE"
               showBackButton={true}
               onBackPress={() => router.back()}
               showAvatar={false}
