@@ -3,7 +3,13 @@ import { ImageBackground } from "expo-image";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Selection = () => {
@@ -12,46 +18,63 @@ const Selection = () => {
     <View style={styles.container}>
       <StatusBar style="light" />
       <ImageBackground
-        source={require("@/assets/images/gymBackground.png")}
+        source={require("@/assets/images/Rutine_2.png")}
         contentFit="cover"
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}
       >
-                {/* Header */}
-          <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
-          <TouchableOpacity style={styles.backButton} onPress={()=>router.back()}>
+        {/* Header */}
+        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>WORKOUT</Text>
+          <Text style={styles.headerTitle}>Gym</Text>
           <View style={styles.headerSpacer} />
         </View>
         <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
           <TouchableOpacity
-            onPress={() => router.push({ pathname: "/body/workout/exercises", params: { workoutId: 'push' }})}
+            onPress={() =>
+              router.push({
+                pathname: "/body/workout/exercises",
+                params: { workoutId: "push" },
+              })
+            }
             style={styles.gymButtonContainer}
           >
             <Text style={styles.gymButtonText}>PUSH</Text>
           </TouchableOpacity>
           <TouchableOpacity
-                      onPress={() => router.push({ pathname: "/body/workout/exercises", params: { workoutId: 'pull' }})}
+            onPress={() =>
+              router.push({
+                pathname: "/body/workout/exercises",
+                params: { workoutId: "pull" },
+              })
+            }
             style={styles.gymButtonContainer}
           >
             <Text style={styles.gymButtonText}>PULL</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => router.push({ pathname: "/body/workout/exercises", params: { workoutId: 'legs' }})}
+            onPress={() =>
+              router.push({
+                pathname: "/body/workout/exercises",
+                params: { workoutId: "legs" },
+              })
+            }
             style={styles.gymButtonContainer}
           >
             <Text style={styles.gymButtonText}>LEGS</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.otherButtonContainer}
-          >
+          <TouchableOpacity style={styles.otherButtonContainer}>
             <Text style={styles.otherButtonText}>REST</Text>
           </TouchableOpacity>
-          <Text style={{color:"#FFFFFF", textAlign:"center", marginTop:20}}>
-            Recommendations:
-            Perform this workout twice per week for optimal strength and recovery
+          <Text style={{ color: "#fff", textAlign: "center", marginTop: 20 }}>
+            Disclaimer: These workouts are intended for general fitness purposes
+            only. Always consult your doctor before starting any new exercise
+            program
           </Text>
         </View>
       </ImageBackground>
@@ -91,8 +114,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginVertical: 10,
     backgroundColor: "#EFB33F",
-    alignItems:'center',
-    justifyContent:'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
   otherButtonContainer: {
     width: width - 40, // Full width minus margins
@@ -101,8 +124,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginVertical: 10,
     backgroundColor: "#303030",
-    alignItems:'center',
-    justifyContent:'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   gymButtonText: {
     color: "#000000",
@@ -120,7 +143,7 @@ const styles = StyleSheet.create({
   },
   otherButtonSubText: {
     color: "#FFFFFF",
-    fontSize: 14  ,
+    fontSize: 14,
     fontWeight: "bold",
     letterSpacing: 1,
     lineHeight: 24,

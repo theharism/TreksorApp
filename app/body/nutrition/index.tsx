@@ -13,7 +13,7 @@ const NutritionHome = () => {
     <View style={styles.container}>
       <StatusBar style="light" />
       <ImageBackground
-        source={require("@/assets/images/nutrition-home.jpeg")}
+        source={require("@/assets/images/Nutrition_2.png")}
         contentFit="cover"
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}

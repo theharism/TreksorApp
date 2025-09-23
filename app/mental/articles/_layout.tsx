@@ -18,7 +18,7 @@ const BodyArticles = () => {
           headerShown: true,
           header: () => (
             <Header
-              title="MIND ARTICLE"
+              title="Mind Article"
               showBackButton={true}
               onBackPress={() => router.back()}
               showAvatar={false}
@@ -33,7 +33,7 @@ const BodyArticles = () => {
           headerShown: true,
           header: () => (
             <Header
-              title="ARTICLE DETAILS"
+              title="Article Details"
               showBackButton={true}
               onBackPress={() => router.back()}
               showAvatar={false}

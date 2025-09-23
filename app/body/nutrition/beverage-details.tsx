@@ -7,7 +7,7 @@ import { LinearGradient } from "expo-linear-gradient"
 import { router, useLocalSearchParams } from "expo-router"
 import { StatusBar } from "expo-status-bar"
 import { useEffect, useState } from "react"
-import { Dimensions, FlatList, Animated as RNAnimated, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { Dimensions, FlatList, Linking, Animated as RNAnimated, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 interface Ingredient {
@@ -24,6 +24,12 @@ interface BeverageData {
   quantity: string
   ingredients: Ingredient[]
   footNote?: string
+  source_1?: string
+  url_1?: string
+  source_2?: string
+  url_2?: string
+  source_3?: string
+  url_3?: string
 }
 
 const BeveragesDetails = () => {
@@ -173,6 +179,26 @@ const BeveragesDetails = () => {
               <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: '400', fontFamily: 'Nunito-Regular' }}>{beverage.footNote}</Text>
             </View>
           )}
+          {(beverage.source_1 || beverage.source_2 || beverage.source_3) && (
+            <View style={{ width: '100%', marginTop: 10 }}>
+              {beverage.source_1 && beverage.url_1 && (
+                <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: '400', fontFamily: 'Nunito-Regular' }}>
+                  <Text style={{ textDecorationLine: 'underline', color: '#3498db' }} onPress={() => Linking.openURL(beverage.url_1!)}>Source 1: {beverage.source_1}</Text>
+                </Text>
+              )}
+              {beverage.source_2 && beverage.url_2 && (
+                <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: '400', fontFamily: 'Nunito-Regular' }}>
+                  <Text style={{ textDecorationLine: 'underline', color: '#3498db' }} onPress={() => Linking.openURL(beverage.url_2!)}>Source 2: {beverage.source_2}</Text>
+                </Text>
+              )}
+              {beverage.source_3 && beverage.url_3 && (
+                <Text style={{ color: "#FFFFFF", fontSize: 12, fontWeight: '400', fontFamily: 'Nunito-Regular' }}>
+                  <Text style={{ textDecorationLine: 'underline', color: '#3498db' }} onPress={() => Linking.openURL(beverage.url_3!)}>Source 3: {beverage.source_3}</Text>
+                </Text>
+              )}
+            </View>
+          )}
+        {/* </LinearGradient> */}
         </ScrollView>
       </ImageBackground>
     </View>

@@ -22,7 +22,7 @@ const BodyHome = () => {
           <TouchableOpacity style={styles.backButton} onPress={()=>router.back()}>
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>MIND</Text>
+          <Text style={styles.headerTitle}>Mind</Text>
           <View style={styles.headerSpacer} />
         </View>
         <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>

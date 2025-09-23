@@ -18,7 +18,7 @@ const MySpaceLayout = () => {
           headerShown: true,
           header: () => (
             <Header
-              title="MY SPACE"
+              title="My Space"
               showBackButton={true}
               onBackPress={() => router.back()}
               showAvatar={false}

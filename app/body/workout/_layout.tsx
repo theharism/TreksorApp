@@ -18,7 +18,7 @@ const WorkoutLayout = () => {
           headerShown: true,
           header: () => (
             <Header
-              title="WORKOUT"
+              title="Workout"
               showBackButton={true}
               onBackPress={() => router.back()}
               showAvatar={false}

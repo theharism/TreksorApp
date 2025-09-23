@@ -8,6 +8,8 @@ import { StatusBar } from "expo-status-bar"
 import { useEffect, useState } from "react"
 import {
   Dimensions,
+  Linking,
+  Pressable,
   Animated as RNAnimated,
   ScrollView,
   StyleSheet,
@@ -23,6 +25,8 @@ interface SupplementData {
   backgroundImage: string
   description: string
   warning: string
+  source: string
+  url: string
 }
 
 const SupplementDetails = () => {
@@ -128,6 +132,19 @@ const SupplementDetails = () => {
                 <View style={styles.warningContainer}>
                   <Text style={styles.warningText}>{supplement.warning}</Text>
                 </View>
+                <View style={styles.warningContainer}>
+                   <Pressable onPress={() => {
+                  // Open the URL in a web browser
+                  if (supplement.url) {
+                    // Using Linking API to open URL
+                      Linking.openURL(supplement.url)
+                  }
+                }}>
+                  {/* <Text style={[styles.sourceText, { textDecorationLine: 'underline', color: '#3498db' }]}>Click Here for Reference</Text> */}
+                  <Text style={[styles.sourceText, { textDecorationLine: 'underline', color: '#3498db' }]}>{supplement.source}</Text>
+                </Pressable>
+                </View>
+               
               {/* </LinearGradient> */}
             </View>
           </RNAnimated.View>
@@ -256,5 +273,14 @@ const styles = StyleSheet.create({
     textAlign: "left",
     lineHeight: 20,
     fontFamily: 'Nunito-Regular'
+  },
+  sourceText: {
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "600",
+    textAlign: "left",
+    lineHeight: 20,
+    fontFamily: 'Nunito-Regular',
+    marginTop: 10
   },
 })

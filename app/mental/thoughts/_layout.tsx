@@ -18,7 +18,7 @@ const PowerThoughtsLayout = () => {
           headerShown: true,
           header: () => (
             <Header
-              title="POWER THOUGHT"
+              title="Power Thoughts"
               showBackButton={true}
               onBackPress={() => router.back()}
               showAvatar={false}

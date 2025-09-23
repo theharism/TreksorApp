@@ -18,7 +18,7 @@ const SpiritualLayout = () => {
           headerShown: true,
           header: () => (
             <Header
-              title="SPIRITUAL"
+              title="Spiritual"
               showBackButton={true}
               onBackPress={() => router.back()}
               showAvatar={false}

@@ -3,7 +3,13 @@ import { ImageBackground } from "expo-image";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Selection = () => {
@@ -12,16 +18,19 @@ const Selection = () => {
     <View style={styles.container}>
       <StatusBar style="light" />
       <ImageBackground
-        source={require("@/assets/images/workout-home.jpeg")}
+        source={require("@/assets/images/Workout_2.png")}
         contentFit="cover"
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}
       >
         <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
-          <TouchableOpacity style={styles.backButton} onPress={()=>router.back()}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>WORKOUT</Text>
+          <Text style={styles.headerTitle}>Workout</Text>
           <View style={styles.headerSpacer} />
         </View>
         <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
@@ -31,9 +40,7 @@ const Selection = () => {
           >
             <Text style={styles.gymButtonText}>GYM</Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.otherButtonContainer}
-          >
+          <TouchableOpacity style={styles.otherButtonContainer}>
             <Text style={styles.otherButtonText}>CALISTHENICS</Text>
             <Text style={styles.otherButtonSubText}>Available Soon</Text>
           </TouchableOpacity>
@@ -75,8 +82,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginVertical: 10,
     backgroundColor: "#EFB33F",
-    alignItems:'center',
-    justifyContent:'center'
+    alignItems: "center",
+    justifyContent: "center",
   },
   otherButtonContainer: {
     width: width - 40, // Full width minus margins
@@ -85,9 +92,9 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginVertical: 10,
     backgroundColor: "#303030",
-    alignItems:'center',
-    justifyContent:'center',
-    opacity:0.5,
+    alignItems: "center",
+    justifyContent: "center",
+    opacity: 0.5,
   },
   gymButtonText: {
     color: "#000000",
@@ -105,7 +112,7 @@ const styles = StyleSheet.create({
   },
   otherButtonSubText: {
     color: "#FFFFFF",
-    fontSize: 14  ,
+    fontSize: 14,
     fontWeight: "bold",
     letterSpacing: 1,
     lineHeight: 24,

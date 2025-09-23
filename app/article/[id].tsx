@@ -1,7 +1,6 @@
 "use client";
 
 import { useArticleStore } from "@/store/article-store";
-import { Ionicons } from "@expo/vector-icons";
 import { Audio } from "expo-av";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -13,12 +12,11 @@ import {
   ActivityIndicator,
   Alert,
   Dimensions,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
@@ -169,9 +167,9 @@ const handleSpeak = async (title?: string, description?: string, body?: string) 
           {/* <Text style={styles.category}>{article?.category}</Text> */}
           <View style={styles.titleRow}>          
             <Text style={styles.title}>{article?.title}</Text>
-            <Pressable onPress={() => handleSpeak(article?.title, article?.description, article?.body)}>
+            {/* <Pressable onPress={() => handleSpeak(article?.title, article?.description, article?.body)}>
               <Ionicons name="volume-high-outline" size={24} color="gray" />
-            </Pressable>
+            </Pressable> */}
           </View>
           <Text style={styles.description}>{article?.description}</Text>
 

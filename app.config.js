@@ -17,13 +17,13 @@ export default {
       supportsTablet: true,
       bundleIdentifier: "com.treksor.app",
       googleServicesFile: process.env.GOOGLE_SERVICES_INFOPLIST,
-      buildNumber: "6",
+      buildNumber: "7",
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
         NSPhotoLibraryUsageDescription:
           "This app needs access to your photo library to let you pick and upload images.",
         NSCameraUsageDescription:
-          "This app uses the camera to take photos and videos.",
+          "The app needs accesse to your photo library to let you upload/change your profile picture.",
       },
       usesAppleSignIn: true,
     },

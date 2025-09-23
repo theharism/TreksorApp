@@ -51,7 +51,7 @@ const PurposeHome = () => {
               marginTop: 20,
             }}
           >
-            Purpose
+            Purpose (Coming Soon)
           </Text>
           <Text
             style={{
@@ -62,7 +62,7 @@ const PurposeHome = () => {
               marginTop: 5,
             }}
           >
-            Annual Subscribers Only
+            Annual Subscribers Only 
           </Text>
           <LinearGradient
             colors={['rgba(255,255,255,0.3)', 'rgba(255,255,255,0)']}

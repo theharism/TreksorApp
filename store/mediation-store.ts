@@ -44,14 +44,20 @@ export const useMediationStore = create<MediationState>()(
 
       fetchMediationById: async (data) => {
         try {
+          console.log("fetchMediationById", { data });
           set({ loading: true, error: null });
+          const lol = get();
+          console.log("fetchMediationById - store data", { lol });
           const mediation = get().mediation.find((mediation) => mediation.id === data.id);
+          console.log("fetchMediationById", { mediation });
           set({ loading: false });
           return mediation;
         } catch (error: any) {
           console.error("fetchMediationById error:", { error: error.response.data });
           set({ error: error.response.data.message, loading: false });
           errorHandler(error);
+        }finally {
+          set({ loading: false });
         }
       },
 

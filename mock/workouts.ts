@@ -3,7 +3,7 @@ import { Workout, WorkoutContent } from "@/types/workout";
 export const WorkoutsData: Workout[] = [
   {
     id: "push",
-    title: "PUSH",
+    title: "Push",
     description: "Chest, Shoulders, Triceps",
     exercises: [
         {

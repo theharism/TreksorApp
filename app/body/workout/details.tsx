@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
 // import { workoutContent } from "@/mock/workouts"
-import { useWorkoutStore } from "@/store/workout-store"
-import { Ionicons } from "@expo/vector-icons"
-import { useEvent } from "expo"
-import { LinearGradient } from "expo-linear-gradient"
-import { router, useLocalSearchParams } from "expo-router"
-import { StatusBar } from "expo-status-bar"
-import { useVideoPlayer, VideoView } from "expo-video"
-import { useEffect, useState } from "react"
+import { useWorkoutStore } from "@/store/workout-store";
+import { Ionicons } from "@expo/vector-icons";
+import { useEvent } from "expo";
+import { LinearGradient } from "expo-linear-gradient";
+import { router, useLocalSearchParams } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useVideoPlayer, VideoView } from "expo-video";
+import { useEffect, useState } from "react";
 import {
   Dimensions,
   Animated as RNAnimated,
@@ -16,44 +16,46 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
-} from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-const { width, height } = Dimensions.get("window")
+  View,
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+const { width, height } = Dimensions.get("window");
 
 interface WorkoutStats {
-  burn: string
-  time: string
+  burn: string;
+  time: string;
 }
 
 interface WorkoutGoals {
-  title: string
-  items: string[]
+  title: string;
+  items: string[];
 }
 
 interface WorkoutContentData {
-  description: string
-  goals: WorkoutGoals
+  description: string;
+  goals: WorkoutGoals;
 }
 
 interface WorkoutInfo {
-  id: string
-  title: string
-  videoUrl: string
-  stats: WorkoutStats
-  content: WorkoutContentData
+  id: string;
+  title: string;
+  videoUrl: string;
+  stats: WorkoutStats;
+  content: WorkoutContentData;
 }
 
 export default function WorkoutInfoScreen() {
-  const insets = useSafeAreaInsets()
-  const { workoutId, id } = useLocalSearchParams()
-  const { workouts, workoutContent, markExerciseAsRead, clearData} = useWorkoutStore();
-  const [workout, setWorkout] = useState<WorkoutInfo | null>(null)
-  const [fadeAnim] = useState(new RNAnimated.Value(0))
-  const [slideAnim] = useState(new RNAnimated.Value(30))
-  const [isCompleted, setIsCompleted] = useState(false)
-  const videoUrl = workout?.videoUrl || "https://app.treksor.com/uploads/loading.mp4";
-  
+  const insets = useSafeAreaInsets();
+  const { workoutId, id } = useLocalSearchParams();
+  const { workouts, workoutContent, markExerciseAsRead, clearData } =
+    useWorkoutStore();
+  const [workout, setWorkout] = useState<WorkoutInfo | null>(null);
+  const [fadeAnim] = useState(new RNAnimated.Value(0));
+  const [slideAnim] = useState(new RNAnimated.Value(30));
+  const [isCompleted, setIsCompleted] = useState(false);
+  const videoUrl =
+    workout?.videoUrl || "https://app.treksor.com/uploads/loading.mp4";
+
   const player = useVideoPlayer(videoUrl);
 
   // Start playback once video and player are available
@@ -64,14 +66,16 @@ export default function WorkoutInfoScreen() {
     }
   }, [player, workout?.videoUrl]);
 
-  const { isPlaying } = useEvent(player, 'playingChange', { isPlaying: player.playing });
+  const { isPlaying } = useEvent(player, "playingChange", {
+    isPlaying: player.playing,
+  });
 
   useEffect(() => {
     // Load workout content based on ID
-    const workoutKey = id as keyof typeof workoutContent
+    const workoutKey = id as keyof typeof workoutContent;
     if (workoutContent[workoutKey]) {
-      const workoutInfo = workoutContent[workoutKey] as WorkoutInfo
-      setWorkout(workoutInfo)
+      const workoutInfo = workoutContent[workoutKey] as WorkoutInfo;
+      setWorkout(workoutInfo);
 
       // Start entrance animations
       RNAnimated.parallel([
@@ -85,31 +89,32 @@ export default function WorkoutInfoScreen() {
           duration: 800,
           useNativeDriver: true,
         }),
-      ]).start()
+      ]).start();
     }
-  }, [id])
+  }, [id]);
 
-  useEffect(()=>{
-    if(!workoutId || !id) return;
-    workouts.find(workout => workout.id === workoutId)?.exercises.find(exercise => exercise.id === id)?.completed && setIsCompleted(true);
-  },[workouts, workoutId, id])
-
+  useEffect(() => {
+    if (!workoutId || !id) return;
+    workouts
+      .find((workout) => workout.id === workoutId)
+      ?.exercises.find((exercise) => exercise.id === id)?.completed &&
+      setIsCompleted(true);
+  }, [workouts, workoutId, id]);
 
   const handleBackPress = () => {
-    router.back()
-  }
+    router.back();
+  };
 
   const handleMarkAsRead = () => {
     markExerciseAsRead(workoutId as string, id as string);
     setIsCompleted(true);
-  }
-
+  };
 
   // Parse HTML content (simple implementation)
   const parseHTMLContent = (htmlString: string) => {
     // Remove HTML tags for React Native Text component
-    return htmlString.replace(/<[^>]*>/g, "")
-  }
+    return htmlString.replace(/<[^>]*>/g, "");
+  };
 
   if (!workout) {
     return (
@@ -119,7 +124,7 @@ export default function WorkoutInfoScreen() {
           <Text style={styles.loadingText}>Loading workout info...</Text>
         </View>
       </View>
-    )
+    );
   }
 
   return (
@@ -151,7 +156,13 @@ export default function WorkoutInfoScreen() {
         >
           {/* Video/Image Section */}
           <View style={styles.videoSection}>
-            <VideoView  style={styles.video} player={player} allowsFullscreen allowsPictureInPicture nativeControls={false} />
+            <VideoView
+              style={styles.video}
+              player={player}
+              allowsFullscreen
+              allowsPictureInPicture
+              nativeControls={false}
+            />
             {/* Stats Overlay */}
             {/* <View style={styles.statsOverlay}>
               <BlurView intensity={40} style={styles.statsBlur}>
@@ -178,16 +189,33 @@ export default function WorkoutInfoScreen() {
               <Text style={styles.workoutTitle}>{workout.title}</Text>
             </View>
 
-            <Text style={styles.description}>{parseHTMLContent(workout.content.description)}</Text>
+            <Text style={styles.description}>
+              {parseHTMLContent(workout.content.description)}
+            </Text>
 
             <View style={styles.goalsSection}>
-              <Text style={styles.goalsTitle}>{workout.content.goals.title}</Text>
+              <Text style={styles.goalsTitle}>
+                {workout.content.goals.title}
+              </Text>
               {workout.content.goals.items.map((goal, index) => (
                 <View key={index} style={styles.goalItem}>
                   <View style={styles.bulletPoint} />
                   <Text style={styles.goalText}>{goal}</Text>
                 </View>
               ))}
+              {/* horizontal line  */}
+              <View style={{
+                borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+                borderBottomWidth: 1,
+                marginVertical: 20,
+              }} />
+              <Text
+                style={styles.goalText}
+              >
+                Note: This exercise description is for educational purposes only
+                and is not a substitute for professional medical advice. Consult
+                your doctor before starting any training program.
+              </Text>
             </View>
           </View>
         </RNAnimated.View>
@@ -196,23 +224,30 @@ export default function WorkoutInfoScreen() {
       {/* Mark as Read Button */}
       <View style={styles.bottomSection}>
         <TouchableOpacity
-          style={[styles.markAsReadButton, isCompleted && styles.markAsReadButtonRead]}
+          style={[
+            styles.markAsReadButton,
+            isCompleted && styles.markAsReadButtonRead,
+          ]}
           onPress={handleMarkAsRead}
           disabled={isCompleted}
           activeOpacity={0.8}
         >
           <LinearGradient
-            colors={isCompleted ? ["#4CAF50", "#45A049"] : ["#F39C12", "#E67E22"]}
+            colors={
+              isCompleted ? ["#4CAF50", "#45A049"] : ["#F39C12", "#E67E22"]
+            }
             style={styles.buttonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
           >
-            <Text style={styles.buttonText}>{isCompleted ? "Read ✓" : "Mark as read"}</Text>
+            <Text style={styles.buttonText}>
+              {isCompleted ? "Read ✓" : "Mark as read"}
+            </Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -394,8 +429,8 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 50,
   },
   video: {
@@ -403,15 +438,15 @@ const styles = StyleSheet.create({
     // height: 250,
     height: height * 0.3,
     borderRadius: 12,
-    backgroundColor: '#00000', // Very light gray
+    backgroundColor: "#00000", // Very light gray
   },
   controlsContainer: {
     padding: 10,
   },
   titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 16,
-  },  
-})
+  },
+});

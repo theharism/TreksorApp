@@ -10,4 +10,6 @@ export interface Mediation {
   content: MediationContentData
   tip: string
   isRead?: boolean
+  source: string
+  url: string
 }

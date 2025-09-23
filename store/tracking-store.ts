@@ -67,7 +67,7 @@ export const useTrackingStore = create<TrackingStore>()(
           const updatedTrackingData: TrackingCategory[] = [
             {
               id: generateRandomId(),
-              title: "Body",
+              title: "BODY",
               percentage: calcPercentage(completedWorkouts + bodyRead, totalWorkouts + bodyArticles.length),
               items: [
                 // { id: generateRandomId(), label: "Workouts", value: `${completedWorkouts}/${totalWorkouts}` },
@@ -91,7 +91,7 @@ export const useTrackingStore = create<TrackingStore>()(
             },
             {
               id: generateRandomId(),
-              title: "Spiritual",
+              title: "SPIRITUAL",
               percentage: calcPercentage(
                 readMeditations + spiritualRead,
                 totalMeditations + spiritualArticles.length

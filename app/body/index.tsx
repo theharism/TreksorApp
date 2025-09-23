@@ -13,7 +13,7 @@ const BodyHome = () => {
     <View style={styles.container}>
       <StatusBar style="light" />
       <ImageBackground
-        source={require("@/assets/images/body-home.png")}
+        source={require("@/assets/images/Body_2.png")}
         contentFit="cover"
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}
@@ -22,7 +22,7 @@ const BodyHome = () => {
           <TouchableOpacity style={styles.backButton} onPress={()=>router.back()}>
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>BODY</Text>
+          <Text style={styles.headerTitle}>Body</Text>
           <View style={styles.headerSpacer} />
         </View>
         <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>

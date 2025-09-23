@@ -3,7 +3,7 @@ import { RitualCard } from "@/types/ritualCard";
 export const ritualCards: RitualCard[] = [
   {
     id: "body",
-    title: "Body",
+    title: "BODY",
     ritualsCompleted: 3,
     totalRituals: 5,
     image: require("@/assets/images/body-ritual.png"),
@@ -21,7 +21,7 @@ export const ritualCards: RitualCard[] = [
   },
   {
     id: "spiritual",
-    title: "Spiritual",
+    title: "SPIRITUAL",
     ritualsCompleted: 3,
     totalRituals: 4,
     image: require("@/assets/images/spiritual-ritual.png"),
@@ -30,7 +30,7 @@ export const ritualCards: RitualCard[] = [
   },
   {
     id: "purpose",
-    title: "Purpose",
+    title: "PURPOSE",
     ritualsCompleted: 0,
     totalRituals: 0,
     image: require("@/assets/images/locked-ritual.png"),

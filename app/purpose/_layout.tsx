@@ -18,7 +18,7 @@ const PurposeLayout = () => {
           headerShown: false,
           header: () => (
             <Header
-              title="PURPOSE"
+              title="Purpose"
               showBackButton={true}
               onBackPress={() => router.back()}
               showAvatar={false}

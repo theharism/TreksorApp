@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import AudioControlButton from "@/components/AudioControlButton"
-import Header from "@/components/ui/Header"
-import { useMediationStore } from "@/store/mediation-store"
-import { Mediation } from "@/types/mediation"
-import { Audio } from 'expo-av'
-import * as FileSystem from 'expo-file-system'
-import { LinearGradient } from "expo-linear-gradient"
-import { router, useLocalSearchParams, useNavigation } from "expo-router"
-import { StatusBar } from "expo-status-bar"
-import { useEffect, useLayoutEffect, useState } from "react"
+import AudioControlButton from "@/components/AudioControlButton";
+import Header from "@/components/ui/Header";
+import { useMediationStore } from "@/store/mediation-store";
+import { Mediation } from "@/types/mediation";
+import { Audio } from "expo-av";
+import * as FileSystem from "expo-file-system";
+import { LinearGradient } from "expo-linear-gradient";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   Image,
   Animated as RNAnimated,
@@ -18,17 +18,17 @@ import {
   Text,
   TouchableOpacity,
   View
-} from "react-native"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+} from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function MediationDetailScreen() {
-  const insets = useSafeAreaInsets()
-  const { id } = useLocalSearchParams()
-  const {fetchMediationById, markMediationAsRead} = useMediationStore();
+  const insets = useSafeAreaInsets();
+  const { id } = useLocalSearchParams();
+  const { fetchMediationById, markMediationAsRead } = useMediationStore();
   const [sound, setSound] = useState<Audio.Sound | null>(null);
-  const [mediation, setMediation] = useState<Mediation | null>(null)
-  const [fadeAnim] = useState(new RNAnimated.Value(0))
-  const [slideAnim] = useState(new RNAnimated.Value(30))
+  const [mediation, setMediation] = useState<Mediation | null>(null);
+  const [fadeAnim] = useState(new RNAnimated.Value(0));
+  const [slideAnim] = useState(new RNAnimated.Value(30));
   const [isPlaying, setIsPlaying] = useState(false);
   const [isAudioDownloaded, setIsAudioDownloaded] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState<number>(0);
@@ -48,30 +48,30 @@ export default function MediationDetailScreen() {
   // }
 
   useEffect(() => {
-      async function checkforAudioFile(){
-        if(mediation) {
-          const filename = encodeURIComponent(mediation.audioUrl);
-          const fileUri = FileSystem.cacheDirectory + filename;
-          const fileInfo = await FileSystem.getInfoAsync(fileUri);
-      
-          if (fileInfo.exists) {
-            setIsAudioDownloaded(true);
-          }
+    async function checkforAudioFile() {
+      if (mediation) {
+        const filename = encodeURIComponent(mediation.audioUrl);
+        const fileUri = FileSystem.cacheDirectory + filename;
+        const fileInfo = await FileSystem.getInfoAsync(fileUri);
+
+        if (fileInfo.exists) {
+          setIsAudioDownloaded(true);
         }
       }
-      checkforAudioFile();
-  },[mediation])
+    }
+    checkforAudioFile();
+  }, [mediation]);
 
   async function playSound() {
     if (!mediation || !mediation.audioUrl) return;
-  
+
     try {
       const filename = encodeURIComponent(mediation.audioUrl);
       const fileUri = FileSystem.cacheDirectory + filename;
       const fileInfo = await FileSystem.getInfoAsync(fileUri);
-  
+
       let localUri = fileUri;
-  
+
       if (!fileInfo.exists) {
         setIsDownloading(true);
         const downloadResumable = FileSystem.createDownloadResumable(
@@ -79,11 +79,12 @@ export default function MediationDetailScreen() {
           fileUri,
           {},
           (progress) => {
-            const progressPercent = progress.totalBytesWritten / progress.totalBytesExpectedToWrite;
+            const progressPercent =
+              progress.totalBytesWritten / progress.totalBytesExpectedToWrite;
             setDownloadProgress(Math.round(progressPercent * 100)); // update state
           }
         );
-  
+
         const { uri } = await downloadResumable.downloadAsync();
         localUri = uri;
 
@@ -98,13 +99,13 @@ export default function MediationDetailScreen() {
         shouldDuckAndroid: true,
         staysActiveInBackground: false,
       });
-  
+
       // Load and play from local URI
       const { sound } = await Audio.Sound.createAsync(
         { uri: localUri },
         { shouldPlay: true }
       );
-  
+
       setSound(sound);
       setIsPlaying(true);
     } catch (error) {
@@ -130,49 +131,45 @@ export default function MediationDetailScreen() {
           showAvatar={false}
         />
       ),
-    })
-  }, [navigation, id])
+    });
+  }, [navigation, id]);
 
   useEffect(() => {
-    fetchMediationById({id: id as string}).then((resp)=>{
-        if(resp)
-        {
-            setMediation(resp);
-            RNAnimated.parallel([
-                RNAnimated.timing(fadeAnim, {
-                toValue: 1,
-                duration: 800,
-                useNativeDriver: true,
-                }),
-                RNAnimated.timing(slideAnim, {
-                toValue: 0,
-                duration: 800,
-                useNativeDriver: true,
-                }),
-            ]).start()
-        }
+    fetchMediationById({ id: id as string }).then((resp) => {
+      if (resp) {
+        setMediation(resp);
+        RNAnimated.parallel([
+          RNAnimated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 800,
+            useNativeDriver: true,
+          }),
+          RNAnimated.timing(slideAnim, {
+            toValue: 0,
+            duration: 800,
+            useNativeDriver: true,
+          }),
+        ]).start();
+      }
     });
     return () => {
       if (sound) {
         sound.unloadAsync();
       }
-    }
-  }, [id])
-
+    };
+  }, [id]);
 
   const handleMarkAsRead = () => {
-    if(mediation)
-    {
+    if (mediation) {
       markMediationAsRead(mediation.id);
     }
-  }
-
+  };
 
   // Parse HTML content (simple implementation)
   const parseHTMLContent = (htmlString: string) => {
     // Remove HTML tags for React Native Text component
-    return htmlString.replace(/<[^>]*>/g, "")
-  }
+    return htmlString.replace(/<[^>]*>/g, "");
+  };
 
   if (!mediation) {
     return (
@@ -182,7 +179,7 @@ export default function MediationDetailScreen() {
           <Text style={styles.loadingText}>Loading mediation...</Text>
         </View>
       </View>
-    )
+    );
   }
 
   async function handleAudioControlPress() {
@@ -199,6 +196,8 @@ export default function MediationDetailScreen() {
       await playSound();
     }
   }
+
+  console.log("Mediation details:", mediation);
 
   return (
     <View style={[styles.container]}>
@@ -229,11 +228,17 @@ export default function MediationDetailScreen() {
         >
           {/* Video/Image Section */}
           {/* <View style={styles.videoSection}> */}
-            {/* <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture /> */}
-            {mediation && (
-              <View style={{ position: 'relative' }}>
+          {/* <VideoView style={styles.video} player={player} allowsFullscreen allowsPictureInPicture /> */}
+          {mediation && (
+            <View style={{ position: "relative" }}>
               <Image
-                source={mediation.id === 'beginner' ? require(`@/assets/images/meditation-beginner.png`) : mediation.id === 'intermediate' ? require(`@/assets/images/meditation-intermediate.png`) : require(`@/assets/images/meditation-advanced.png`)}
+                source={
+                  mediation.id === "beginner"
+                    ? require(`@/assets/images/meditation-beginner.png`)
+                    : mediation.id === "intermediate"
+                    ? require(`@/assets/images/meditation-intermediate.png`)
+                    : require(`@/assets/images/meditation-advanced.png`)
+                }
                 style={styles.meditationImage}
                 resizeMode="cover"
               />
@@ -272,15 +277,15 @@ export default function MediationDetailScreen() {
                 color="#FFFFFF"
                 />
               </TouchableOpacity> */}
-               <AudioControlButton
-                  isAudioDownloaded={isAudioDownloaded}
-                  isPlaying={isPlaying}
-                  downloadProgress={downloadProgress}
-                  isDownloading={isDownloading}
-                  onPress={handleAudioControlPress}
-                />
-              </View>
-            )}
+              <AudioControlButton
+                isAudioDownloaded={isAudioDownloaded}
+                isPlaying={isPlaying}
+                downloadProgress={downloadProgress}
+                isDownloading={isDownloading}
+                onPress={handleAudioControlPress}
+              />
+            </View>
+          )}
           {/* </View> */}
 
           {/* Content Section */}
@@ -289,7 +294,9 @@ export default function MediationDetailScreen() {
               <Text style={styles.workoutTitle}>{mediation.title}</Text>
             </View>
 
-            <Text style={styles.description}>{parseHTMLContent(mediation.content.description)}</Text>
+            <Text style={styles.description}>
+              {parseHTMLContent(mediation.content.description)}
+            </Text>
 
             <View style={styles.goalsSection}>
               <Text style={styles.goalsTitle}>What You'll Experience:</Text>
@@ -299,6 +306,35 @@ export default function MediationDetailScreen() {
                   <Text style={styles.goalText}>{goal}</Text>
                 </View>
               ))}
+              {/* horizontal line  */}
+              <View
+                style={{
+                  borderBottomColor: "rgba(255, 255, 255, 0.1)",
+                  borderBottomWidth: 1,
+                  marginVertical: 20,
+                }}
+              />
+              <Text style={styles.goalText}>
+                Note: These practices are intended for relaxation and
+                mindfulness only. They are not medical or psychological
+                treatment. If you have any health concerns or conditions,
+                consult your doctor before starting.
+              </Text>
+              {/* <Text
+                style={{
+                  color: "#FFFFFF",
+                  fontSize: 12,
+                  fontWeight: "400",
+                  fontFamily: "Nunito-Regular",
+                }}
+              >
+                <Text
+                  style={{ textDecorationLine: "underline", color: "#3498db" }}
+                  onPress={() => Linking.openURL(mediation.url!)}
+                >
+                  {mediation?.source}
+                </Text>
+              </Text> */}
             </View>
           </View>
         </RNAnimated.View>
@@ -307,23 +343,30 @@ export default function MediationDetailScreen() {
       {/* Mark as Read Button */}
       <View style={styles.bottomSection}>
         <TouchableOpacity
-          style={[styles.markAsReadButton, mediation.isRead && styles.markAsReadButtonRead]}
+          style={[
+            styles.markAsReadButton,
+            mediation.isRead && styles.markAsReadButtonRead,
+          ]}
           onPress={handleMarkAsRead}
           disabled={mediation.isRead}
           activeOpacity={0.8}
         >
           <LinearGradient
-            colors={mediation.isRead ? ["#4CAF50", "#45A049"] : ["#F39C12", "#E67E22"]}
+            colors={
+              mediation.isRead ? ["#4CAF50", "#45A049"] : ["#F39C12", "#E67E22"]
+            }
             style={styles.buttonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
           >
-            <Text style={styles.buttonText}>{mediation.isRead ? "Read ✓" : "Mark as read"}</Text>
+            <Text style={styles.buttonText}>
+              {mediation.isRead ? "Read ✓" : "Mark as read"}
+            </Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -505,29 +548,29 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 50,
   },
   video: {
     width: "100%",
     height: 275,
-    borderRadius:12,
+    borderRadius: 12,
   },
   controlsContainer: {
     padding: 10,
   },
   titleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 16,
-  },  
+  },
   meditationImage: {
     width: "93%",
     borderRadius: 12,
     borderWidth: 1,
     borderColor: "gray",
-    alignSelf: 'center',
+    alignSelf: "center",
   },
-})
+});

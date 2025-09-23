@@ -37,7 +37,7 @@ export default function WorkoutDetailScreen() {
     navigation.setOptions({
       header: () => (
         <Header
-          title={(workoutId as string).toUpperCase()}
+          title={(workoutId as string)?.charAt(0).toUpperCase() + (workoutId as string)?.slice(1)}
           showBackButton={true}
           onBackPress={() => router.back()}
           headerRightButton={
@@ -126,7 +126,7 @@ export default function WorkoutDetailScreen() {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <ImageBackground
-                source={require("@/assets/images/exerciseBackground.png")}
+                source={require("@/assets/images/Gym_2.png")}
                 contentFit="cover"
                 style={styles.backgroundImage}
                 imageStyle={styles.imageStyle}
@@ -146,7 +146,7 @@ export default function WorkoutDetailScreen() {
   return (
     <View style={[styles.container]}>
        <ImageBackground
-                source={require("@/assets/images/exerciseBackground.png")}
+                source={require("@/assets/images/Gym_2.png")}
                 contentFit="cover"
                 style={styles.backgroundImage}
                 imageStyle={styles.imageStyle}

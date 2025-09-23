@@ -2,7 +2,7 @@ export const Nutritions = {
   beverages: {
     route: "/body/nutrition/beverage-details",
     backgroundImage: require("@/assets/images/beverages-home.png"),
-    headerTitle: "Nutrition Beverages",
+    headerTitle: "Beverages",
     data: [
       {
         id: "elixir-noir",
@@ -25,11 +25,6 @@ Drink it at night, in silence, as a clear sign that you're choosing to focus on 
             id: "black-pepper",
             name: "Black Pepper",
             measurement: "(A Pinch)",
-          },
-          {
-            id: "ashwagandha",
-            name: "Ashwagandha Powder",
-            measurement: "(1 tsp)",
           },
           {
             id: "ginger",
@@ -57,7 +52,13 @@ Drink it at night, in silence, as a clear sign that you're choosing to focus on 
             measurement: "(To fill the cup)",
           },
         ],
-        footNote: `This tea wasn't made to please your taste - it was made to restore you. Let your food be your medicine, and your medicine, your choice.`,
+        footNote: `Consult your Doctor before making any dietary changes.`,
+        source_1: "NIH – National Center for Complementary and Integrative Health (NCCIH)",
+        url_1: "https://www.nccih.nih.gov/health/turmeric",
+        source_2: "NIH – National Center for Complementary and Integrative Health (NCCIH)",
+        url_2: "https://www.nccih.nih.gov/health/ginger",
+        source_3: "NIH – Office of Dietary Supplements (ODS): Vitamin C (lemon juice)",
+        url_3: "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/",
       },
       {
         id: "electro-boost",
@@ -100,14 +101,15 @@ Perfect after training or on high-demand days - physically or mentally.`,
             id: "lemon",
             name: "Lemon Juice",
             measurement: "(½ lemon)",
-          },
-          {
-            id: "ashwagandha",
-            name: "Ashwagandha (Optional)",
-            measurement: "(½ tsp)",
-          },
+          }
         ],
-        footNote: "",
+        footNote: "Consult your Doctor before making any dietary changes.",
+        source_1: "Harvard Health – Using food to stay hydrated",
+        url_1: "https://www.health.harvard.edu/staying-healthy/using-food-to-stay-hydrated",
+        source_2: "NIH – National Center for Complementary and Integrative Health (NCCIH): Ginger",
+        url_2: "https://www.nccih.nih.gov/health/ginger",
+        source_3: "American Heart Association: Dietary sodium & hydration (sea salt reference)",
+        url_3: "https://www.heart.org/en/healthy-living/healthy-eating/eat-smart/sodium",
       },
       {
         id: "green-tonic",
@@ -151,8 +153,11 @@ Best taken on an empty stomach, it sets the tone for a focused and grounded day.
             measurement: "(250ml)",
           },
         ],
-        footNote: `Hydration, detox support, liver activation, improved digestion, mental clarity.
-No crashes. Just clean fuel.`,
+        footNote: `Consult your Doctor before making any dietary changes.`,
+        source_1: "Harvard Health – Using food to stay hydrated",
+        url_1: "https://www.health.harvard.edu/staying-healthy/using-food-to-stay-hydrated",
+        source_2: "NIH – Office of Dietary Supplements (ODS): Vitamin C (lemon juice)",
+        url_2: "https://ods.od.nih.gov/factsheets/VitaminC-Consumer/",
       },
     ],
   },
@@ -168,6 +173,8 @@ No crashes. Just clean fuel.`,
         description:
           "Creatine is a natural compound that boosts energy in muscles, improving performance in short, intense activities like lifting and sprinting. It helps with strength, muscle growth, and recovery. Creatine is commonly used by athletes and is safe when taken properly.",
         warning: "Note: Consult your Doctor before use Do Not Self-Diagnose",
+        source: "Source: Mayo Clinic – Creatine",
+        url: "https://www.mayoclinic.org/drugs-supplements-creatine/art-20347591",
       },
       {
         id: "omega-3",
@@ -177,6 +184,9 @@ No crashes. Just clean fuel.`,
           "Omega-3 is a healthy fat essential for heart, brain, and joint health. It reduces inflammation, supports brain function, and helps lower the risk of heart disease. Common sources include fish (like salmon), flaxseeds, and walnuts.",
         warning:
           "Note: Consult your Doctor before use Do not self-diagnose or self-medicate",
+        source:
+          "Source: NIH Office of Dietary Supplements – Omega-3 Fatty Acids",
+        url: "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-Consumer/",
       },
       {
         id: "b12",
@@ -185,6 +195,8 @@ No crashes. Just clean fuel.`,
         description:
           "Vitamin B12 is a vital nutrient that helps keep your nerves, blood cells, and DNA healthy. It also supports energy production and brain function. Found mainly in animal products, B12 deficiency can lead to fatigue, weakness, and nerve problems.",
         warning: "Note: Consult your Doctor before taking any supplement",
+        source: "Source: NIH Office of Dietary Supplements – Vitamin B12",
+        url: "https://ods.od.nih.gov/factsheets/VitaminB12-Consumer/",
       },
     ],
   },
