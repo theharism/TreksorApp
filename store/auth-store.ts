@@ -83,6 +83,9 @@ interface AuthState {
     role: string;
     avatar?: string;
     authProvider?: string;
+    createdAt: string;
+    daysLeft: string;
+    plan: string;
   };
   token: string | null;
   loading: boolean;
@@ -252,6 +255,7 @@ export const useAuthStore = create<AuthState>()(
         try {
           set({ loading: true, error: null });
           const {data:response} = await api.get<AuthResponse>("user/me");
+          console.log("getCurrentUser", response?.data);
           set({ loading: false, user: response.data.user, isVerified: response.data.user?.isVerified });
           return response.data.user?.isVerified;
         } catch (error: any) {

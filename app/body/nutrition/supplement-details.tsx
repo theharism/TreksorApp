@@ -1,6 +1,8 @@
 "use client"
 
+import Header from "@/components/ui/Header"
 import { Nutritions } from "@/mock/nutrition"
+import { useAuthStore } from "@/store/auth-store"
 import { Ionicons } from "@expo/vector-icons"
 import { ImageBackground } from "expo-image"
 import { router, useLocalSearchParams } from "expo-router"
@@ -37,6 +39,7 @@ const SupplementDetails = () => {
   const [slideAnim] = useState(new RNAnimated.Value(30))
   const [scaleAnim] = useState(new RNAnimated.Value(0.8))
   const supplementsData = Nutritions['supplements'].data;
+  const { user } = useAuthStore();
 
   useEffect(() => {
     // Load supplement data based on ID
@@ -92,7 +95,8 @@ const SupplementDetails = () => {
         imageStyle={styles.imageStyle}
       >
         {/* Header */}
-        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+         {!user?.plan && <Header showTitle={false} showBackButton={false} showAvatar={false} />}
+        <View style={[styles.header, { paddingTop: user?.plan && (insets.top + 10), position: !user?.plan ? "relative": "absolute" }]}>
           <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>

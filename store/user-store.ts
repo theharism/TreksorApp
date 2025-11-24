@@ -18,6 +18,18 @@ export interface DeactivateAccountResponse {
   success: boolean;
 }
 
+export interface PurchasePlanResponse {
+  message: string;
+  success: boolean;
+}
+
+export interface CancelSubscriptionResponse {
+  message: string;
+  success: boolean;
+}
+
+
+
 interface UserState {
   // user: {
   //   id: string;
@@ -29,10 +41,14 @@ interface UserState {
   pushToken: string | null;
   savePushToken: (data: savePushTokenRequest) => Promise<void>;
   deactivateAccount: () => Promise<void>;
+  purchasePlan: (data: {planType: string}) => Promise<void>;
+  cancelSubscription: () => Promise<void>;
   // token: string | null;
   loading: boolean;
   error: string | null;
   clearData: () => void;
+  showPackages: boolean;
+  setShowPackages: (data: boolean) => void;
   // getCurrentUser: () => Promise<boolean | undefined>;
   // updateProfile: (data: updateProfileRequest) => Promise<void>;
 }
@@ -61,6 +77,7 @@ export const useUserStore = create<UserState>()(
       pushToken: null,
       loading: false,
       error: null,
+      showPackages: false,
 
       savePushToken: async (data: savePushTokenRequest) => {
         try {
@@ -74,6 +91,10 @@ export const useUserStore = create<UserState>()(
         }
       },
 
+      setShowPackages: (data: boolean) => {
+        set({ showPackages: data });
+      },
+
       deactivateAccount: async () => {
         try {
           set({ loading: true, error: null });
@@ -85,6 +106,31 @@ export const useUserStore = create<UserState>()(
           errorHandler(error);
         }
       },
+
+      purchasePlan: async (data: {planType: string}) => {
+        try {
+          set({ loading: true, error: null });
+          await api.post<PurchasePlanResponse>("user/purchase-plan", data);
+          set({ loading: false });
+        } catch (error: any) {
+          console.error("purchasePlanError error:", { error:error.response.data });
+          set({ error: error.response.data.message, loading: false });
+          errorHandler(error);
+        }
+      },
+
+      cancelSubscription: async () => {
+        try {
+          set({ loading: true, error: null });
+          await api.post<CancelSubscriptionResponse>("user/cancel-subscription");
+          set({ loading: false });
+        } catch (error: any) {
+          console.error("cancelSubscription error:", { error:error.response.data });
+          set({ error: error.response.data.message, loading: false });
+          errorHandler(error);
+        }
+      },
+      
 
       clearData: () => {
         set({

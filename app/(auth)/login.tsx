@@ -98,10 +98,10 @@ export default function Login() {
     Keyboard.dismiss();
 
     if (validateForm()) {
-      login({ email, password }).then(() => {
+      login({ email: email?.toLowerCase(), password }).then(() => {
         getCurrentUser().then((isVerified) => {
           if (!isVerified) {
-            requestOtp({ email }).then(() => {
+            requestOtp({ email: email?.toLowerCase() }).then(() => {
                 router.push({ pathname: "/(auth)/verify-otp", params: { email } });
             });
           }
@@ -204,7 +204,7 @@ export default function Login() {
               <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
             </TouchableOpacity>
 
-            <Text style={styles.heading}>Welcome Back</Text>
+            <Text style={styles.heading}>Welcome To Treksor</Text>
             <Text style={styles.subHeading}>Sign in to your account</Text>
 
             <View style={styles.form}>

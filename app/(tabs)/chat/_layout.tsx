@@ -1,3 +1,4 @@
+import Header from "@/components/ui/Header";
 import { Stack } from "expo-router";
 
 export default function HomeLayout() {
@@ -11,6 +12,10 @@ export default function HomeLayout() {
       }}>
       <Stack.Screen
         name="index"
+         options={{
+          headerShown:true,
+          header:()=><Header title="Chat" showBackButton={false} showAvatar={false} />
+        }}
       />
     </Stack>
   );

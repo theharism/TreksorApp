@@ -1,6 +1,8 @@
 "use client"
 
+import Header from "@/components/ui/Header"
 import { Nutritions } from "@/mock/nutrition"
+import { useAuthStore } from "@/store/auth-store"
 import { Ionicons } from "@expo/vector-icons"
 import { ImageBackground } from "expo-image"
 import { LinearGradient } from "expo-linear-gradient"
@@ -38,6 +40,7 @@ const BeveragesDetails = () => {
   const [beverage, setBeverage] = useState<BeverageData | null>(null)
   const [animatedValues, setAnimatedValues] = useState<RNAnimated.Value[]>([])
   const beveragesData = Nutritions['beverages'].data;
+  const { user } = useAuthStore();
 
   useEffect(() => {
     // Load beverage data based on ID
@@ -135,7 +138,8 @@ const BeveragesDetails = () => {
         imageStyle={styles.imageStyle}
       >
         {/* Header */}
-        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+         {!user?.plan && <Header showTitle={false} showBackButton={false} showAvatar={false} />}
+        <View style={[styles.header, { paddingTop: user?.plan && (insets.top + 10), position: !user?.plan ? "relative": "absolute" }]}>
           <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>

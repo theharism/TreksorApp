@@ -216,11 +216,11 @@ export default function Register() {
     if (validateStep3()) {
       register({
         name,
-        email,
+        email: email?.toLowerCase(),
         password,
         role: "user",
       }).then(() => {
-        requestOtp({email}).then(() => {
+        requestOtp({email: email?.toLowerCase()}).then(() => {
           router.push({ pathname: "/(auth)/verify-otp", params: { email } });
         })
       })

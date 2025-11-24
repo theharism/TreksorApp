@@ -7,7 +7,7 @@ export const trackingData: TrackingCategory[] = [
         percentage: 0,
         items: [
             // { id: "1-1", label: "Workouts", value: "" },
-            { id: "1-2", label: "Articles Completed", value: "" },
+            { id: "1-2", label: "Articles Read", value: "" },
         ],
         custom: false,
     },
@@ -17,7 +17,7 @@ export const trackingData: TrackingCategory[] = [
         percentage: 0,
         items: [
             // { id: "2-1", label: "Power Thought Read", value: "" },
-            { id: "2-2", label: "Articles Completed", value: "" },
+            { id: "2-2", label: "Articles Read", value: "" },
             // { id: "2-3", label: "General Entries", value: "" },
         ],
         custom: false,
@@ -29,6 +29,15 @@ export const trackingData: TrackingCategory[] = [
         items: [
             // { id: "3-1", label: "Meditations", value: "" },
             { id: "3-2", label: "Articles Read", value: "" },
+        ],
+        custom: false,
+    },
+    {
+        id: "4",
+        title: "Articles",
+        percentage: 0,
+        items: [
+            { id: "4-1", label: "Total Articles Read", value: "" },
         ],
         custom: false,
     },

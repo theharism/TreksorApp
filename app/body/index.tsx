@@ -1,14 +1,23 @@
 import Button from "@/components/ui/Button";
+import Header from "@/components/ui/Header";
+import { useAuthStore } from "@/store/auth-store";
 import { Ionicons } from "@expo/vector-icons";
 import { ImageBackground } from "expo-image";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const BodyHome = () => {
   const insets = useSafeAreaInsets();
+  const { user } = useAuthStore();
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -18,17 +27,37 @@ const BodyHome = () => {
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}
       >
-        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
-          <TouchableOpacity style={styles.backButton} onPress={()=>router.back()}>
+        {!user?.plan && <Header showTitle={false} showBackButton={false} showAvatar={false} />}
+
+        <View style={[styles.header, { paddingTop: user?.plan && (insets.top + 10), position: !user?.plan ? "relative": "absolute" }]}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Body</Text>
           <View style={styles.headerSpacer} />
         </View>
         <View style={[styles.content, { paddingBottom: insets.bottom + 30 }]}>
-          <Button onPress={()=>router.push("/body/workout/selection")} icon={require("@/assets/images/dumbbell.png")}>WORKOUT</Button>
-          <Button onPress={()=>router.push("/body/nutrition")} icon={require("@/assets/images/food-items.png")}>NUTRITION</Button>
-          <Button onPress={()=>router.push("/body/articles")} icon={require("@/assets/images/articles.png")}>ARTICLES</Button>
+          <Button
+            onPress={() => router.push("/body/workout/selection")}
+            icon={require("@/assets/images/dumbbell.png")}
+          >
+            WORKOUT
+          </Button>
+          <Button
+            onPress={() => router.push("/body/nutrition")}
+            icon={require("@/assets/images/food-items.png")}
+          >
+            NUTRITION
+          </Button>
+          <Button
+            onPress={() => router.push("/body/articles")}
+            icon={require("@/assets/images/articles.png")}
+          >
+            ARTICLES
+          </Button>
         </View>
       </ImageBackground>
     </View>

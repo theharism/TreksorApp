@@ -14,8 +14,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
-  const {isAuthenticated, logout, user, loading, requestResetPassword} = useAuthStore();
-  const {deactivateAccount} = useUserStore();
+  const {isAuthenticated, logout, user, loading, requestResetPassword, getCurrentUser} = useAuthStore();
+  const {deactivateAccount, cancelSubscription, setShowPackages} = useUserStore();
   const [showPDF, setShowPDF] = useState<{
       visible: boolean
       title: string
@@ -69,18 +69,53 @@ export default function ProfileScreen() {
 
   const handleDeactivateAccount = () => {
     Alert.alert(
-      "Deactivate Account",
-      "Are you sure you want to deactivate account? The action is irreversible",
+      "Delete Account",
+      "Are you sure you want to delete account? The action is irreversible",
       [
         {
           text: "Cancel",
           style: "cancel",
         },
         {
-          text: "Deactivate",
+          text: "Delete",
           style: "destructive",
           onPress: () => {
             deactivateAccount().then(() => logout());
+          }
+        },
+      ],
+      { cancelable: true },
+    )
+  }
+
+  const handleCancelSubscription = () => {
+    Alert.alert(
+      "Cancel Subscription",
+      "Are you sure you want to cancel your subscription? You will lose access to premium features at the end of your current billing period.",
+      [
+        {
+          text: "Keep Subscription",
+          style: "cancel",
+        },
+        {
+          text: "Cancel Subscription",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              await cancelSubscription();
+              await getCurrentUser(); // Refresh user data
+              Alert.alert(
+                "Subscription Cancelled",
+                "Your subscription has been cancelled. You will continue to have access until the end of your current billing period.",
+                [{ text: "OK" }]
+              );
+            } catch {
+              Alert.alert(
+                "Error",
+                "Failed to cancel subscription. Please try again later.",
+                [{ text: "OK" }]
+              );
+            }
           }
         },
       ],
@@ -130,6 +165,27 @@ export default function ProfileScreen() {
           </Button>
         </View>
 
+        {/* Subscription Plan Section */}
+        {user?.plan && (
+          <TouchableOpacity onPress={()=> setShowPackages(true)} style={styles.subscriptionSection}>
+            <View style={styles.subscriptionCard}>
+              <View style={styles.subscriptionHeader}>
+                <Ionicons name="checkmark-circle" size={24} color="#EFB33F" />
+                <Text style={styles.subscriptionTitle}>Active Plan</Text>
+              </View>
+              <Text style={styles.planName}>
+                {user.plan === "monthly" ? "Monthly Plan" : user.plan === "yearly" ? "Yearly Plan" : user.plan.charAt(0).toUpperCase() + user.plan.slice(1) + " Plan"}
+              </Text>
+              {/* <TouchableOpacity 
+                style={styles.cancelButton} 
+                onPress={handleCancelSubscription}
+              >
+                <Text style={styles.cancelButtonText}>Cancel Subscription</Text>
+              </TouchableOpacity> */}
+            </View>
+          </TouchableOpacity>
+        )}
+
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Account</Text>
 
@@ -147,7 +203,7 @@ export default function ProfileScreen() {
 
           <TouchableOpacity style={[styles.menuItem, {backgroundColor: 'red',opacity:0.8}]} onPress={handleDeactivateAccount}>
             <AntDesign name="deleteuser" size={22} color="#FFFFFF" style={styles.menuIcon} />
-            <Text style={styles.menuText}>Deactivate Account</Text>
+            <Text style={styles.menuText}>Delete Account</Text>
             <Ionicons name="chevron-forward" size={20} color="#AAAAAA" />
           </TouchableOpacity>
 
@@ -315,5 +371,52 @@ const styles = StyleSheet.create({
   versionText: {
     color: "#666666",
     fontSize: 14,
+  },
+  subscriptionSection: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255, 255, 255, 0.1)",
+  },
+  subscriptionCard: {
+    backgroundColor: "#1A1A1A",
+    borderRadius: 12,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: "#EFB33F",
+  },
+  subscriptionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  subscriptionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#EFB33F",
+    marginLeft: 10,
+  },
+  planName: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#FFFFFF",
+    marginBottom: 8,
+  },
+  daysLeft: {
+    fontSize: 14,
+    color: "#AAAAAA",
+  },
+  cancelButton: {
+    marginTop: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#FF4444",
+    alignItems: "center",
+  },
+  cancelButtonText: {
+    color: "#FF4444",
+    fontSize: 14,
+    fontWeight: "600",
   },
 })

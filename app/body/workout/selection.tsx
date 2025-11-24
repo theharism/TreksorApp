@@ -1,3 +1,5 @@
+import Header from "@/components/ui/Header";
+import { useAuthStore } from "@/store/auth-store";
 import { Ionicons } from "@expo/vector-icons";
 import { ImageBackground } from "expo-image";
 import { router } from "expo-router";
@@ -14,6 +16,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Selection = () => {
   const insets = useSafeAreaInsets();
+  const { user } = useAuthStore();
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -23,7 +26,8 @@ const Selection = () => {
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}
       >
-        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+        {!user?.plan && <Header showTitle={false} showBackButton={false} showAvatar={false} />}
+        <View style={[styles.header, { paddingTop: user?.plan && (insets.top + 10), position: !user?.plan ? "relative": "absolute" }]}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => router.back()}

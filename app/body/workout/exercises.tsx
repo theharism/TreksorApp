@@ -1,12 +1,18 @@
 "use client";
 
 import Header from "@/components/ui/Header";
+import { useAuthStore } from "@/store/auth-store";
 import { useWorkoutStore } from "@/store/workout-store";
 import { Exercise } from "@/types/workout";
 import { Ionicons } from "@expo/vector-icons";
 import { ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
-import { router, useFocusEffect, useLocalSearchParams, useNavigation } from "expo-router";
+import {
+  router,
+  useFocusEffect,
+  useLocalSearchParams,
+  useNavigation,
+} from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useLayoutEffect, useState } from "react";
 import {
@@ -16,7 +22,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -26,6 +32,7 @@ export default function WorkoutDetailScreen() {
   const { workoutId } = useLocalSearchParams();
   const { workouts, getWorkoutExercies, resetProgress } = useWorkoutStore();
   const [workout, setWorkout] = useState<Exercise[]>();
+  const {user} = useAuthStore();
 
   useFocusEffect(() => {
     if (workoutId) {
@@ -36,43 +43,47 @@ export default function WorkoutDetailScreen() {
   useLayoutEffect(() => {
     navigation.setOptions({
       header: () => (
-        <Header
-          title={(workoutId as string)?.charAt(0).toUpperCase() + (workoutId as string)?.slice(1)}
-          showBackButton={true}
-          onBackPress={() => router.back()}
-          headerRightButton={
-            <TouchableOpacity onPress={_resetProgress}>
-                <Ionicons name="refresh" size={24} color="white" />
-            </TouchableOpacity>
-          }
-          showAvatar={false}
-        />
+        <></>
+        // <Header
+        //   title={(workoutId as string)?.charAt(0).toUpperCase() + (workoutId as string)?.slice(1)}
+        //   showBackButton={true}
+        //   onBackPress={() => router.back()}
+        //   headerRightButton={
+        //     <TouchableOpacity onPress={_resetProgress}>
+        //         <Ionicons name="refresh" size={24} color="white" />
+        //     </TouchableOpacity>
+        //   }
+        //   showAvatar={false}
+        // />
       ),
-    })
-  }, [navigation, workoutId])
+    });
+  }, [navigation, workoutId]);
 
   const _resetProgress = () => {
     Alert.alert(
-        "Reset Progress",
-        "Are you sure you want to reset progress?",
-        [
-          {
-            text: "Cancel",
-            style: "cancel",
-          },
-          {
-            text: "Reset",
-            style: "destructive",
-            onPress: () => resetProgress(workoutId as string),
-          },
-        ],
-        { cancelable: true },
-      )
+      "Reset Progress",
+      "Are you sure you want to reset progress?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        {
+          text: "Reset",
+          style: "destructive",
+          onPress: () => resetProgress(workoutId as string),
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const handleExercisePress = (workoutId: string, exerciseId: string) => {
     if (!workout) return;
-    router.push({pathname:"/body/workout/details",params:{id:exerciseId, workoutId}})
+    router.push({
+      pathname: "/body/workout/details",
+      params: { id: exerciseId, workoutId },
+    });
   };
 
   const renderExerciseCard = (
@@ -81,44 +92,44 @@ export default function WorkoutDetailScreen() {
     index: number
   ) => {
     return (
-        <TouchableOpacity
-          style={styles.exerciseCard}
-          onPress={() => handleExercisePress(workoutId, exercise.id)}
-          key={index}
+      <TouchableOpacity
+        style={styles.exerciseCard}
+        onPress={() => handleExercisePress(workoutId, exercise.id)}
+        key={index}
+      >
+        <LinearGradient
+          colors={["rgba(255, 255, 255, 0.3)", "rgba(255, 255, 255, 0.4)"]}
+          start={{ x: 0.2, y: 0 }}
+          end={{ x: 0.8, y: 1 }}
+          style={styles.borderGradient}
         >
           <LinearGradient
-            colors={["rgba(255, 255, 255, 0.3)", "rgba(255, 255, 255, 0.4)"]}
-            start={{ x: 0.2, y: 0 }}
-            end={{ x: 0.8, y: 1 }}
-            style={styles.borderGradient}
+            colors={["#262626", "#0a0a0a"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.innerGradient}
           >
-            <LinearGradient
-              colors={["#262626", "#0a0a0a"]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.innerGradient}
-            >
-              <View style={styles.cardContent}>
-                <View style={styles.checkboxContainer}>
-                  {exercise.completed ? (
-                    <View style={styles.completedCheckbox}>
-                      <Ionicons name="checkmark" size={12} color="#FFFFFF" />
-                    </View>
-                  ) : (
-                    <View style={styles.uncompletedCheckbox} />
-                  )}
-                </View>
-
-                <View style={styles.exerciseInfo}>
-                  <Text style={styles.exerciseName}>{exercise.title}</Text>
-                  <Text style={styles.exerciseDetails}>
-                    {exercise.description}
-                  </Text>
-                </View>
+            <View style={styles.cardContent}>
+              <View style={styles.checkboxContainer}>
+                {exercise.completed ? (
+                  <View style={styles.completedCheckbox}>
+                    <Ionicons name="checkmark" size={12} color="#FFFFFF" />
+                  </View>
+                ) : (
+                  <View style={styles.uncompletedCheckbox} />
+                )}
               </View>
-            </LinearGradient>
+
+              <View style={styles.exerciseInfo}>
+                <Text style={styles.exerciseName}>{exercise.title}</Text>
+                <Text style={styles.exerciseDetails}>
+                  {exercise.description}
+                </Text>
+              </View>
+            </View>
           </LinearGradient>
-        </TouchableOpacity>
+        </LinearGradient>
+      </TouchableOpacity>
     );
   };
 
@@ -126,51 +137,80 @@ export default function WorkoutDetailScreen() {
     return (
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <ImageBackground
-                source={require("@/assets/images/Gym_2.png")}
-                contentFit="cover"
-                style={styles.backgroundImage}
-                imageStyle={styles.imageStyle}
-              >
-
-        <StatusBar style="light" />
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading workout...</Text>
+          source={require("@/assets/images/Rutine_2.png")}
+          contentFit="cover"
+          style={styles.backgroundImage}
+          imageStyle={styles.imageStyle}
+        >
+          <StatusBar style="light" />
+          <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>
+            {(workoutId as string)?.charAt(0).toUpperCase() +
+              (workoutId as string)?.slice(1)}
+          </Text>
+          <TouchableOpacity onPress={_resetProgress}>
+            <Ionicons name="refresh" size={24} color="white" />
+          </TouchableOpacity>
         </View>
-              </ImageBackground>
+          <View style={styles.loadingContainer}>
+            <Text style={styles.loadingText}>Loading workout...</Text>
+          </View>
+        </ImageBackground>
       </View>
     );
   }
 
   let exerciseIndex = 0;
 
+
   return (
     <View style={[styles.container]}>
-       <ImageBackground
-                source={require("@/assets/images/Gym_2.png")}
-                contentFit="cover"
-                style={styles.backgroundImage}
-                imageStyle={styles.imageStyle}
-              >
-
-              
-      <StatusBar style="light" />
-      <ScrollView
-        style={styles.content}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
+      <ImageBackground
+        source={require("@/assets/images/Rutine_2.png")}
+        contentFit="cover"
+        style={styles.backgroundImage}
+        imageStyle={styles.imageStyle}
       >
-        {workout.map((exercise,index) => (
-          <View key={index} style={styles.section}>
-            {/* <Text style={styles.sectionTitle}>{sectionTitle}</Text> */}
-            <View style={styles.exercisesList}>
-              {/* {exercises.map((exercise) => {
+        <StatusBar style="light" />
+        {!user?.plan && <Header showTitle={false} showBackButton={false} showAvatar={false} />}
+        <View style={[styles.header, { paddingTop: user?.plan && (insets.top + 10), position: !user?.plan ? "relative": "absolute" }]}>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.back()}
+          >
+            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>
+            {(workoutId as string)?.charAt(0).toUpperCase() +
+              (workoutId as string)?.slice(1)}
+          </Text>
+          <TouchableOpacity onPress={_resetProgress}>
+            <Ionicons name="refresh" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+        <ScrollView
+          style={styles.content}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          {workout.map((exercise, index) => (
+            <View key={index} style={styles.section}>
+              {/* <Text style={styles.sectionTitle}>{sectionTitle}</Text> */}
+              <View style={styles.exercisesList}>
+                {/* {exercises.map((exercise) => {
                 const cardIndex = exerciseIndex++; */}
                 {renderExerciseCard(exercise, workoutId as string, index)}
-              {/* })} */}
+                {/* })} */}
+              </View>
             </View>
-          </View>
-        ))}
-      </ScrollView>
+          ))}
+        </ScrollView>
       </ImageBackground>
     </View>
   );
@@ -195,10 +235,11 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+    marginTop: "20%",
   },
   scrollContent: {
     padding: 20,
-    justifyContent:'center',
+    justifyContent: "center",
     flexGrow: 1,
     paddingBottom: 100,
   },
@@ -273,11 +314,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 11, // Slightly smaller than outer radius
   },
-   backgroundImage: {
+  backgroundImage: {
     width,
     height,
   },
   imageStyle: {
     opacity: 1,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 10,
+  },
+  backButton: {
+    padding: 5,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#FFFFFF",
+    textShadowColor: "rgba(0, 0, 0, 0.5)",
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
+  },
+  headerSpacer: {
+    width: 34,
   },
 });

@@ -1,5 +1,7 @@
 import Button from "@/components/ui/Button";
+import Header from "@/components/ui/Header";
 import { Nutritions } from "@/mock/nutrition";
+import { useAuthStore } from "@/store/auth-store";
 import { Ionicons } from "@expo/vector-icons";
 import { ImageBackground } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
@@ -19,6 +21,7 @@ const BeveragesHome = () => {
   const { type } = useLocalSearchParams();
   const { backgroundImage, data, route, headerTitle } =
     Nutritions[type as string];
+    const { user } = useAuthStore();
 
   return (
     <View style={styles.container}>
@@ -30,7 +33,8 @@ const BeveragesHome = () => {
         imageStyle={styles.imageStyle}
       >
         {/* Header */}
-        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+         {!user?.plan && <Header showTitle={false} showBackButton={false} showAvatar={false} />}
+        <View style={[styles.header, { paddingTop: user?.plan && (insets.top + 10), position: !user?.plan ? "relative": "absolute" }]}>
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => router.back()}

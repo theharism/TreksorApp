@@ -1,67 +1,141 @@
-// app/_layout.tsx
+import SubscriptionScreen from "@/components/SubscriptionScreen";
+import { useNotifications } from "@/hooks/useNotifications";
 import { useAuthStore } from "@/store/auth-store";
+import { useUserStore } from "@/store/user-store";
 import * as Linking from "expo-linking";
 import { router, SplashScreen, Stack } from "expo-router";
 import { useEffect, useState } from "react";
+import Purchases from "react-native-purchases";
 import Toast from "react-native-toast-message";
-
-// SplashScreen.preventAutoHideAsync();
+import { initRC } from "./services/revenuecat";
 
 export default function RootLayout() {
+  const { error, clearError, isAuthenticated, getCurrentUser } = useAuthStore();
+  const [initialURL, setInitialURL] = useState<string | null>(null);
+  const [isNavigationReady, setIsNavigationReady] = useState(false);
+  const { user } = useAuthStore();
+  const { showPackages, setShowPackages, savePushToken, purchasePlan } = useUserStore();
+  const { pushToken } = useNotifications();
+  const [hasSyncedSubscription, setHasSyncedSubscription] = useState(false);
 
-  const { error, clearError } = useAuthStore()
-  const [initialURL, setInitialURL] = useState<string | null>(null)
-  const [isNavigationReady, setIsNavigationReady] = useState(false)
+  useEffect(() => {
+    initRC();
+  }, []);
 
-  useEffect(()=>{
-    const timer = setTimeout(() => {
-      setIsNavigationReady(true)
-    }, 300)
+  // ✅ Reset sync flag when authentication state changes
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setHasSyncedSubscription(false);
+    }
+  }, [isAuthenticated]);
 
-    const subscription = Linking.addEventListener("url", ({ url }) => {
-      handleDeepLink(url)
-    })
-
-    Linking.getInitialURL().then((url) => {
-      if (url) {
-        setInitialURL(url)
+  // ✅ Sync subscription status on app start
+  useEffect(() => {
+    async function syncSubscriptionStatus() {
+      if (!isAuthenticated || hasSyncedSubscription) {
+        return;
       }
-    })
 
-    return () => {
-      subscription.remove()
-      clearTimeout(timer)
+      try {
+        // Wait for RevenueCat to be configured
+        if (await Purchases.isConfigured()) {
+          const customerInfo = await Purchases.getCustomerInfo();
+          const activeEntitlements = customerInfo.entitlements.active;
+          
+          // Check if user has an active subscription (including trial)
+          const hasActiveSubscription = Object.keys(activeEntitlements).length > 0;
+          
+          if (hasActiveSubscription) {
+            // Determine subscription type from RevenueCat
+            let planType: "monthly" | "yearly" | null = null;
+            const entitlementKeys = Object.keys(activeEntitlements);
+            
+            if (entitlementKeys.length > 0) {
+              const entitlement = activeEntitlements[entitlementKeys[0]];
+              const productIdentifier = entitlement.productIdentifier || "";
+              
+              // Check if it's monthly or yearly based on product identifier
+              if (productIdentifier.includes("monthly") || productIdentifier === "$rc_monthly") {
+                planType = "monthly";
+              } else if (productIdentifier.includes("annual") || productIdentifier === "$rc_annual" || productIdentifier.includes("yearly")) {
+                planType = "yearly";
+              }
+            }
+
+            // If we found a plan type, sync with backend
+            if (planType) {
+              try {
+                await purchasePlan({ planType });
+                console.log(`Synced subscription: ${planType}`);
+              } catch (error) {
+                console.error("Error syncing subscription:", error);
+              }
+            }
+          }
+          
+          // Always fetch user data after checking subscription
+          await getCurrentUser();
+          setHasSyncedSubscription(true);
+        } else {
+          // RevenueCat not configured yet, just fetch user data
+          await getCurrentUser();
+          setHasSyncedSubscription(true);
+        }
+      } catch (error) {
+        console.error("Error checking subscription status:", error);
+        // Still fetch user data even if subscription check fails
+        try {
+          await getCurrentUser();
+        } catch (userError) {
+          console.error("Error fetching user data:", userError);
+        }
+        setHasSyncedSubscription(true);
+      }
     }
 
-  },[])
+    // Small delay to ensure RevenueCat is fully initialized
+    const timer = setTimeout(() => {
+      syncSubscriptionStatus();
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [isAuthenticated, hasSyncedSubscription, purchasePlan, getCurrentUser]);
+
+  // ✅ Linking logic (unchanged)
+  useEffect(() => {
+    const timer = setTimeout(() => setIsNavigationReady(true), 300);
+    const subscription = Linking.addEventListener("url", ({ url }) => handleDeepLink(url));
+
+    Linking.getInitialURL().then((url) => url && setInitialURL(url));
+
+    return () => {
+      subscription.remove();
+      clearTimeout(timer);
+    };
+  }, []);
 
   useEffect(() => {
     if (isNavigationReady && initialURL) {
-      handleDeepLink(initialURL)
-      setInitialURL(null)
+      handleDeepLink(initialURL);
+      setInitialURL(null);
     }
-  }, [isNavigationReady, initialURL])
+  }, [isNavigationReady, initialURL]);
 
   const handleDeepLink = (url: string) => {
     try {
-      const parsedUrl = Linking.parse(url)
-
+      const parsedUrl = Linking.parse(url);
       if (parsedUrl.path) {
-        const queryParams = parsedUrl.queryParams || {}
-        router.replace({
-          pathname: `/${parsedUrl.path}`,
-          params: queryParams,
-        })
+        const path = parsedUrl.path.startsWith("/") ? parsedUrl.path : `/${parsedUrl.path}`;
+        router.replace(path as any);
       }
     } catch (error) {
-      console.error("Error handling deep link:", error)
-    }
-    finally{
+      console.error("Error handling deep link:", error);
+    } finally {
       SplashScreen.hideAsync();
     }
-  }
+  };
 
-  // Show toast when auth error changes
+  // ✅ Toast for auth errors
   useEffect(() => {
     if (error) {
       Toast.show({
@@ -69,25 +143,39 @@ export default function RootLayout() {
         text1: "Error",
         text2: error,
         onHide: clearError,
-      })
+      });
     }
-  }, [error, clearError])
+  }, [error, clearError]);
 
+  // ✅ Force show subscription modal if expired
+  useEffect(() => {
+    if (user && Number(user.daysLeft) === 0 && !user.plan) {
+      setShowPackages(true);
+    }
+  }, [user, setShowPackages]);
+
+  // ✅ Save push token on app start when authenticated
+  useEffect(() => {
+    if (pushToken && pushToken?.data && isAuthenticated) {
+      savePushToken({ pushToken: pushToken.data });
+    }
+  }, [pushToken, isAuthenticated, savePushToken]);
+
+  // ✅ UI
   return (
-        // <Slot />
-        <Stack
+    <>
+      {showPackages && (
+        <SubscriptionScreen onClose={()=> setShowPackages(false)}/>
+      )}
+
+      <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: {
-            backgroundColor: "#02050C",
-          },
+          contentStyle: { backgroundColor: "#02050C" },
           animation: "slide_from_right",
-          gestureEnabled: true,
-          gestureDirection: "horizontal",
-          fullScreenGestureEnabled: true,
         }}
       />
-      //   <Stack.Screen name="body" />
-      //   </Stack>
+    </>
   );
 }
+

@@ -1,3 +1,5 @@
+import Header from "@/components/ui/Header";
+import { useAuthStore } from "@/store/auth-store";
 import { Ionicons } from "@expo/vector-icons";
 import { Image, ImageBackground } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -17,6 +19,7 @@ const { width, height } = Dimensions.get("window");
 
 const PurposeHome = () => {
   const insets = useSafeAreaInsets();
+  const { user } = useAuthStore();
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -26,7 +29,18 @@ const PurposeHome = () => {
         style={styles.backgroundImage}
         imageStyle={styles.imageStyle}
       >
-        <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+        {!user?.plan && (
+          <Header showTitle={false} showBackButton={false} showAvatar={false} />
+        )}
+        <View
+          style={[
+            styles.header,
+            {
+              paddingTop: user?.plan && insets.top + 10,
+              position: !user?.plan ? "relative" : "absolute",
+            },
+          ]}
+        >
           <TouchableOpacity
             style={styles.backButton}
             onPress={() => router.back()}
@@ -62,13 +76,13 @@ const PurposeHome = () => {
               marginTop: 5,
             }}
           >
-            Annual Subscribers Only 
+            Annual Subscribers Only
           </Text>
           <LinearGradient
-            colors={['rgba(255,255,255,0.3)', 'rgba(255,255,255,0)']}
+            colors={["rgba(255,255,255,0.3)", "rgba(255,255,255,0)"]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            locations={[0.3, 1]}  // start fully white at 30%, fade to transparent at the end
+            locations={[0.3, 1]} // start fully white at 30%, fade to transparent at the end
             style={{
               borderRadius: 12,
               borderColor: "rgba(255,255,255,0.3)",
@@ -98,9 +112,9 @@ const PurposeHome = () => {
                 textAlign: "center",
               }}
             >
-              December 2025
+              Spring 2026
             </Text>
-          {/* </View> */}
+            {/* </View> */}
           </LinearGradient>
         </View>
       </ImageBackground>

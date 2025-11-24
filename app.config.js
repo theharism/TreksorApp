@@ -1,8 +1,8 @@
 export default {
   expo: {
-    name: "TreksorApp",
-    slug: "TreksorApp",
-    version: "1.3.0",
+    name: "Treksor",
+    slug: "Treksor",
+    version: "1.0.3",
     orientation: "portrait",
     icon: "./assets/images/appicon-treksor.png",
     scheme: "treksorapp",
@@ -15,15 +15,16 @@ export default {
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.treksor.app",
+      bundleIdentifier: "com.treksor.prod",
       googleServicesFile: process.env.GOOGLE_SERVICES_INFOPLIST,
-      buildNumber: "7",
+      buildNumber: "3",
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
         NSPhotoLibraryUsageDescription:
           "This app needs access to your photo library to let you pick and upload images.",
         NSCameraUsageDescription:
-          "The app needs accesse to your photo library to let you upload/change your profile picture.",
+          "The app needs access to your camera to let you upload/change your profile picture.",
+        SKAdNetworkItems: [], // if you want, for ad tracking
       },
       usesAppleSignIn: true,
     },
@@ -52,20 +53,20 @@ export default {
             "The app accesses your photos to let you change your profile picture.",
         },
       ],
-      [
-        "expo-video",
-        {
-          supportsBackgroundPlayback: true,
-          supportsPictureInPicture: true,
-        },
-      ],
+      // [
+      //   "expo-video",
+      //   {
+      //     supportsBackgroundPlayback: true,
+      //     supportsPictureInPicture: true,
+      //   },
+      // ],
       ["@react-native-google-signin/google-signin"],
       [
         "expo-font",
         {
           fonts: ["assets/fonts/Nunito-Regular.ttf"],
           android: {
-            fonts: [
+            fonts: [ 
               {
                 fontFamily: "Nunito-Regular",
                 fontDefinitions: [
@@ -86,9 +87,8 @@ export default {
     extra: {
       router: {},
       eas: {
-        projectId: "d5f9b141-617b-41ca-bed2-0c2fb862c6f8",
-      },
-      owner: "fahadzahidd24",
+        projectId: "67c51458-b4bc-49a9-a9a9-c9117a576b2d"
+      }
     },
   },
 };

@@ -3,6 +3,7 @@
 import { useNotifications } from "@/hooks/useNotifications";
 import { ritualCards } from "@/mock/rituals";
 import { useArticleStore } from "@/store/article-store";
+import { useAuthStore } from "@/store/auth-store";
 import { usePowerThoughtStore } from "@/store/thought-store";
 import { useUserStore } from "@/store/user-store";
 import { PowerThought } from "@/types/powerThought";
@@ -38,6 +39,12 @@ export default function HomeScreen() {
   const {pushToken, notification} = useNotifications();
   const {getUnreadArticlesCount} = useArticleStore();
   const {savePushToken} = useUserStore();
+  const { login, loading, getCurrentUser, requestOtp, signInWithThirdParty } =
+      useAuthStore();
+
+  useEffect(() => {
+    getCurrentUser();
+  }, []);
   
   useEffect(()=>{
     if(pushToken && pushToken?.data) {

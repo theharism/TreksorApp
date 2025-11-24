@@ -35,15 +35,20 @@ export const useTrackingStore = create<TrackingStore>()(
 
           const countRead = (items: { isRead?: boolean }[]) => items.filter(i => i.isRead).length;
 
-          // Articles
+          // Articles - Get all articles from all categories
           const { articles } = useArticleStore.getState();
           const bodyArticles = articles["Body"] || [];
           const mentalArticles = articles["Mental"] || [];
           const spiritualArticles = articles["Spiritual"] || [];
+          const allArticles = articles["All Articles"] || [];
 
           const bodyRead = countRead(bodyArticles);
           const mentalRead = countRead(mentalArticles);
           const spiritualRead = countRead(spiritualArticles);
+          
+          // Calculate total read articles across all categories
+          const totalArticlesRead = countRead(allArticles);
+          const totalArticles = allArticles.length;
 
           // Workouts
           const workouts = useWorkoutStore.getState().workouts || [];
@@ -64,19 +69,27 @@ export const useTrackingStore = create<TrackingStore>()(
           const journalEntries = useMySpaceStore.getState().myspaces || [];
           const totalJournals = journalEntries.length;
 
+          // Get existing tracking data to preserve IDs and custom categories
+          let oldTrackingData = get().trackingData;
+          
+          const bodyCategory = oldTrackingData.find(track => track.title === 'BODY' || track.title === 'Body') || { id: "1", title: "BODY" };
+          const mindCategory = oldTrackingData.find(track => track.title === 'MIND' || track.title === 'Mind') || { id: "2", title: "MIND" };
+          const spiritualCategory = oldTrackingData.find(track => track.title === 'SPIRITUAL' || track.title === 'Spiritual') || { id: "3", title: "SPIRITUAL" };
+          const articlesCategory = oldTrackingData.find(track => track.title === 'ARTICLES' || track.title === 'Articles') || { id: "4", title: "ARTICLES" };
+
           const updatedTrackingData: TrackingCategory[] = [
             {
-              id: generateRandomId(),
+              id: bodyCategory.id,
               title: "BODY",
               percentage: calcPercentage(completedWorkouts + bodyRead, totalWorkouts + bodyArticles.length),
               items: [
                 // { id: generateRandomId(), label: "Workouts", value: `${completedWorkouts}/${totalWorkouts}` },
-                { id: generateRandomId(), label: "Articles Completed", value: `${bodyRead}/${bodyArticles.length}` },
+                { id: bodyCategory.items?.[0]?.id || generateRandomId(), label: "Articles Completed", value: `${bodyRead}/${bodyArticles.length}` },
               ],
-              custom: false,
+              custom: bodyCategory.custom || false,
             },
             {
-              id: generateRandomId(),
+              id: mindCategory.id,
               title: "MIND",
               percentage: calcPercentage(
                 readThoughts + mentalRead + totalJournals,
@@ -84,13 +97,13 @@ export const useTrackingStore = create<TrackingStore>()(
               ),
               items: [
                 // { id: generateRandomId(), label: "Power Thought Read", value: `${readThoughts}/${totalThoughts}` },
-                { id: generateRandomId(), label: "Articles Completed", value: `${mentalRead}/${mentalArticles.length}` },
+                { id: mindCategory.items?.[0]?.id || generateRandomId(), label: "Articles Completed", value: `${mentalRead}/${mentalArticles.length}` },
                 // { id: generateRandomId(), label: "General Entries", value: `${totalJournals}` },
               ],
-              custom: false,
+              custom: mindCategory.custom || false,
             },
             {
-              id: generateRandomId(),
+              id: spiritualCategory.id,
               title: "SPIRITUAL",
               percentage: calcPercentage(
                 readMeditations + spiritualRead,
@@ -98,21 +111,53 @@ export const useTrackingStore = create<TrackingStore>()(
               ),
               items: [
                 // { id: generateRandomId(), label: "Meditations", value: `${readMeditations}/${totalMeditations}` },
-                { id: generateRandomId(), label: "Articles Read", value: `${spiritualRead}/${spiritualArticles.length}` },
+                { id: spiritualCategory.items?.[0]?.id || generateRandomId(), label: "Articles Read", value: `${spiritualRead}/${spiritualArticles.length}` },
               ],
-              custom: false,
+              custom: spiritualCategory.custom || false,
+            },
+            {
+              id: articlesCategory.id,
+              title: "ARTICLES",
+              percentage: calcPercentage(totalArticlesRead, totalArticles),
+              items: [
+                { id: articlesCategory.items?.[0]?.id || generateRandomId(), label: "Total Articles Read", value: `${totalArticlesRead}/${totalArticles}` },
+              ],
+              custom: articlesCategory.custom || false,
             },
           ];
 
-            let oldTrackingData = get().trackingData;
-            
-            const bodyIndex = oldTrackingData.findIndex(track => track.title === 'Body')
-            const mentalIndex = oldTrackingData.findIndex(track => track.title === 'Mental')
-            const SpiritualIndex = oldTrackingData.findIndex(track => track.title === 'Spiritual')
+            // Update or add tracking categories
+            const bodyIndex = oldTrackingData.findIndex(track => track.title === 'BODY' || track.title === 'Body')
+            const mentalIndex = oldTrackingData.findIndex(track => track.title === 'MIND' || track.title === 'Mind')
+            const spiritualIndex = oldTrackingData.findIndex(track => track.title === 'SPIRITUAL' || track.title === 'Spiritual')
+            const articlesIndex = oldTrackingData.findIndex(track => track.title === 'ARTICLES' || track.title === 'Articles')
 
-            oldTrackingData[bodyIndex] = updatedTrackingData[0]
-            oldTrackingData[mentalIndex] = updatedTrackingData[1]
-            oldTrackingData[SpiritualIndex] = updatedTrackingData[2]
+            // Update existing categories
+            if (bodyIndex !== -1) {
+              oldTrackingData[bodyIndex] = updatedTrackingData[0];
+            } else {
+              oldTrackingData.push(updatedTrackingData[0]);
+            }
+            
+            if (mentalIndex !== -1) {
+              oldTrackingData[mentalIndex] = updatedTrackingData[1];
+            } else {
+              oldTrackingData.push(updatedTrackingData[1]);
+            }
+            
+            if (spiritualIndex !== -1) {
+              oldTrackingData[spiritualIndex] = updatedTrackingData[2];
+            } else {
+              oldTrackingData.push(updatedTrackingData[2]);
+            }
+
+            // Add or update Articles tracking category
+            if (articlesIndex !== -1) {
+              oldTrackingData[articlesIndex] = updatedTrackingData[3];
+            } else {
+              // Add new Articles tracking category if it doesn't exist
+              oldTrackingData.push(updatedTrackingData[3]);
+            }
 
             set({ trackingData: oldTrackingData, loading: false });
         } catch (error: any) {

@@ -1,5 +1,7 @@
 "use client";
 
+import Header from "@/components/ui/Header";
+import { useAuthStore } from "@/store/auth-store";
 // import { workoutContent } from "@/mock/workouts"
 import { useWorkoutStore } from "@/store/workout-store";
 import { Ionicons } from "@expo/vector-icons";
@@ -57,6 +59,7 @@ export default function WorkoutInfoScreen() {
     workout?.videoUrl || "https://app.treksor.com/uploads/loading.mp4";
 
   const player = useVideoPlayer(videoUrl);
+  const {user} = useAuthStore();
 
   // Start playback once video and player are available
   useEffect(() => {
@@ -128,10 +131,11 @@ export default function WorkoutInfoScreen() {
   }
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={[styles.container, { paddingTop: user?.plan && (insets.top + 10), position: !user?.plan ? "relative": "absolute" }]}>
       <StatusBar style="light" />
 
       {/* Custom Header */}
+      {!user?.plan && <Header showTitle={false} showBackButton={false} showAvatar={false} />}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
           <Ionicons name="arrow-back" size={24} color="#FFFFFF" />

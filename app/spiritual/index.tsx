@@ -66,7 +66,7 @@ const SpiritualHome = () => {
             }}
           />
           <View style={styles.paginationContainer}>
-            {articles["Spiritual"]?.map((_, index) => (
+            {articles["Spiritual"]?.slice(0, 3).map((_, index) => (
               <View
                 key={index}
                 style={[
